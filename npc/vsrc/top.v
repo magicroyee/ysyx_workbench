@@ -5,4 +5,3 @@ module top(
 );
     assign f = a ^ b;
 endmodule
-1
