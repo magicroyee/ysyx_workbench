@@ -15,4 +15,7 @@ sim: $(TARGETS)
 	@echo "Write this Makefile by your self."
 	./obj_dir/$(TARGETS)
 
+clean:
+	rm -rf obj_dir *.vcd
+
 include ../Makefile
