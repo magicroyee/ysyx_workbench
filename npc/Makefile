@@ -1,6 +1,6 @@
 CFLAGS=--cc --exe --build --j 0 -Wall --trace
 
-CSOURCES=$(wildcard csrc/*.c)
+CSOURCES=$(wildcard csrc/*.cpp)
 VSOURCES=$(wildcard vsrc/*.v)
 
 all:
