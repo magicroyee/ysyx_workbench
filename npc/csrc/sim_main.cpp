@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "Vdswitch.h"
+#include "Vtop.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
@@ -9,7 +9,7 @@ int main(int argc, char** argv)
 {
     VerilatedContext* contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);
-    Vdswitch* top = new Vdswitch{ contextp };
+    Vtop* top = new Vtop{ contextp };
 
     VerilatedVcdC *tfp = new VerilatedVcdC;
     contextp->traceEverOn(true);
