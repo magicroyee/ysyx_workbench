@@ -1,36 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <unistd.h>
+#include <nvboard.h>
 #include "Vtop.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
+static TOP_NAME dut;
+
+void nvboard_bind_all_pins(Vtop *top);
+
+// static void single_cycle() {
+//   dut.clk = 0; dut.eval();
+//   dut.clk = 1; dut.eval();
+// }
+
+// static void reset(int n) {
+//   dut.rstn = 0;
+//   while (n -- > 0) single_cycle();
+//   dut.rstn = 1;
+// }
+
 int main(int argc, char** argv)
 {
-    VerilatedContext* contextp = new VerilatedContext;
-    contextp->commandArgs(argc, argv);
-    Vtop* top = new Vtop{ contextp };
+    nvboard_bind_all_pins(&dut);
+    nvboard_init();
 
-    VerilatedVcdC *tfp = new VerilatedVcdC;
-    contextp->traceEverOn(true);
-    top->trace(tfp, 0);
-    tfp->open("./build/wave.vcd");
+    // reset(10);
 
-    while (!contextp->gotFinish()) {
-        int a = rand() & 1;
-        int b = rand() & 1;
-        top->a = a;
-        top->b = b;
-        top->eval();
-        printf("a = %d, b = %d, f = %d\n", a, b, top->f);
-        assert(top->f == (a ^ b));
-
-        tfp->dump(contextp->time());
-        contextp->timeInc(1);
-
+    // dut.eval();
+    while(1) {
+        dut.eval();
+        nvboard_update();
+        // single_cycle();
     }
-    delete top;
-    tfp->close();
-    delete contextp;
+
+    nvboard_quit();
+
     return 0;
 }
