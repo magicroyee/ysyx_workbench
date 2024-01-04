@@ -6,7 +6,7 @@ module seg (
 
     always @(*) begin
         if (!en) begin
-            seg = 8'b00000000;
+            seg = 8'b11111111;
         end
         else begin
             case(data)
@@ -18,7 +18,7 @@ module seg (
             3'd5: seg = 8'b01001001;
             3'd6: seg = 8'b01000001;
             3'd7: seg = 8'b00011111;
-            default: seg = 8'b00000000;
+            default: seg = 8'b11111111;
             endcase
         end
     end
