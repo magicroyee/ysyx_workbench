@@ -16,9 +16,9 @@ static void single_cycle() {
 }
 
 static void reset(int n) {
-  dut.rst = 1;
+  dut.rstn = 0;
   while (n -- > 0) single_cycle();
-  dut.rst = 0;
+  dut.rstn = 1;
 }
 
 int main(int argc, char** argv)
@@ -30,6 +30,8 @@ int main(int argc, char** argv)
 
     while(1) {
         nvboard_update();
+        dut.a = rand() & 1;
+        dut.b = rand() & 1;
         single_cycle();
     }
 
