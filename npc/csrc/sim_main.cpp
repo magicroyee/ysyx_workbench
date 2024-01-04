@@ -29,6 +29,7 @@ int main(int argc, char** argv)
 
     // reset(10);
 
+    dut.eval();
     while(1) {
         nvboard_update();
         dut.a = rand() & 1;
