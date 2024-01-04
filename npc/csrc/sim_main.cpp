@@ -1,36 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <nvboard.h>
 #include "Vtop.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
+static TOP_NAME dut;
+
+void nvboard_bind_all_pins(Vtop *top);
+
 int main(int argc, char** argv)
 {
-    VerilatedContext* contextp = new VerilatedContext;
-    contextp->commandArgs(argc, argv);
-    Vtop* top = new Vtop{ contextp };
+    nvboard_bind_all_pins(&dut);
+    nvboard_init();
 
-    VerilatedVcdC *tfp = new VerilatedVcdC;
-    contextp->traceEverOn(true);
-    top->trace(tfp, 0);
-    tfp->open("wave.vcd");
-
-    while (!contextp->gotFinish()) {
-        int a = rand() & 1;
-        int b = rand() & 1;
-        top->a = a;
-        top->b = b;
-        top->eval();
-        printf("a = %d, b = %d, f = %d\n", a, b, top->f);
-        assert(top->f == (a ^ b));
-
-        tfp->dump(contextp->time());
-        contextp->timeInc(1);
-
+    while(1) {
+        nvboard_update();
     }
-    delete top;
-    tfp->close();
-    delete contextp;
+
     return 0;
 }

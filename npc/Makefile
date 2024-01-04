@@ -46,7 +46,7 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
-all:
+all: default
 	@echo "Write this Makefile by your self."
 
 sim: $(BIN) 
@@ -58,3 +58,5 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 include ../Makefile
+
+.PHONY: default all sim clean
