@@ -1,7 +1,7 @@
 module seg (
     input en,
     input [2:0] data,
-    output [7:0] seg
+    output reg [7:0] seg
 );
 
     always @(*) begin

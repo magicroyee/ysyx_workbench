@@ -1,7 +1,7 @@
 module top(
     input [7:0] sws,
     output [3:0] leds,
-    ouptut [7:0] seg
+    output [7:0] seg
 );
     
     wire en;

@@ -1,7 +1,7 @@
 module code83 (
     input [7:0]  x,
-    output       en,
-    output [2:0] y
+    output reg       en,
+    output reg [2:0] y
 );
 
 integer i;
