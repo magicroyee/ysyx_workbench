@@ -31,11 +31,11 @@ int main(int argc, char** argv)
 
     // dut.eval();
     while(1) {
+        nvboard_update();
         dut.a = rand() & 1;
         dut.eval();
         dut.b = rand() & 1;
         dut.eval();
-        nvboard_update();
         // single_cycle();
     }
 
