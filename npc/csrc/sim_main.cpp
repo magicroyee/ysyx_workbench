@@ -29,14 +29,14 @@ int main(int argc, char** argv)
 
     // reset(10);
 
-    dut.eval();
+    // dut.eval();
     while(1) {
         nvboard_update();
         dut.a = rand() & 1;
         dut.eval();
         dut.b = rand() & 1;
         dut.eval();
-        usleep(1);
+        usleep(100);
         // single_cycle();
     }
 
