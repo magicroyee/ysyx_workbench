@@ -31,6 +31,7 @@ int main(int argc, char** argv)
     while(1) {
         nvboard_update();
         dut.a = rand() & 1;
+		dut.eval();
         dut.b = rand() & 1;
 		dut.eval();
         // single_cycle();
