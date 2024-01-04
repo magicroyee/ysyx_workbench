@@ -35,7 +35,7 @@ int main(int argc, char** argv)
         dut.eval();
         dut.b = rand() & 1;
         dut.eval();
-        usleep(1);
+        usleep(100);
         // single_cycle();
     }
 
