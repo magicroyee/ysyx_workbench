@@ -1,8 +1,16 @@
 module top(
+    input clk,
+    input rstn,
     input a,
     input b,
-    output f
+    output reg f
 );
-    assign f = a^b;
+    always @(posedge clk or negedge rstn) begin
+        if (!rstn) begin
+            f <= 1'b0;
+        end else begin
+            f <= a ^ b;
+        end
+    end
 
 endmodule
