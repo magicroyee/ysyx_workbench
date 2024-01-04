@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <unistd.h>
 #include <nvboard.h>
 #include "Vtop.h"
 #include "verilated.h"
@@ -34,6 +35,7 @@ int main(int argc, char** argv)
         dut.eval();
         dut.b = rand() & 1;
         dut.eval();
+        usleep(1);
         // single_cycle();
     }
 
