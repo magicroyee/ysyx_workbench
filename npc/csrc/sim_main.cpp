@@ -30,10 +30,10 @@ int main(int argc, char** argv)
 
     while(1) {
         nvboard_update();
-        dut.a = rand() & 1;
-        dut.b = rand() & 1;
         single_cycle();
     }
+
+    nvboard_quit();
 
     return 0;
 }
