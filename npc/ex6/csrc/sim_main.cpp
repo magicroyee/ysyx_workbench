@@ -47,9 +47,10 @@ int main(int argc, char **argv)
 
     while (!contextp->gotFinish())
     {
+        printf("x = %d", top->x);
         single_cycle();
     }
-    
+
     delete top;
     tfp->close();
     delete contextp;
