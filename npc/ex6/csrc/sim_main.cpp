@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
     while (!contextp->gotFinish())
     {
-        printf("x = %d", top->x);
+        printf("x = %d\n", top->x);
         single_cycle();
     }
 
