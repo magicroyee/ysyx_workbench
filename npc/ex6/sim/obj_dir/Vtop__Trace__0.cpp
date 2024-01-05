@@ -25,8 +25,13 @@ void Vtop___024root__trace_chg_sub_0(Vtop___024root* vlSelf, VerilatedVcd::Buffe
     // Body
     bufp->chgBit(oldp+0,(vlSelf->clk));
     bufp->chgBit(oldp+1,(vlSelf->rstn));
-    bufp->chgCData(oldp+2,(vlSelf->x),8);
-    bufp->chgBit(oldp+3,((1U & VL_REDXOR_8((0x1dU & (IData)(vlSelf->x))))));
+    bufp->chgCData(oldp+2,(vlSelf->din),8);
+    bufp->chgCData(oldp+3,(vlSelf->shamt),3);
+    bufp->chgBit(oldp+4,(vlSelf->lr));
+    bufp->chgBit(oldp+5,(vlSelf->al));
+    bufp->chgCData(oldp+6,(vlSelf->dout),8);
+    bufp->chgIData(oldp+7,(vlSelf->shamt),32);
+    bufp->chgIData(oldp+8,(vlSelf->top__DOT__u_barrel_shifter__DOT__i),32);
 }
 
 void Vtop___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

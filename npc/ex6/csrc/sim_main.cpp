@@ -5,6 +5,8 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
+u_int8_t din[] = {0x00, 0x01, 0x11, 0x55, 0x99, 0xff};
+
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
 static Vtop *top = NULL;
@@ -47,8 +49,30 @@ int main(int argc, char **argv)
 
     while (!contextp->gotFinish())
     {
-        printf("x = %d\n", top->x);
-        single_cycle();
+        // printf("x = %d\n", top->x);
+        // single_cycle();
+        for (int i=0; i<8; i++){
+            for (int j=0; j<sizeof(din); j++){
+                top->din = din[j];
+                top->shamt = i;
+                top->lr = 0;
+                top->al = 0;
+                single_cycle();
+                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
+                top->lr = 0;
+                top->al = 1;
+                single_cycle();
+                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
+                top->lr = 1;
+                top->al = 0;
+                single_cycle();
+                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
+                top->lr = 1;
+                top->al = 1;
+                single_cycle();
+                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
+            }
+        }
     }
 
     delete top;

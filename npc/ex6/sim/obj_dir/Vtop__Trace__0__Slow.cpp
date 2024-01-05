@@ -13,16 +13,29 @@ VL_ATTR_COLD void Vtop___024root__trace_init_sub__TOP__0(Vtop___024root* vlSelf,
     // Body
     tracep->declBit(c+1,"clk", false,-1);
     tracep->declBit(c+2,"rstn", false,-1);
-    tracep->declBus(c+3,"x", false,-1, 7,0);
+    tracep->declBus(c+3,"din", false,-1, 7,0);
+    tracep->declBus(c+4,"shamt", false,-1, 2,0);
+    tracep->declBit(c+5,"lr", false,-1);
+    tracep->declBit(c+6,"al", false,-1);
+    tracep->declBus(c+7,"dout", false,-1, 7,0);
     tracep->pushNamePrefix("top ");
     tracep->declBit(c+1,"clk", false,-1);
     tracep->declBit(c+2,"rstn", false,-1);
-    tracep->declBus(c+3,"x", false,-1, 7,0);
-    tracep->pushNamePrefix("u_rand_gen ");
+    tracep->declBus(c+3,"din", false,-1, 7,0);
+    tracep->declBus(c+4,"shamt", false,-1, 2,0);
+    tracep->declBit(c+5,"lr", false,-1);
+    tracep->declBit(c+6,"al", false,-1);
+    tracep->declBus(c+7,"dout", false,-1, 7,0);
+    tracep->pushNamePrefix("u_barrel_shifter ");
     tracep->declBit(c+1,"clk", false,-1);
     tracep->declBit(c+2,"rstn", false,-1);
-    tracep->declBus(c+3,"x", false,-1, 7,0);
-    tracep->declBit(c+4,"x8", false,-1);
+    tracep->declBus(c+3,"din", false,-1, 7,0);
+    tracep->declBus(c+4,"shamt", false,-1, 2,0);
+    tracep->declBit(c+5,"lr", false,-1);
+    tracep->declBit(c+6,"al", false,-1);
+    tracep->declBus(c+7,"dout", false,-1, 7,0);
+    tracep->declBus(c+8,"shift", false,-1, 31,0);
+    tracep->declBus(c+9,"i", false,-1, 31,0);
     tracep->popNamePrefix(2);
 }
 
@@ -68,7 +81,11 @@ VL_ATTR_COLD void Vtop___024root__trace_full_sub_0(Vtop___024root* vlSelf, Veril
     // Body
     bufp->fullBit(oldp+1,(vlSelf->clk));
     bufp->fullBit(oldp+2,(vlSelf->rstn));
-    bufp->fullCData(oldp+3,(vlSelf->x),8);
-    bufp->fullBit(oldp+4,((1U & VL_REDXOR_8((0x1dU 
-                                             & (IData)(vlSelf->x))))));
+    bufp->fullCData(oldp+3,(vlSelf->din),8);
+    bufp->fullCData(oldp+4,(vlSelf->shamt),3);
+    bufp->fullBit(oldp+5,(vlSelf->lr));
+    bufp->fullBit(oldp+6,(vlSelf->al));
+    bufp->fullCData(oldp+7,(vlSelf->dout),8);
+    bufp->fullIData(oldp+8,(vlSelf->shamt),32);
+    bufp->fullIData(oldp+9,(vlSelf->top__DOT__u_barrel_shifter__DOT__i),32);
 }

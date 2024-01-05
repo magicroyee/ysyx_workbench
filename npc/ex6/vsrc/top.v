@@ -1,13 +1,21 @@
 module top(
     input clk,
     input rstn,
-    output [7:0] x
+    input [7:0] din,
+    input [2:0] shamt,
+    input lr,
+    input al,
+    output [7:0] dout
 );
-    
-    rand_gen u_rand_gen (
-        .clk    (clk),
-        .rstn   (rstn),
-        .x      (x)
+
+    barrel_shifter u_barrel_shifter (
+        .clk(clk),
+        .rstn(rstn),
+        .din(din),
+        .shamt(shamt),
+        .lr(lr),
+        .al(al),
+        .dout(dout)
     );
 
 endmodule

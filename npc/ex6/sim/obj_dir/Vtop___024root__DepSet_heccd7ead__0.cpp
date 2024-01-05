@@ -17,16 +17,137 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___nba_sequent__TOP__0\n"); );
     // Body
-    vlSelf->x = ((IData)(vlSelf->rstn) ? ((0U != (IData)(vlSelf->x))
-                                           ? (((IData)(vlSelf->top__DOT__u_rand_gen__DOT__x8) 
-                                               << 7U) 
-                                              | (0x7fU 
-                                                 & ((IData)(vlSelf->x) 
-                                                    >> 1U)))
-                                           : 1U) : 1U);
-    vlSelf->top__DOT__u_rand_gen__DOT__x8 = (1U & VL_REDXOR_8(
-                                                              (0x1dU 
-                                                               & (IData)(vlSelf->x))));
+    if (vlSelf->rstn) {
+        vlSelf->top__DOT__u_barrel_shifter__DOT__i = 8U;
+        vlSelf->dout = ((0xfeU & (IData)(vlSelf->dout)) 
+                        | (1U & ((IData)(vlSelf->lr)
+                                  ? ((0U >= (IData)(vlSelf->shamt)) 
+                                     & ((IData)(vlSelf->din) 
+                                        >> (7U & (- (IData)(vlSelf->shamt)))))
+                                  : ((0U < ((IData)(8U) 
+                                            - (IData)(vlSelf->shamt)))
+                                      ? ((IData)(vlSelf->din) 
+                                         >> (IData)(vlSelf->shamt))
+                                      : ((IData)(vlSelf->al) 
+                                         & ((IData)(vlSelf->din) 
+                                            >> 7U))))));
+        vlSelf->dout = ((0xfdU & (IData)(vlSelf->dout)) 
+                        | (2U & (((IData)(vlSelf->lr)
+                                   ? ((1U >= (IData)(vlSelf->shamt)) 
+                                      & ((IData)(vlSelf->din) 
+                                         >> (7U & ((IData)(1U) 
+                                                   - (IData)(vlSelf->shamt)))))
+                                   : ((1U < ((IData)(8U) 
+                                             - (IData)(vlSelf->shamt)))
+                                       ? ((IData)(vlSelf->din) 
+                                          >> (7U & 
+                                              ((IData)(1U) 
+                                               + (IData)(vlSelf->shamt))))
+                                       : ((IData)(vlSelf->al) 
+                                          & ((IData)(vlSelf->din) 
+                                             >> 7U)))) 
+                                 << 1U)));
+        vlSelf->dout = ((0xfbU & (IData)(vlSelf->dout)) 
+                        | (4U & (((IData)(vlSelf->lr)
+                                   ? ((2U >= (IData)(vlSelf->shamt)) 
+                                      & ((IData)(vlSelf->din) 
+                                         >> (7U & ((IData)(2U) 
+                                                   - (IData)(vlSelf->shamt)))))
+                                   : ((2U < ((IData)(8U) 
+                                             - (IData)(vlSelf->shamt)))
+                                       ? ((IData)(vlSelf->din) 
+                                          >> (7U & 
+                                              ((IData)(2U) 
+                                               + (IData)(vlSelf->shamt))))
+                                       : ((IData)(vlSelf->al) 
+                                          & ((IData)(vlSelf->din) 
+                                             >> 7U)))) 
+                                 << 2U)));
+        vlSelf->dout = ((0xf7U & (IData)(vlSelf->dout)) 
+                        | (8U & (((IData)(vlSelf->lr)
+                                   ? ((3U >= (IData)(vlSelf->shamt)) 
+                                      & ((IData)(vlSelf->din) 
+                                         >> (7U & ((IData)(3U) 
+                                                   - (IData)(vlSelf->shamt)))))
+                                   : ((3U < ((IData)(8U) 
+                                             - (IData)(vlSelf->shamt)))
+                                       ? ((IData)(vlSelf->din) 
+                                          >> (7U & 
+                                              ((IData)(3U) 
+                                               + (IData)(vlSelf->shamt))))
+                                       : ((IData)(vlSelf->al) 
+                                          & ((IData)(vlSelf->din) 
+                                             >> 7U)))) 
+                                 << 3U)));
+        vlSelf->dout = ((0xefU & (IData)(vlSelf->dout)) 
+                        | (0x10U & (((IData)(vlSelf->lr)
+                                      ? ((4U >= (IData)(vlSelf->shamt)) 
+                                         & ((IData)(vlSelf->din) 
+                                            >> (7U 
+                                                & ((IData)(4U) 
+                                                   - (IData)(vlSelf->shamt)))))
+                                      : ((4U < ((IData)(8U) 
+                                                - (IData)(vlSelf->shamt)))
+                                          ? ((IData)(vlSelf->din) 
+                                             >> (7U 
+                                                 & ((IData)(4U) 
+                                                    + (IData)(vlSelf->shamt))))
+                                          : ((IData)(vlSelf->al) 
+                                             & ((IData)(vlSelf->din) 
+                                                >> 7U)))) 
+                                    << 4U)));
+        vlSelf->dout = ((0xdfU & (IData)(vlSelf->dout)) 
+                        | (0x20U & (((IData)(vlSelf->lr)
+                                      ? ((5U >= (IData)(vlSelf->shamt)) 
+                                         & ((IData)(vlSelf->din) 
+                                            >> (7U 
+                                                & ((IData)(5U) 
+                                                   - (IData)(vlSelf->shamt)))))
+                                      : ((5U < ((IData)(8U) 
+                                                - (IData)(vlSelf->shamt)))
+                                          ? ((IData)(vlSelf->din) 
+                                             >> (7U 
+                                                 & ((IData)(5U) 
+                                                    + (IData)(vlSelf->shamt))))
+                                          : ((IData)(vlSelf->al) 
+                                             & ((IData)(vlSelf->din) 
+                                                >> 7U)))) 
+                                    << 5U)));
+        vlSelf->dout = ((0xbfU & (IData)(vlSelf->dout)) 
+                        | (0x40U & (((IData)(vlSelf->lr)
+                                      ? ((6U >= (IData)(vlSelf->shamt)) 
+                                         & ((IData)(vlSelf->din) 
+                                            >> (7U 
+                                                & ((IData)(6U) 
+                                                   - (IData)(vlSelf->shamt)))))
+                                      : ((6U < ((IData)(8U) 
+                                                - (IData)(vlSelf->shamt)))
+                                          ? ((IData)(vlSelf->din) 
+                                             >> (7U 
+                                                 & ((IData)(6U) 
+                                                    + (IData)(vlSelf->shamt))))
+                                          : ((IData)(vlSelf->al) 
+                                             & ((IData)(vlSelf->din) 
+                                                >> 7U)))) 
+                                    << 6U)));
+        vlSelf->dout = ((0x7fU & (IData)(vlSelf->dout)) 
+                        | (0x80U & (((IData)(vlSelf->lr)
+                                      ? ((IData)(vlSelf->al) 
+                                         & ((IData)(vlSelf->din) 
+                                            >> 7U))
+                                      : ((7U < ((IData)(8U) 
+                                                - (IData)(vlSelf->shamt)))
+                                          ? ((IData)(vlSelf->din) 
+                                             >> (7U 
+                                                 & ((IData)(7U) 
+                                                    + (IData)(vlSelf->shamt))))
+                                          : ((IData)(vlSelf->al) 
+                                             & ((IData)(vlSelf->din) 
+                                                >> 7U)))) 
+                                    << 7U)));
+    } else {
+        vlSelf->dout = 0U;
+    }
 }
 
 void Vtop___024root___eval_nba(Vtop___024root* vlSelf) {
@@ -105,5 +226,11 @@ void Vtop___024root___eval_debug_assertions(Vtop___024root* vlSelf) {
         Verilated::overWidthError("clk");}
     if (VL_UNLIKELY((vlSelf->rstn & 0xfeU))) {
         Verilated::overWidthError("rstn");}
+    if (VL_UNLIKELY((vlSelf->shamt & 0xf8U))) {
+        Verilated::overWidthError("shamt");}
+    if (VL_UNLIKELY((vlSelf->lr & 0xfeU))) {
+        Verilated::overWidthError("lr");}
+    if (VL_UNLIKELY((vlSelf->al & 0xfeU))) {
+        Verilated::overWidthError("al");}
 }
 #endif  // VL_DEBUG

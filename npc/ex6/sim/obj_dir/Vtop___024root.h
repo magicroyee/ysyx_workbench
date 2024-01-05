@@ -15,14 +15,16 @@ class Vtop___024root final : public VerilatedModule {
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
     VL_IN8(rstn,0,0);
-    VL_OUT8(x,7,0);
-    CData/*0:0*/ top__DOT__u_rand_gen__DOT__x8;
+    VL_IN8(din,7,0);
+    VL_IN8(shamt,2,0);
+    VL_IN8(lr,0,0);
+    VL_IN8(al,0,0);
+    VL_OUT8(dout,7,0);
     CData/*0:0*/ __Vtrigrprev__TOP__clk;
     CData/*0:0*/ __Vtrigrprev__TOP__rstn;
     CData/*0:0*/ __VactContinue;
-    IData/*31:0*/ __VstlIterCount;
+    IData/*31:0*/ top__DOT__u_barrel_shifter__DOT__i;
     IData/*31:0*/ __VactIterCount;
-    VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VactTriggered;
     VlTriggerVec<1> __VnbaTriggered;
 
