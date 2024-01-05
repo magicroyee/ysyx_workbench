@@ -9,6 +9,9 @@ module rand_gen (
         if (!rstn) begin
             x <= 8'b00000001;
         end
+        else if (!(|x)) begin
+            x <= 8'b00000001;
+        end
         else begin
             x <= {x8, x[7:1]};
         end
