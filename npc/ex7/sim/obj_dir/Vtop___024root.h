@@ -6,6 +6,7 @@
 #define VERILATED_VTOP___024ROOT_H_  // guard
 
 #include "verilated.h"
+#include "verilated_timing.h"
 
 class Vtop__Syms;
 
@@ -13,20 +14,29 @@ class Vtop___024root final : public VerilatedModule {
   public:
 
     // DESIGN SPECIFIC STATE
-    VL_IN8(clk,0,0);
-    VL_IN8(rstn,0,0);
-    VL_IN8(din,7,0);
-    VL_IN8(shamt,2,0);
-    VL_IN8(lr,0,0);
-    VL_IN8(al,0,0);
-    VL_OUT8(dout,7,0);
-    CData/*0:0*/ __Vtrigrprev__TOP__clk;
-    CData/*0:0*/ __Vtrigrprev__TOP__rstn;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__clk;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__clrn;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__ready;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__overflow;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__kbd_clk;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__kbd_data;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__nextdata_n;
+    CData/*2:0*/ top__DOT__u_keyboard_sim__DOT__inst__DOT__w_ptr;
+    CData/*2:0*/ top__DOT__u_keyboard_sim__DOT__inst__DOT__r_ptr;
+    CData/*3:0*/ top__DOT__u_keyboard_sim__DOT__inst__DOT__count;
+    CData/*2:0*/ top__DOT__u_keyboard_sim__DOT__inst__DOT__ps2_clk_sync;
+    CData/*0:0*/ top__DOT__u_keyboard_sim__DOT__inst__DOT____Vlvbound_h1a91ade8__0;
+    CData/*0:0*/ __Vtrigrprev__TOP__top__DOT__u_keyboard_sim__DOT__clk;
     CData/*0:0*/ __VactContinue;
-    IData/*31:0*/ top__DOT__u_barrel_shifter__DOT__i;
+    SData/*10:0*/ top__DOT__u_keyboard_sim__DOT__model__DOT__kbd_sendcode__Vstatic__send_buffer;
+    SData/*9:0*/ top__DOT__u_keyboard_sim__DOT__inst__DOT__buffer;
+    IData/*31:0*/ top__DOT__u_keyboard_sim__DOT__model__DOT__kbd_sendcode__Vstatic__i;
     IData/*31:0*/ __VactIterCount;
-    VlTriggerVec<1> __VactTriggered;
-    VlTriggerVec<1> __VnbaTriggered;
+    VlUnpacked<CData/*7:0*/, 8> top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo;
+    VlUnpacked<CData/*0:0*/, 4> __Vm_traceActivity;
+    VlDelayScheduler __VdlySched;
+    VlTriggerVec<2> __VactTriggered;
+    VlTriggerVec<2> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vtop__Syms* const vlSymsp;

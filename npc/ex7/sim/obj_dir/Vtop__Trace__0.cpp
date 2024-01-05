@@ -23,15 +23,36 @@ void Vtop___024root__trace_chg_sub_0(Vtop___024root* vlSelf, VerilatedVcd::Buffe
     // Init
     uint32_t* const oldp VL_ATTR_UNUSED = bufp->oldp(vlSymsp->__Vm_baseCode + 1);
     // Body
-    bufp->chgBit(oldp+0,(vlSelf->clk));
-    bufp->chgBit(oldp+1,(vlSelf->rstn));
-    bufp->chgCData(oldp+2,(vlSelf->din),8);
-    bufp->chgCData(oldp+3,(vlSelf->shamt),3);
-    bufp->chgBit(oldp+4,(vlSelf->lr));
-    bufp->chgBit(oldp+5,(vlSelf->al));
-    bufp->chgCData(oldp+6,(vlSelf->dout),8);
-    bufp->chgIData(oldp+7,(vlSelf->shamt),32);
-    bufp->chgIData(oldp+8,(vlSelf->top__DOT__u_barrel_shifter__DOT__i),32);
+    if (VL_UNLIKELY((vlSelf->__Vm_traceActivity[1U] 
+                     | vlSelf->__Vm_traceActivity[2U]))) {
+        bufp->chgBit(oldp+0,(vlSelf->top__DOT__u_keyboard_sim__DOT__clrn));
+        bufp->chgBit(oldp+1,(vlSelf->top__DOT__u_keyboard_sim__DOT__kbd_clk));
+        bufp->chgBit(oldp+2,(vlSelf->top__DOT__u_keyboard_sim__DOT__kbd_data));
+        bufp->chgBit(oldp+3,(vlSelf->top__DOT__u_keyboard_sim__DOT__nextdata_n));
+        bufp->chgIData(oldp+4,(vlSelf->top__DOT__u_keyboard_sim__DOT__model__DOT__kbd_sendcode__Vstatic__i),32);
+        bufp->chgSData(oldp+5,(vlSelf->top__DOT__u_keyboard_sim__DOT__model__DOT__kbd_sendcode__Vstatic__send_buffer),11);
+    }
+    if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[3U])) {
+        bufp->chgCData(oldp+6,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo
+                               [vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__r_ptr]),8);
+        bufp->chgBit(oldp+7,(vlSelf->top__DOT__u_keyboard_sim__DOT__ready));
+        bufp->chgBit(oldp+8,(vlSelf->top__DOT__u_keyboard_sim__DOT__overflow));
+        bufp->chgSData(oldp+9,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__buffer),10);
+        bufp->chgCData(oldp+10,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[0]),8);
+        bufp->chgCData(oldp+11,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[1]),8);
+        bufp->chgCData(oldp+12,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[2]),8);
+        bufp->chgCData(oldp+13,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[3]),8);
+        bufp->chgCData(oldp+14,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[4]),8);
+        bufp->chgCData(oldp+15,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[5]),8);
+        bufp->chgCData(oldp+16,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[6]),8);
+        bufp->chgCData(oldp+17,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__fifo[7]),8);
+        bufp->chgCData(oldp+18,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__w_ptr),3);
+        bufp->chgCData(oldp+19,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__r_ptr),3);
+        bufp->chgCData(oldp+20,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__count),4);
+        bufp->chgCData(oldp+21,(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__ps2_clk_sync),3);
+        bufp->chgBit(oldp+22,((IData)((4U == (6U & (IData)(vlSelf->top__DOT__u_keyboard_sim__DOT__inst__DOT__ps2_clk_sync))))));
+    }
+    bufp->chgBit(oldp+23,(vlSelf->top__DOT__u_keyboard_sim__DOT__clk));
 }
 
 void Vtop___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {
@@ -39,11 +60,10 @@ void Vtop___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {
     // Init
     Vtop___024root* const __restrict vlSelf VL_ATTR_UNUSED = static_cast<Vtop___024root*>(voidSelf);
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
-    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
-        __Vm_traceActivity[__Vi0] = 0;
-    }
     // Body
     vlSymsp->__Vm_activity = false;
-    __Vm_traceActivity[0U] = 0U;
+    vlSymsp->TOP.__Vm_traceActivity[0U] = 0U;
+    vlSymsp->TOP.__Vm_traceActivity[1U] = 0U;
+    vlSymsp->TOP.__Vm_traceActivity[2U] = 0U;
+    vlSymsp->TOP.__Vm_traceActivity[3U] = 0U;
 }

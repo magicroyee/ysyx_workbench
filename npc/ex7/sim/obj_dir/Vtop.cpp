@@ -11,13 +11,6 @@
 Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new Vtop__Syms(contextp(), _vcname__, this)}
-    , clk{vlSymsp->TOP.clk}
-    , rstn{vlSymsp->TOP.rstn}
-    , din{vlSymsp->TOP.din}
-    , shamt{vlSymsp->TOP.shamt}
-    , lr{vlSymsp->TOP.lr}
-    , al{vlSymsp->TOP.al}
-    , dout{vlSymsp->TOP.dout}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context
@@ -74,12 +67,9 @@ void Vtop::eval_step() {
 
 //============================================================
 // Events and timing
-bool Vtop::eventsPending() { return false; }
+bool Vtop::eventsPending() { return !vlSymsp->TOP.__VdlySched.empty(); }
 
-uint64_t Vtop::nextTimeSlot() {
-    VL_FATAL_MT(__FILE__, __LINE__, "", "%Error: No delays in the design");
-    return 0;
-}
+uint64_t Vtop::nextTimeSlot() { return vlSymsp->TOP.__VdlySched.nextTimeSlot(); }
 
 //============================================================
 // Utilities

@@ -45,11 +45,12 @@ int main(int argc, char **argv)
     top->trace(tfp, 0);
     tfp->open("./sim/wave.vcd");
 
-    reset(10);
+    // reset(10);
 
     while (!contextp->gotFinish())
     {
         step_and_dump_wave();
+        // printf("data = %d, ready = %d, overflow = %d\n", top->u_keyboard_sim->data, top->u_keyboard_sim->ready, top->u_keyboard_sim->overflow);
     }
 
     delete top;

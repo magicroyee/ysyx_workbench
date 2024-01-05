@@ -16,12 +16,11 @@ void Vtop___024root___eval_triggers__act(Vtop___024root* vlSelf) {
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___eval_triggers__act\n"); );
     // Body
-    vlSelf->__VactTriggered.at(0U) = (((IData)(vlSelf->clk) 
-                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clk))) 
-                                      | ((~ (IData)(vlSelf->rstn)) 
-                                         & (IData)(vlSelf->__Vtrigrprev__TOP__rstn)));
-    vlSelf->__Vtrigrprev__TOP__clk = vlSelf->clk;
-    vlSelf->__Vtrigrprev__TOP__rstn = vlSelf->rstn;
+    vlSelf->__VactTriggered.at(0U) = ((IData)(vlSelf->top__DOT__u_keyboard_sim__DOT__clk) 
+                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__top__DOT__u_keyboard_sim__DOT__clk)));
+    vlSelf->__VactTriggered.at(1U) = vlSelf->__VdlySched.awaitingCurrentTime();
+    vlSelf->__Vtrigrprev__TOP__top__DOT__u_keyboard_sim__DOT__clk 
+        = vlSelf->top__DOT__u_keyboard_sim__DOT__clk;
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         Vtop___024root___dump_triggers__act(vlSelf);

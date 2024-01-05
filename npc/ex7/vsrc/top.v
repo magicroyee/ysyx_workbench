@@ -1,7 +1,9 @@
+`timescale 1ns / 1ps
 module top(
     
 );
 
-    ps2_keyboard u_ps2_keyboard ();
+    keyboard_sim u_keyboard_sim (
+    );
 
 endmodule

@@ -4,7 +4,7 @@
 # Execute this makefile from the object directory:
 #    make -f Vtop.mk
 
-default: /home/zhu/workspace/ysyx-workbench/npc/ex6/sim/top
+default: /home/zhu/workspace/ysyx-workbench/npc/ex7/sim/top
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -53,7 +53,7 @@ VM_USER_CLASSES = \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
-	/home/zhu/workspace/ysyx-workbench/npc/ex6/csrc \
+	/home/zhu/workspace/ysyx-workbench/npc/ex7/csrc \
 
 
 ### Default rules...
@@ -65,11 +65,11 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-sim_main.o: /home/zhu/workspace/ysyx-workbench/npc/ex6/csrc/sim_main.cpp
+sim_main.o: /home/zhu/workspace/ysyx-workbench/npc/ex7/csrc/sim_main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)
-/home/zhu/workspace/ysyx-workbench/npc/ex6/sim/top: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+/home/zhu/workspace/ysyx-workbench/npc/ex7/sim/top: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 
