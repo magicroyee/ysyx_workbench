@@ -32,9 +32,8 @@ int main(int argc, char** argv)
     dut.eval();
     while(1) {
         // dut.eval();
-        single_cycle();
-        usleep(1000000);
         nvboard_update();
+        single_cycle();
     }
 
     nvboard_quit();
