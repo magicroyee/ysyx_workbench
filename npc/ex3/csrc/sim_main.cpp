@@ -32,7 +32,7 @@ int main(int argc, char** argv)
                 }
             }
         }
-
+        break;
         tfp->dump(contextp->time());
         contextp->timeInc(1);
 
