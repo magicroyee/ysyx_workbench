@@ -29,12 +29,12 @@ int main(int argc, char** argv)
                     top->b = b[k];
                     top->eval();
                     printf("op = %d, a = %d, b = %d, y = %d\n", op[i], a[j], b[k], top->y);
+                    tfp->dump(contextp->time());
+                    contextp->timeInc(1);
                 }
             }
         }
         // break;
-        tfp->dump(contextp->time());
-        contextp->timeInc(1);
 
     }
     delete top;
