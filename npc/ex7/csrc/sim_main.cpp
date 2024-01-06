@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 {
     contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);
-    tfp = new VerilatedVcdC;
     top = new Vtop{contextp};
+    tfp = new VerilatedVcdC;
 
     contextp->traceEverOn(true);
     top->trace(tfp, 0);
