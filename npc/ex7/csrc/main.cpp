@@ -16,7 +16,7 @@ static Vtop *top = NULL;
 void step_and_dump_wave()
 {
     top->eval();
-    contextp->timeInc(1);
+    contextp->timeInc(10000);
     tfp->dump(contextp->time());
 };
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 
     tfp = new VerilatedVcdC;
     top->trace(tfp, 0);
-    tfp->open("./sim/wave.vcd");
+    tfp->open("./build/wave.vcd");
 
     nvboard_bind_all_pins(&dut);
     nvboard_init();
