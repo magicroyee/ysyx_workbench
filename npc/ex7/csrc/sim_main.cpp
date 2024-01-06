@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "Vtop.h"
+#include "Vtb_top.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
@@ -9,7 +9,7 @@ u_int8_t din[] = {0x00, 0x01, 0x11, 0x55, 0x99, 0xff};
 
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
-static Vtop *top = NULL;
+static Vtb_top *top = NULL;
 
 void step_and_dump_wave()
 {
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 {
     contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);
-    top = new Vtop{contextp};
+    top = new Vtb_top{contextp};
     contextp->traceEverOn(true);
 
     tfp = new VerilatedVcdC;

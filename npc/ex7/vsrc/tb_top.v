@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-module keyboard_sim;
+module tb_top;
 
 /* parameter */
 parameter [31:0] clock_period = 10;

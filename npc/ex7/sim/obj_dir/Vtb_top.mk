@@ -2,9 +2,9 @@
 # DESCRIPTION: Verilator output: Makefile for building Verilated archive or executable
 #
 # Execute this makefile from the object directory:
-#    make -f Vtop.mk
+#    make -f Vtb_top.mk
 
-default: /home/zhu/workspace/ysyx-workbench/npc/ex7/sim/top
+default: /home/zhu/workspace/ysyx-workbench/npc/ex7/sim/tb_top
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -30,9 +30,9 @@ VM_SC_TARGET_ARCH = linux
 
 ### Vars...
 # Design prefix (from --prefix)
-VM_PREFIX = Vtop
+VM_PREFIX = Vtb_top
 # Module prefix (from --prefix)
-VM_MODPREFIX = Vtop
+VM_MODPREFIX = Vtb_top
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 	-MMD \
@@ -40,7 +40,7 @@ VM_USER_CFLAGS = \
 	-I/usr/include/SDL2 \
 	-D_REENTRANT \
 	-I/home/zhu/workspace/ysyx-workbench/nvboard/include \
-	-DTOP_NAME="Vtop" \
+	-DTOP_NAME="Vtb_top" \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
@@ -58,7 +58,7 @@ VM_USER_DIR = \
 
 ### Default rules...
 # Include list of all generated classes
-include Vtop_classes.mk
+include Vtb_top_classes.mk
 # Include global rules
 include $(VERILATOR_ROOT)/include/verilated.mk
 
@@ -69,7 +69,7 @@ sim_main.o: /home/zhu/workspace/ysyx-workbench/npc/ex7/csrc/sim_main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)
-/home/zhu/workspace/ysyx-workbench/npc/ex7/sim/top: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+/home/zhu/workspace/ysyx-workbench/npc/ex7/sim/tb_top: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 

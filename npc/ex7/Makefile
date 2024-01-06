@@ -7,6 +7,7 @@
 # $(TARGETS): $(VSOURCES) $(CSOURCES)
 # 	verilator $(CFLAGS) $(VSOURCES) $(CSOURCES)
 TOPNAME ?= top
+SIMTOPNAME = tb_$(TOPNAME)
 NXDC_FILES = constr/top.nxdc
 INC_PATH ?=
 
@@ -21,7 +22,7 @@ OBJ_DIR = $(BUILD_DIR)/obj_dir
 BIN = $(BUILD_DIR)/$(TOPNAME)
 SIM_DIR = ./sim
 SIM_OBJ_DIR = $(SIM_DIR)/obj_dir
-SIM_BIN = $(SIM_DIR)/$(TOPNAME)
+SIM_BIN = $(SIM_DIR)/$(SIMTOPNAME)
 
 default: $(BIN) $(SIM_BIN)
 
@@ -43,21 +44,22 @@ include $(NVBOARD_HOME)/scripts/nvboard.mk
 
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+RUN_FLAGS = $(CXXFLAGS) $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+SIM_FLAGS = $(CXXFLAGS) $(INCFLAGS) -DTOP_NAME="\"V$(SIMTOPNAME)\""
 
 $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		$(addprefix -CFLAGS , $(RUN_FLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 $(SIM_BIN): $(VSRCS) $(SIM_CSRCS)
 	$(shell mkdir -p $(SIM_DIR))
 	@rm -rf $(SIM_OBJ_DIR)
 	$(VERILATOR) $(SIM_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--top-module $(SIMTOPNAME) $^ \
+		$(addprefix -CFLAGS , $(SIM_FLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(SIM_OBJ_DIR) --exe -o $(abspath $(SIM_BIN))
 
 all: default
