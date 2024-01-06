@@ -9,6 +9,17 @@
 
 static TOP_NAME dut;
 
+VerilatedContext *contextp = NULL;
+VerilatedVcdC *tfp = NULL;
+static Vtop *top = NULL;
+
+void step_and_dump_wave()
+{
+    top->eval();
+    contextp->timeInc(1);
+    tfp->dump(contextp->time());
+};
+
 void nvboard_bind_all_pins(Vtop *top);
 
 static void single_cycle() {
@@ -24,6 +35,15 @@ static void reset(int n) {
 
 int main(int argc, char** argv)
 {
+    contextp = new VerilatedContext;
+    contextp->commandArgs(argc, argv);
+    top = new Vtop{contextp};
+    contextp->traceEverOn(true);
+
+    tfp = new VerilatedVcdC;
+    top->trace(tfp, 0);
+    tfp->open("./sim/wave.vcd");
+
     nvboard_bind_all_pins(&dut);
     nvboard_init();
 
@@ -34,9 +54,13 @@ int main(int argc, char** argv)
         // dut.eval();
         nvboard_update();
         single_cycle();
+        step_and_dump_wave();
     }
 
     nvboard_quit();
 
+    delete top;
+    tfp->close();
+    delete contextp;
     return 0;
 }
