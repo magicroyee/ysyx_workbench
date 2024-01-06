@@ -37,9 +37,9 @@ void step_and_dump_wave()
 int main(int argc, char **argv)
 {
     contextp = new VerilatedContext;
+    contextp->commandArgs(argc, argv);
     tfp = new VerilatedVcdC;
     top = new Vtop{contextp};
-    contextp->commandArgs(argc, argv);
 
     contextp->traceEverOn(true);
     top->trace(tfp, 0);
