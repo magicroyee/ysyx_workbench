@@ -39,9 +39,9 @@ int main(int argc, char **argv)
     contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);
     top = new Vtop{contextp};
-    tfp = new VerilatedVcdC;
-
     contextp->traceEverOn(true);
+
+    tfp = new VerilatedVcdC;
     top->trace(tfp, 0);
     tfp->open("./sim/wave.vcd");
 
