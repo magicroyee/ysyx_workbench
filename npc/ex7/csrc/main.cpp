@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
-#include <nvboard.h>
+#include "nvboard.h"
 #include "Vtop.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
         // dut.eval();
         nvboard_update();
         single_cycle();
-        step_and_dump_wave();
+        // step_and_dump_wave();
     }
 
     nvboard_quit();
