@@ -39,7 +39,7 @@ module code_analysis(
             key_valid <= 1'b0;
         end
         else if(code_reg_valid) begin
-            if (releasing) begin
+            if (releasing && (code_reg == key_reg)) begin
                 key_valid <= 1'b0;
             end
             else if (code_reg != 8'hf0) begin
@@ -109,6 +109,7 @@ module code_analysis(
         end
     end
 
+    // assign new_key = (key_valid & ~key_valid_d1) | (key_valid & (code_reg != 8'hf0) & (code_reg != key_reg) & ~releasing);
     assign new_key = (key_valid & ~key_valid_d1) | (key_valid & (code_reg != 8'hf0) & (code_reg != key_reg) & ~releasing);
 
     always @(posedge clk or negedge rstn) begin
