@@ -14,7 +14,7 @@ static Vtop *top = NULL;
 void step_and_dump_wave()
 {
     top->eval();
-    contextp->timeInc(1);
+    contextp->timeInc(10);
     tfp->dump(contextp->time());
 }
 
