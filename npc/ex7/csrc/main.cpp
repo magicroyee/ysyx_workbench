@@ -7,47 +7,48 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
-static TOP_NAME dut;
+static TOP_NAME *dut = NULL;
 
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
 
 void step_and_dump_wave()
 {
-    dut.eval();
+    dut->eval();
     contextp->timeInc(10);
     tfp->dump(contextp->time());
 };
 
 void nvboard_bind_all_pins(Vtop *top);
 
-static void single_cycle() {
-    dut.clk = 0; dut.eval();
-    dut.clk = 1; dut.eval();
+    static void single_cycle() {
+        dut->clk = 0; dut->eval();
+        dut->clk = 1; dut->eval();
 }
 
 static void reset(int n) {
-    dut.rstn = 0;
+    dut->rstn = 0;
     while (n -- > 0) single_cycle();
-    dut.rstn = 1;
+    dut->rstn = 1;
 }
 
 int main(int argc, char** argv)
 {
     contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);
+    dut = new TOP_NAME{contextp};
     contextp->traceEverOn(true);
 
     tfp = new VerilatedVcdC;
-    dut.trace(tfp, 0);
+    dut->trace(tfp, 0);
     tfp->open("./build/wave.vcd");
 
-    nvboard_bind_all_pins(&dut);
+    nvboard_bind_all_pins(&(*dut));
     nvboard_init();
 
     reset(10);
 
-    dut.eval();
+    dut->eval();
     while(1) {
         // dut.eval();
         nvboard_update();
