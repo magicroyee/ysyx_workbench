@@ -110,7 +110,7 @@ module code_analysis(
     end
 
     // assign new_key = (key_valid & ~key_valid_d1) | (key_valid & (code_reg != 8'hf0) & (code_reg != key_reg) & ~releasing);
-    assign new_key = (key_valid & ~key_valid_d1) | (key_valid & (code_reg != 8'hf0) & (code_reg != key_reg) & ~releasing);
+    assign new_key = (key_valid & ~key_valid_d1) | (key_valid & code_reg_valid & (code_reg != 8'hf0) & (code_reg != key_reg) & ~releasing);
 
     always @(posedge clk or negedge rstn) begin
         if (!rstn) begin
