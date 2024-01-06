@@ -6,7 +6,7 @@ module code_analysis(
     output reg key_valid,
     output reg [7:0] key_a,
     output reg [7:0] key_c,
-    output reg [7:0] count
+    output [7:0] count
 );
 
     reg [7:0] code_reg;
@@ -15,6 +15,8 @@ module code_analysis(
     reg [7:0] key_reg;
     reg       key_valid_d1;
     wire      new_key;
+    reg [3:0] count0;
+    reg [3:0] count1;
 
     always @(posedge clk or negedge rstn) begin
         if (!rstn) begin
@@ -114,11 +116,32 @@ module code_analysis(
 
     always @(posedge clk or negedge rstn) begin
         if (!rstn) begin
-            count <= 8'h00;
+            count0 <= 4'h0;
         end
         else if(new_key) begin
-            count <= count + 8'h01;
+            if (count0 < 4'h9) begin
+                count0 <= count0 + 4'h1;
+            end
+            else begin
+                count0 <= 4'h0;
+            end
         end
     end
+
+    always @(posedge clk or negedge rstn) begin
+        if (!rstn) begin
+            count1 <= 4'h0;
+        end
+        else if(new_key && (count0 == 4'h9)) begin
+            if (count1 < 4'h9) begin
+                count1 <= count1 + 4'h1;
+            end
+            else begin
+                count1 <= 4'h0;
+            end
+        end
+    end
+
+    assign count = {count1, count0};
 
 endmodule
