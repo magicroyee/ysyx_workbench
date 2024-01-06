@@ -83,7 +83,7 @@ module code_analysis(
             key_c <= 8'h00;
         end
         else if(code_reg_valid) begin
-            if (code_reg != 8'hf0) begin
+            if ((code_reg != 8'hf0) && ~releasing) begin
                 key_c <= code_reg;
             end
         end
@@ -94,7 +94,7 @@ module code_analysis(
             key_reg <= 8'h00;
         end
         else if(code_reg_valid) begin
-            if (code_reg != 8'hf0) begin
+            if ((code_reg != 8'hf0) && ~releasing) begin
                 key_reg <= code_reg;
             end
         end
