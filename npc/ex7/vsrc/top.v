@@ -16,6 +16,8 @@ module top(
     output [7:0] seg1,
     output [7:0] seg2,
     output [7:0] seg3,
+    output [7:0] seg4,
+    output [7:0] seg5,
     output [7:0] seg6,
     output [7:0] seg7
 );
@@ -62,5 +64,8 @@ module top(
         .seg6(seg6),
         .seg7(seg7)
     );
+
+    assign seg4 = 8'hff;
+    assign seg5 = 8'hff;
 
 endmodule
