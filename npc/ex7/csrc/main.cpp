@@ -15,7 +15,7 @@ VerilatedVcdC *tfp = NULL;
 void step_and_dump_wave()
 {
     dut->eval();
-    contextp->timeInc(10);
+    contextp->timeInc(100);
     tfp->dump(contextp->time());
 };
 

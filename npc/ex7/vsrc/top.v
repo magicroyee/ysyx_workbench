@@ -8,8 +8,6 @@
 module top(
     input clk,
     input rstn,
-    input sw,
-    output led,
     input ps2_clk,
     input ps2_data,
     output [7:0] data,
@@ -28,7 +26,5 @@ module top(
         .nextdata_n(nextdata_n),
         .overflow(overflow)
     );
-
-    assign led = sw;
 
 endmodule
