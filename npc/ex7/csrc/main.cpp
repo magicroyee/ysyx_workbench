@@ -53,7 +53,7 @@ int main(int argc, char** argv)
         // dut.eval();
         nvboard_update();
         single_cycle();
-        // step_and_dump_wave();
+        step_and_dump_wave();
     }
 
     nvboard_quit();
