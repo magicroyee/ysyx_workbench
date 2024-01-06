@@ -39,11 +39,11 @@ module code_analysis(
             key_valid <= 1'b0;
         end
         else if(code_reg_valid) begin
-            if (code_reg != 8'hf0) begin
-                key_valid <= 1'b1;
-            end
-            else if (releasing) begin
+            if (releasing) begin
                 key_valid <= 1'b0;
+            end
+            else if (code_reg != 8'hf0) begin
+                key_valid <= 1'b1;
             end
         end
     end
