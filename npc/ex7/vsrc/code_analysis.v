@@ -44,7 +44,7 @@ module code_analysis(
             if (releasing && (code_reg == key_reg)) begin
                 key_valid <= 1'b0;
             end
-            else if (code_reg != 8'hf0) begin
+            else if (code_reg_valid && ~releasing && code_reg != 8'hf0) begin
                 key_valid <= 1'b1;
             end
         end
