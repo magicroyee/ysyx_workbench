@@ -1,8 +1,14 @@
 module top(
-    input a,
-    input b,
-    output f
+    input clk,
+    input rstn,
+    output reg [15:0] led
 );
-    assign f = a^b;
-
+    reg [31:0] count;
+    always @(posedge clk) begin
+        if (!rstn) begin led <= 1; count <= 0; end
+        else begin
+            if (count == 0) led <= {led[14:0], led[15]};
+            count <= (count >= 5000000 ? 32'b0 : count + 1);
+        end
+    end
 endmodule

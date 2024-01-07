@@ -12,14 +12,14 @@ static TOP_NAME dut;
 void nvboard_bind_all_pins(Vtop *top);
 
 static void single_cycle() {
-  dut.clk = 0; dut.eval();
-  dut.clk = 1; dut.eval();
+    dut.clk = 0; dut.eval();
+    dut.clk = 1; dut.eval();
 }
 
 static void reset(int n) {
-  dut.rstn = 0;
-  while (n -- > 0) single_cycle();
-  dut.rstn = 1;
+    dut.rstn = 0;
+    while (n -- > 0) single_cycle();
+    dut.rstn = 1;
 }
 
 int main(int argc, char** argv)
@@ -29,11 +29,11 @@ int main(int argc, char** argv)
 
     reset(10);
 
-    // dut.eval();
+    dut.eval();
     while(1) {
-        dut.eval();
-        single_cycle();
+        // dut.eval();
         nvboard_update();
+        single_cycle();
     }
 
     nvboard_quit();
