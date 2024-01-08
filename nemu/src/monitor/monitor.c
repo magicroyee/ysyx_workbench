@@ -32,8 +32,8 @@ static void welcome() {
   Log("Build time: %s, %s", __TIME__, __DATE__);
   printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
-  // Log("Exercise: Please remove me in the source code and compile NEMU again.");
-  // assert(0);
+  Log("Exercise: Please remove me in the source code and compile NEMU again.");
+  assert(0);
 }
 
 #ifndef CONFIG_TARGET_AM
@@ -121,15 +121,12 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
-  printf("Initialized image, size = %ld\n", img_size);
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
-  printf("Initialized differential testing, port = %d\n", difftest_port);
 
   /* Initialize the simple debugger. */
   init_sdb();
-  printf("Initialized simple debugger\n");
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
@@ -141,7 +138,6 @@ void init_monitor(int argc, char *argv[]) {
                                "bad"))) "-pc-linux-gnu"
   ));
 #endif
-  printf("Initialized disassembler\n");
 
   /* Display welcome message. */
   welcome();
