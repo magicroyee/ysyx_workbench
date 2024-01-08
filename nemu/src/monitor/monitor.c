@@ -141,6 +141,7 @@ void init_monitor(int argc, char *argv[]) {
                                "bad"))) "-pc-linux-gnu"
   ));
 #endif
+  printf("Initialized disassembler\n");
 
   /* Display welcome message. */
   welcome();
