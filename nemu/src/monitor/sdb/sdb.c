@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "memory/vaddr.h"
 
 static int is_batch_mode = false;
 
@@ -53,6 +54,52 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args) {
+  char *arg = strtok(NULL, " ");
+  int n = 1;
+  if (arg != NULL) {
+    sscanf(arg, "%d", &n);
+  }
+  cpu_exec(n);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("Please specify the subcommand!\n");
+    return 0;
+  }
+  if (strcmp(arg, "r") == 0) {
+    isa_reg_display();
+  }
+  else {
+    printf("Unknown subcommand '%s'\n", arg);
+  }
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("Please specify the length!\n");
+    return 0;
+  }
+  int n;
+  sscanf(arg, "%d", &n);
+  arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("Please specify the address!\n");
+    return 0;
+  }
+  vaddr_t addr;
+  sscanf(arg, "%x", &addr);
+  for (int i = 0; i < n; i++) {
+    printf("0x%08x: 0x%08x\n", addr + i * 4, vaddr_read(addr + i * 4, 4));
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -65,7 +112,10 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-
+  { "si", "Single step execution", cmd_si },
+  { "info", "Print the status of registers or watchpoints", cmd_info },
+  { "x", "Scan the memory", cmd_x },
+  
 };
 
 #define NR_CMD ARRLEN(cmd_table)
