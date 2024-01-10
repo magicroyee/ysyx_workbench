@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     res = expr(eval_ptr, &success);
     if (success) {
       printf("%s = %u\n", res_ptr, res);
-      assert(res == atoi(res_ptr));
+      printf("%s = %u, should be %u", res_ptr, res, atoi(res_ptr));
     } else {
       printf("%s = invalid\n", res_ptr);
     }

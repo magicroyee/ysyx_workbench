@@ -107,11 +107,10 @@ static bool make_token(char *e) {
           default: {
             tokens[nr_token].type = rules[i].token_type;
             sprintf(tokens[nr_token].str, "%.*s", substr_len, substr_start);
+            nr_token ++;
           }
         }
-
-        nr_token ++;
-
+        
         break;
       }
     }
