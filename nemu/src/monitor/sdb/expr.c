@@ -92,37 +92,9 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-        //     i, rules[i].regex, position, substr_len, substr_len, substr_start);
-        do
-        {
-          printf("\33[1;34m"
-                 "[%s:%d %s] "
-                 "What?\n"
-                 "\33[0m"
-                 "\n",
-                 "src/monitor/sdb/expr.c", 97, __func__);
-          do
-          {
-            extern FILE *log_fp;
-            extern
-# 97 "src/monitor/sdb/expr.c" 3 4
-                _Bool
-# 97 "src/monitor/sdb/expr.c"
-                log_enable();
-            if (log_enable())
-            {
-              fprintf(log_fp, "\33[1;34m"
-                              "[%s:%d %s] "
-                              "What?\n"
-                              "\33[0m"
-                              "\n",
-                      "src/monitor/sdb/expr.c", 97, __func__);
-              fflush(log_fp);
-            }
-          } while (0);
-        } while (0);
-
+        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
