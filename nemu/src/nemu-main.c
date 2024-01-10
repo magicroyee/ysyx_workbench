@@ -50,12 +50,8 @@ int main(int argc, char *argv[]) {
     res_ptr = strtok(line, " ");
     eval_ptr = strtok(NULL, "\n");
     res = expr(eval_ptr, &success);
-    if (success) {
-      printf("%s = %u\n", res_ptr, res);
-      printf("%s = %u, should be %u\n", eval_ptr, res, atoi(res_ptr));
-    } else {
-      printf("%s = invalid\n", res_ptr);
-    }
+    assert(success);
+    assert(res == atoi(res_ptr));
   }
 
   // close the file
