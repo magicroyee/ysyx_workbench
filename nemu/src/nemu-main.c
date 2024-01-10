@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <common.h>
+#include "./monitor/sdb/sdb.h"
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
@@ -40,9 +41,21 @@ int main(int argc, char *argv[]) {
   char *line = NULL;
   size_t len = 0;
   ssize_t read;
+  uint32_t res;
+  char *res_ptr;
+  char *eval_ptr;
+  bool success;
+
   while ((read = getline(&line, &len, fp)) != -1) {
-    printf("Retrieved line of length %zu:\n", read);
-    printf("%s", line);
+    res_ptr = strtok(line, " ");
+    eval_ptr = strtok(NULL, "\n");
+    res = expr(res_ptr, &success);
+    if (success) {
+      printf("%s = %u\n", res_ptr, res);
+      assert(res == atoi(eval_ptr));
+    } else {
+      printf("%s = invalid\n", res_ptr);
+    }
   }
 
   // close the file
