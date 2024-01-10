@@ -94,7 +94,34 @@ static bool make_token(char *e) {
 
         // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
         //     i, rules[i].regex, position, substr_len, substr_len, substr_start);
-        Log("What?\n");
+        do
+        {
+          printf("\33[1;34m"
+                 "[%s:%d %s] "
+                 "What?\n"
+                 "\33[0m"
+                 "\n",
+                 "src/monitor/sdb/expr.c", 97, __func__);
+          do
+          {
+            extern FILE *log_fp;
+            extern
+# 97 "src/monitor/sdb/expr.c" 3 4
+                _Bool
+# 97 "src/monitor/sdb/expr.c"
+                log_enable();
+            if (log_enable())
+            {
+              fprintf(log_fp, "\33[1;34m"
+                              "[%s:%d %s] "
+                              "What?\n"
+                              "\33[0m"
+                              "\n",
+                      "src/monitor/sdb/expr.c", 97, __func__);
+              fflush(log_fp);
+            }
+          } while (0);
+        } while (0);
 
         position += substr_len;
 
