@@ -22,14 +22,30 @@ int is_exit_status_bad();
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
-  init_monitor(argc, argv);
-#endif
+// #ifdef CONFIG_TARGET_AM
+//   am_init_monitor();
+// #else
+//   init_monitor(argc, argv);
+// #endif
 
-  /* Start engine. */
-  engine_start();
+//   /* Start engine. */
+//   engine_start();
 
-  return is_exit_status_bad();
+//   return is_exit_status_bad();
+  // open a file for reading
+  FILE *fp = fopen("/home/zhu/workspace/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  assert(fp != NULL);
+  
+  // read a line
+  char *line = NULL;
+  size_t len = 0;
+  ssize_t read;
+  while ((read = getline(&line, &len, fp)) != -1) {
+    printf("Retrieved line of length %zu:\n", read);
+    printf("%s", line);
+  }
+
+  // close the file
+  fclose(fp);
+  return 0;
 }

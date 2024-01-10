@@ -26,13 +26,58 @@ static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
-"  unsigned result = %s; "
+"  unsigned result = (unsigned int)(%s); "
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
+static int ind = 0;
+
+static inline uint32_t choose(uint32_t n) {
+  return rand() % n;
+}
+
+static inline void gen(char c) {
+  buf[ind++] = c;
+  buf[ind] = '\0';
+}
+
+static inline void gen_num() {
+  uint32_t n = choose(10);
+  if (n == 0) {
+    gen('0');
+    gen('u');
+    return;
+  }
+  for (int i=0; i < n; i++) {
+    if (i == 0) {
+      gen(choose(9) + '1');
+    } else {
+      gen(choose(10) + '0');
+    }
+  }
+  gen('u');
+}
+
+static inline void gen_rand_op() {
+  switch (choose(4)) {
+    case 0: gen('+'); break;
+    case 1: gen('-'); break;
+    case 2: gen('*'); break;
+    case 3: gen('/'); break;
+  }
+}
 
 static void gen_rand_expr() {
-  buf[0] = '\0';
+  if (ind >= 65536/2) {
+    gen_num();
+    return;
+  }
+switch (choose(4)) {
+    case 0: gen_num(); break;
+    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    case 2: gen(' '); gen_rand_expr(); break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -44,7 +89,9 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    ind = 0;
     gen_rand_expr();
+    // sprintf(buf, "4294967295+(2*4294967295)");
 
     sprintf(code_buf, code_format, buf);
 
@@ -53,7 +100,7 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr");
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");
@@ -62,6 +109,8 @@ int main(int argc, char *argv[]) {
     int result;
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
+
+    if (ret != 1) continue;
 
     printf("%u %s\n", result, buf);
   }
