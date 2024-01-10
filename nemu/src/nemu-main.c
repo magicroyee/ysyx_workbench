@@ -49,10 +49,10 @@ int main(int argc, char *argv[]) {
   while ((read = getline(&line, &len, fp)) != -1) {
     res_ptr = strtok(line, " ");
     eval_ptr = strtok(NULL, "\n");
-    res = expr(res_ptr, &success);
+    res = expr(eval_ptr, &success);
     if (success) {
       printf("%s = %u\n", res_ptr, res);
-      assert(res == atoi(eval_ptr));
+      assert(res == atoi(res_ptr));
     } else {
       printf("%s = invalid\n", res_ptr);
     }
