@@ -234,8 +234,8 @@ static word_t eval(int p, int q) {
         }
       }
     }
-    int val1 = eval(p, position - 1);
-    int val2 = eval(position + 1, q);
+    uint32_t val1 = eval(p, position - 1);
+    uint32_t val2 = eval(position + 1, q);
     switch (op) {
       case '*': return val1 * val2;
       case '/': return val1 / val2;
