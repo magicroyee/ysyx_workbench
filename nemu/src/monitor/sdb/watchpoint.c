@@ -22,7 +22,7 @@ typedef struct watchpoint {
   struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
-
+  char *expr;
 } WP;
 
 static WP wp_pool[NR_WP] = {};
@@ -40,4 +40,64 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
+void insert_wp(WP *head, WP *wp) 
+{
+  if (head == NULL) {
+    head = wp;
+    return ;
+  }
+  wp->next = head;
+  head = wp;
+}
 
+WP *extract_wp(WP *head, WP *wp)
+{
+  if (head == NULL) {
+    printf("No watchpoint in heads!\n");
+    assert(0);
+  }
+  WP *p = head;
+  if (p == wp) {
+    head = head->next;
+    p->next = NULL;
+    return p;
+  }
+  while (p->next != NULL) {
+    if (p->next == wp) {
+      WP *q = p->next;
+      p->next = p->next->next;
+      q->next = NULL;
+      return q;
+    }
+    p = p->next;
+  }
+  printf("No such watchpoint!\n");
+  assert(0);
+}
+
+WP* new_wp(char *expr) {
+  if (free_ == NULL) {
+    printf("No more watchpoint!\n");
+    assert(0);
+  }
+  WP *wp = extract_wp(free_, free_);
+  wp->expr = malloc(strlen(expr) + 1);
+  if(!wp->expr) {
+    printf("malloc failed!\n");
+    assert(0);
+  }
+  strcpy(wp->expr, expr);
+  insert_wp(head, wp);
+  return wp;
+}
+
+void free_wp(WP *wp)
+{
+  if (wp == NULL) {
+    printf("Wp should not be NULL!\n");
+    assert(0);
+  }
+  WP *p = extract_wp(head, wp);
+  free(p->expr);
+  insert_wp(free_, p);
+}
