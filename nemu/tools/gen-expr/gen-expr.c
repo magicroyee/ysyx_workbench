@@ -69,11 +69,14 @@ static inline void gen_num() {
 }
 
 static inline void gen_rand_op() {
-  switch (choose(4)) {
+  switch (choose(7)) {
     case 0: gen('+'); break;
     case 1: gen('-'); break;
     case 2: gen('*'); break;
     case 3: gen('/'); break;
+    case 4: gen('='); gen('='); break;
+    case 5: gen('!'); gen('='); break;
+    case 6: gen('&'); gen('&'); break;
   }
 }
 
