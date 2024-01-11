@@ -34,17 +34,17 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
-void insert_wp(WP *head, WP *wp) 
+void insert_wp(WP **_head, WP *wp) 
 {
-  if (head == NULL) {
-    head = wp;
+  if (*_head == NULL) {
+    *_head = wp;
     wp->next = NULL;
     return ;
   }
-  WP *p = head;
+  WP *p = *_head;
   if (wp->NO < p->NO) {
     wp->next = p;
-    head = wp;
+    *_head = wp;
     return ;
   }
   while (p->next != NULL) {
@@ -59,15 +59,15 @@ void insert_wp(WP *head, WP *wp)
   wp->next = NULL;
 }
 
-WP *extract_wp(WP *head, int NO)
+WP *extract_wp(WP **_head, int NO)
 {
-  if (head == NULL) {
+  if (*_head == NULL) {
     printf("No watchpoint in heads!\n");
     assert(0);
   }
-  WP *p = head;
+  WP *p = *_head;
   if (p->NO == NO) {
-    head = head->next;
+    *_head = (*_head)->next;
     p->next = NULL;
     return p;
   }
@@ -89,24 +89,24 @@ WP* new_wp(char *expr) {
     printf("No more watchpoint!\n");
     assert(0);
   }
-  WP *wp = extract_wp(free_, free_->NO);
+  WP *wp = extract_wp(&free_, free_->NO);
   wp->expr = malloc(strlen(expr) + 1);
   if(!wp->expr) {
     printf("malloc failed!\n");
     assert(0);
   }
   strcpy(wp->expr, expr);
-  insert_wp(head, wp);
+  insert_wp(&head, wp);
   return wp;
 }
 
 void free_wp(int NO)
 {
-  WP *wp = extract_wp(head, NO);
+  WP *wp = extract_wp(&head, NO);
   free(wp->expr);
   wp->expr = NULL;
   wp->eval = 0;
-  insert_wp(free_, wp);
+  insert_wp(&free_, wp);
 }
 
 void print_wp()
