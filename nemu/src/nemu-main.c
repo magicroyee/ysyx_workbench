@@ -52,6 +52,9 @@ int main(int argc, char *argv[]) {
     line_num++;
     res_ptr = strtok(line, " ");
     eval_ptr = strtok(NULL, "\n");
+    if (line_num == 131) {
+      printf("line lr\n");
+    }
     res = expr(eval_ptr, &success);
     printf("line %d: %s %s\n", line_num, res_ptr, eval_ptr);
     assert(success);
