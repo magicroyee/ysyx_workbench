@@ -112,13 +112,20 @@ static int cmd_p(char *args) {
   return 0;
 }
 
-// static int cmd_w(char *args) {
-//   char *arg = strtok(NULL, "");
-//   WP *wp = new_wp(arg);
-//   insert_wp(head, wp);
-//   printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
-//   return 0;
-// }
+static int cmd_w(char *args) {
+  char *arg = strtok(NULL, "");
+  WP *wp = new_wp(arg);
+  printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  char *arg = strtok(NULL, "");
+  int n;
+  sscanf(arg, "%d", &n);
+  free_wp(n);
+  return 0;
+}
 
 static int cmd_help(char *args);
 
@@ -136,6 +143,8 @@ static struct {
   { "info", "Print the status of registers or watchpoints", cmd_info },
   { "x", "Scan the memory", cmd_x },
   { "p", "Print the result of expression", cmd_p },
+  { "w", "Set a watchpoint", cmd_w },
+  { "d", "Delete a watchpoint", cmd_d },
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -196,7 +205,10 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { return; }
+        if (cmd_table[i].handler(args) < 0) { 
+          free_wp_all();
+          return; 
+        }
         break;
       }
     }
