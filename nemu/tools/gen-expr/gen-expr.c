@@ -42,6 +42,16 @@ static inline void gen(char c) {
 }
 
 static inline void gen_num() {
+  // choose to gen dec num or hex num
+  if (choose(2) == 0) {
+    gen('0');
+    gen('x');
+    for (int i=0; i < 8; i++) {
+      gen(choose(16) < 10 ? choose(10) + '0' : choose(6) + 'a');
+    }
+    gen('u');
+    return;
+  }
   uint32_t n = choose(10);
   if (n == 0) {
     gen('0');

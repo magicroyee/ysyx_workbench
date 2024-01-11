@@ -19,6 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <memory/vaddr.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_AND,
@@ -43,7 +44,6 @@ static struct rule {
   {"[0-9]+", TK_NUM},     // number
   {"0[xX][0-9a-fA-F]+", TK_HEX},     // hex number
   {"\\$[a-zA-Z_]+", TK_REG},     // register
-  {"==", TK_EQ},        // equal
   {"!=", TK_NEQ},       // not equal
   {"&&", TK_AND},       // and
 
@@ -180,6 +180,7 @@ static bool check_parentheses(int p, int q) {
 
   if (parentheses != 0) {
     illegal = 1;
+    printf("parentheses not match in %s\n", tokens[p].str);
     false_parentheses = 1;
   }
 
@@ -241,6 +242,7 @@ static word_t eval(int p, int q) {
   if (p > q) {
     /* Bad expression */
     illegal = 1;
+    printf("p > q\n");
     return -1;
   }
   else if (p == q) {
@@ -248,11 +250,28 @@ static word_t eval(int p, int q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-    if (tokens[p].type != TK_NUM) {
+    if (tokens[p].type == TK_NUM) {
+      return atoi(tokens[p].str);
+    }
+    else if (tokens[p].type == TK_HEX) {
+      return strtol(tokens[p].str, NULL, 16);
+    }
+    else if (tokens[p].type == TK_REG) {
+      uint32_t data;
+      bool success;
+      data = isa_reg_str2val(tokens[p].str+1, &success);
+      if (success == false) {
+        illegal = 1;
+        printf("invalid register %d: %s\n", p, tokens[p].str);
+        return -1;
+      }
+      return data;
+    }
+    else {
       illegal = 1;
+      printf("invalid token %d: %s\n", p, tokens[p].str);
       return -1;
     }
-    return atoi(tokens[p].str);
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
@@ -288,20 +307,26 @@ static word_t eval(int p, int q) {
         }
       }
     }
-    uint32_t val1 = eval(p, position - 1);
+    uint32_t val1 = 0;
+    if (position > p){
+      val1 = eval(p, position - 1);
+    }
     uint32_t val2 = eval(position + 1, q);
     switch (op) {
+      case TK_DEREF: return vaddr_read(val2, 4);
       case '*': return val1 * val2;
       case '/': return val1 / val2;
       case '+': return val1 + val2;
       case '-': return val1 - val2;
       case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
+      case TK_AND: return val1 && val2;
       default: assert(0);
     }
   }
 }
 
-word_t expr(char *e, bool *success) {
+word_t expr(char *e, bool *success, char **msg) {
   if (!make_token(e)) {
     *success = false;
     return 0;

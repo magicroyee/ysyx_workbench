@@ -32,9 +32,9 @@ int main(int argc, char *argv[]) {
 //   /* Start engine. */
 //   engine_start();
 
-  printf("hex 0x10 = %ld\n", strtol("0x10", NULL, 16));
+  printf("hex 0x10 is %ld\n", strtol("0x10u", NULL, 16));
 
-  // open a file for reading
+  // // open a file for reading
   // FILE *fp = fopen("/home/zhu/workspace/ysyx-workbench/nemu/tools/gen-expr/input", "r");
   // assert(fp != NULL);
   
@@ -58,5 +58,6 @@ int main(int argc, char *argv[]) {
   // // close the file
   // fclose(fp);
 
-  return is_exit_status_bad();
+  return 0;
+  // return is_exit_status_bad();
 }
