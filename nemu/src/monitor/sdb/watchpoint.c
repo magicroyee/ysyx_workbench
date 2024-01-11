@@ -134,7 +134,6 @@ int diff_wp()
     uint32_t new_eval = expr(p->expr, &success);
     if (success == false) {
       printf("Invalid watch point expression!\n");
-      assert(0);
     }
     if (new_eval != p->eval) {
       printf("Watchpoint %d: %s\n", p->NO, p->expr);
