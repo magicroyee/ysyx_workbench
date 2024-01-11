@@ -43,7 +43,7 @@ static struct rule {
   {"\\-", '-'},         // minus
   {"0[xX][0-9a-fA-F]+", TK_HEX},     // hex number
   {"[0-9]+", TK_NUM},     // number
-  {"\\$[a-zA-Z_]+", TK_REG},     // register
+  {"\\$[a-zA-Z_0-9]+", TK_REG},     // register
   {"!=", TK_NEQ},       // not equal
   {"&&", TK_AND},       // and
 
