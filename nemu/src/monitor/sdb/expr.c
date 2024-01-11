@@ -49,10 +49,18 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+  {"==", TK_EQ},        // equal}
+};
+
+int op_list[] = {
+  TK_DEREF,
+  '/', '*',
+  '+', '-',
+  TK_EQ, TK_NEQ, TK_AND
 };
 
 #define NR_REGEX ARRLEN(rules)
+#define NR_OP ARRLEN(op_list)
 
 static regex_t re[NR_REGEX] = {};
 
@@ -188,26 +196,8 @@ static bool check_parentheses(int p, int q) {
 }
 
 static bool check_op(int type) {
-  for (int i=0; i<NR_REGEX; i++) {
-    if (rules[i].token_type == TK_NUM) {
-      continue;
-    }
-    else if (rules[i].token_type == TK_HEX) {
-      continue;
-    }
-    else if (rules[i].token_type == TK_REG) {
-      continue;
-    }
-    else if (rules[i].token_type == '(') {
-      continue;
-    }
-    else if (rules[i].token_type == ')') {
-      continue;
-    }
-    else if (rules[i].token_type == TK_NOTYPE) {
-      continue;
-    }
-    else if (rules[i].token_type == type) {
+  for (int i=0; i<NR_OP; i++) {
+    if (type == op_list[i]) {
       return true;
     }
   }
