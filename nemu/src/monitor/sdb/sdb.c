@@ -112,6 +112,14 @@ static int cmd_p(char *args) {
   return 0;
 }
 
+// static int cmd_w(char *args) {
+//   char *arg = strtok(NULL, "");
+//   WP *wp = new_wp(arg);
+//   insert_wp(head, wp);
+//   printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
+//   return 0;
+// }
+
 static int cmd_help(char *args);
 
 static struct {
