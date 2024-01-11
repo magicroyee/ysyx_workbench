@@ -112,13 +112,12 @@ static int cmd_p(char *args) {
   return 0;
 }
 
-// static int cmd_w(char *args) {
-//   char *arg = strtok(NULL, "");
-//   WP *wp = new_wp(arg);
-//   insert_wp(head, wp);
-//   printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
-//   return 0;
-// }
+static int cmd_w(char *args) {
+  char *arg = strtok(NULL, "");
+  WP *wp = new_wp(arg);
+  printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
+  return 0;
+}
 
 static int cmd_help(char *args);
 
@@ -136,6 +135,7 @@ static struct {
   { "info", "Print the status of registers or watchpoints", cmd_info },
   { "x", "Scan the memory", cmd_x },
   { "p", "Print the result of expression", cmd_p },
+  { "w", "Set a watchpoint", cmd_w },
 };
 
 #define NR_CMD ARRLEN(cmd_table)
