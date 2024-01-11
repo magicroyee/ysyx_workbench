@@ -21,10 +21,10 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_AND,
 
   /* TODO: Add more token types */
-  TK_NUM,
+  TK_NUM, TK_HEX, TK_REG, TK_DEREF
 };
 
 static struct rule {
@@ -41,6 +41,11 @@ static struct rule {
   {"\\/", '/'},         // divide
   {"\\-", '-'},         // minus
   {"[0-9]+", TK_NUM},     // number
+  {"0[xX][0-9a-fA-F]+", TK_HEX},     // hex number
+  {"\\$[a-zA-Z_]+", TK_REG},     // register
+  {"==", TK_EQ},        // equal
+  {"!=", TK_NEQ},       // not equal
+  {"&&", TK_AND},       // and
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
@@ -65,6 +70,19 @@ void init_regex() {
       regerror(ret, &re[i], error_msg, 128);
       panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
     }
+  }
+}
+
+static int is_expr(int type)
+{
+  switch (type) {
+    case TK_NUM:
+    case TK_HEX:
+    case TK_REG:
+    case ')' :
+      return 1;
+    default:
+      return 0;
   }
 }
 
@@ -104,6 +122,24 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case TK_NOTYPE: break;
+          case '*': {
+            if (nr_token == 0) {
+              tokens[nr_token].type = TK_DEREF;
+              sprintf(tokens[nr_token].str, "%.*s", substr_len, substr_start);
+              nr_token ++;
+            }
+            else if (is_expr(tokens[nr_token - 1].type) == 1) {
+              tokens[nr_token].type = '*';
+              sprintf(tokens[nr_token].str, "%.*s", substr_len, substr_start);
+              nr_token ++;
+            }
+            else {
+              tokens[nr_token].type = TK_DEREF;
+              sprintf(tokens[nr_token].str, "%.*s", substr_len, substr_start);
+              nr_token ++;
+            }
+            break;
+          }
           default: {
             tokens[nr_token].type = rules[i].token_type;
             sprintf(tokens[nr_token].str, "%.*s", substr_len, substr_start);
@@ -155,7 +191,22 @@ static bool check_op(int type) {
     if (rules[i].token_type == TK_NUM) {
       continue;
     }
-    if (rules[i].token_type == type) {
+    else if (rules[i].token_type == TK_HEX) {
+      continue;
+    }
+    else if (rules[i].token_type == TK_REG) {
+      continue;
+    }
+    else if (rules[i].token_type == '(') {
+      continue;
+    }
+    else if (rules[i].token_type == ')') {
+      continue;
+    }
+    else if (rules[i].token_type == TK_NOTYPE) {
+      continue;
+    }
+    else if (rules[i].token_type == type) {
       return true;
     }
   }
@@ -167,11 +218,14 @@ static int op_priority(int type) {
   assert(check_op(type) == true);
 
   switch (type) {
+    case TK_DEREF: return 3;
     case '*': return 2;
     case '/': return 2;
     case '+': return 1;
     case '-': return 1;
     case TK_EQ: return 0;
+    case TK_NEQ: return 0;
+    case TK_AND: return 0;
     default: assert(0);
   }
 }
