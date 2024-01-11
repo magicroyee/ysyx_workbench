@@ -69,14 +69,14 @@ static inline void gen_num() {
 }
 
 static inline void gen_rand_op() {
-  switch (choose(7)) {
+  switch (choose(6)) {
     case 0: gen('+'); break;
     case 1: gen('-'); break;
     case 2: gen('*'); break;
     case 3: gen('/'); break;
     case 4: gen('='); gen('='); break;
     case 5: gen('!'); gen('='); break;
-    case 6: gen('&'); gen('&'); break;
+    // case 6: gen('&'); gen('&'); break;
   }
 }
 
@@ -104,7 +104,13 @@ int main(int argc, char *argv[]) {
   for (i = 0; i < loop; i ++) {
     ind = 0;
     gen_rand_expr();
-    // sprintf(buf, "4294967295+(2*4294967295)");
+    // sprintf(buf, " 
+    // ( 0x85627792u-0xd8f0f72du/0x05d4212au/ 0x1ea4603cu-320u/( 0x6fa37c2eu*((((((0x27657e26u&&0x4ae40d31u)&& 0x56eccbafu))))*70u))== ( 63u)&& 26551u+(0x4a9244d6u)!= 25u*91u*(   12664376u==(0u)&&  1u*703u/0xc5b25630u*9398u&&0x5950258eu/500u)&&0xcd6bc79fu+( ( (( 21326u+(( (780991261u!=(3209u!= 7064104u==  0xfab603dcu)==(((3066u-0u)+(( 17273428u!=0xbc4c554au-(0x4b0400b6u)!=0x7545a8d0u==830471u)))))/(  (  0xf405f6b9u)&& ((( 810772u==32u))))-((395940u)))!=(( ( 0xc580503fu))))!= 0xc8df04ddu* 6453u&& ((6u)&&59563u))* ( 759u)- 0xd19af3e3u*0x8012d650u)*0xc39f0d20u==(( 244647u))-260935u))-(18743u)+ 35u+ 0x6175640bu+2566u) 
+    // ");
+    // sprintf(buf, "
+    // ( ( (( 21326u+(( (780991261u!=(3209u!= 7064104u==  0xfab603dcu)==(((3066u-0u)+(( 17273428u!=0xbc4c554au-(0x4b0400b6u)!=0x7545a8d0u==830471u)))))/(  (  0xf405f6b9u)&& ((( 810772u==32u))))-((395940u)))!=(( ( 0xc580503fu))))!= 0xc8df04ddu* 6453u&& ((6u)&&59563u))* ( 759u)- 0xd19af3e3u*0x8012d650u)*0xc39f0d20u==(( 244647u))-260935u)) 
+    // ");
+    // sprintf(buf, " 0 &&  0 /0 ");
 
     sprintf(code_buf, code_format, buf);
 
