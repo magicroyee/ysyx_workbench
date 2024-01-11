@@ -47,9 +47,12 @@ int main(int argc, char *argv[]) {
   char *eval_ptr;
   bool success;
 
+  int line_num = 0;
   while ((read = getline(&line, &len, fp)) != -1) {
+    line_num++;
     res_ptr = strtok(line, " ");
     eval_ptr = strtok(NULL, "\n");
+    printf("line %d: %s %s\n", line_num, res_ptr, eval_ptr);
     res = expr(eval_ptr, &success);
     assert(success);
     assert(res == atoi(res_ptr));
