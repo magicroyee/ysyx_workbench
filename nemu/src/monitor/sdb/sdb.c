@@ -100,6 +100,18 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args) {
+  char *arg = strtok(NULL, "");
+  bool success = true;
+  uint32_t result = expr(arg, &success);
+  if (success == false) {
+    printf("Invalid expression!\n");
+    return -1;
+  }
+  printf("%u\n", result);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -115,7 +127,7 @@ static struct {
   { "si", "Single step execution", cmd_si },
   { "info", "Print the status of registers or watchpoints", cmd_info },
   { "x", "Scan the memory", cmd_x },
-  
+  { "p", "Print the result of expression", cmd_p },
 };
 
 #define NR_CMD ARRLEN(cmd_table)

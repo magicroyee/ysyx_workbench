@@ -29,38 +29,39 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
-//   /* Start engine. */
-//   engine_start();
+  /* Start engine. */
+  engine_start();
+
+  return is_exit_status_bad();
 
   // printf("hex 0x10 is %ld\n", strtol("0x10u", NULL, 16));
 
-  // open a file for reading
-  FILE *fp = fopen("/home/zhu/workspace/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  assert(fp != NULL);
+  // // open a file for reading
+  // FILE *fp = fopen("/home/zhu/workspace/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  // assert(fp != NULL);
   
-  // read a line
-  char *line = NULL;
-  size_t len = 0;
-  ssize_t read;
-  uint32_t res;
-  char *res_ptr;
-  char *eval_ptr;
-  bool success;
+  // // read a line
+  // char *line = NULL;
+  // size_t len = 0;
+  // ssize_t read;
+  // uint32_t res;
+  // char *res_ptr;
+  // char *eval_ptr;
+  // bool success;
 
-  int line_num = 0;
-  while ((read = getline(&line, &len, fp)) != -1) {
-    line_num++;
-    res_ptr = strtok(line, " ");
-    eval_ptr = strtok(NULL, "\n");
-    res = expr(eval_ptr, &success);
-    printf("line %d: %s %s\n", line_num, res_ptr, eval_ptr);
-    assert(success);
-    assert(res == atoi(res_ptr));
-  }
+  // int line_num = 0;
+  // while ((read = getline(&line, &len, fp)) != -1) {
+  //   line_num++;
+  //   res_ptr = strtok(line, " ");
+  //   eval_ptr = strtok(NULL, "\n");
+  //   res = expr(eval_ptr, &success);
+  //   printf("line %d: %s %s\n", line_num, res_ptr, eval_ptr);
+  //   assert(success);
+  //   assert(res == atoi(res_ptr));
+  // }
 
-  // close the file
-  fclose(fp);
+  // // close the file
+  // fclose(fp);
 
-  return 0;
-  // return is_exit_status_bad();
+  // return 0;
 }
