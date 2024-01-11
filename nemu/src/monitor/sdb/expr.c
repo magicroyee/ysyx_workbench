@@ -315,7 +315,16 @@ static word_t eval(int p, int q) {
     switch (op) {
       case TK_DEREF: return vaddr_read(val2, 4);
       case '*': return val1 * val2;
-      case '/': return val1 / val2;
+      case '/': {
+        if (val2 == 0) {
+          illegal = 1;
+          printf("divided by zero\n");
+          return -1;
+        }
+        else {
+          return val1 / val2;
+        }
+      }
       case '+': return val1 + val2;
       case '-': return val1 - val2;
       case TK_EQ: return val1 == val2;
