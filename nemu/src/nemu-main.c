@@ -52,8 +52,8 @@ int main(int argc, char *argv[]) {
     line_num++;
     res_ptr = strtok(line, " ");
     eval_ptr = strtok(NULL, "\n");
-    printf("line %d: %s %s\n", line_num, res_ptr, eval_ptr);
     res = expr(eval_ptr, &success);
+    printf("line %d: %s %s\n", line_num, res_ptr, eval_ptr);
     assert(success);
     assert(res == atoi(res_ptr));
   }
