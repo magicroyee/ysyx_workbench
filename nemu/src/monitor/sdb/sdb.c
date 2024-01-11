@@ -119,6 +119,14 @@ static int cmd_w(char *args) {
   return 0;
 }
 
+static int cmd_d(char *args) {
+  char *arg = strtok(NULL, "");
+  int n;
+  sscanf(arg, "%d", &n);
+  free_wp(n);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -136,6 +144,7 @@ static struct {
   { "x", "Scan the memory", cmd_x },
   { "p", "Print the result of expression", cmd_p },
   { "w", "Set a watchpoint", cmd_w },
+  { "d", "Delete a watchpoint", cmd_d },
 };
 
 #define NR_CMD ARRLEN(cmd_table)

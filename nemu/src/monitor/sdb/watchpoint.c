@@ -25,6 +25,8 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+    wp_pool[i].expr = NULL;
+    wp_pool[i].eval = 0;
   }
 
   head = NULL;
@@ -36,28 +38,43 @@ void insert_wp(WP *head, WP *wp)
 {
   if (head == NULL) {
     head = wp;
+    wp->next = NULL;
     return ;
   }
-  wp->next = head;
-  head = wp;
+  WP *p = head;
+  if (wp->NO < p->NO) {
+    wp->next = p;
+    head = wp;
+    return ;
+  }
+  while (p->next != NULL) {
+    if (wp->NO < p->next->NO) {
+      wp->next = p->next;
+      p->next = wp;
+      return ;
+    }
+    p = p->next;
+  }
+  p->next = wp;
+  wp->next = NULL;
 }
 
-WP *extract_wp(WP *head, WP *wp)
+WP *extract_wp(WP *head, int NO)
 {
   if (head == NULL) {
     printf("No watchpoint in heads!\n");
     assert(0);
   }
   WP *p = head;
-  if (p == wp) {
+  if (p->NO == NO) {
     head = head->next;
     p->next = NULL;
     return p;
   }
   while (p->next != NULL) {
-    if (p->next == wp) {
+    if (p->next->NO == NO) {
       WP *q = p->next;
-      p->next = p->next->next;
+      p->next = q->next;
       q->next = NULL;
       return q;
     }
@@ -72,7 +89,7 @@ WP* new_wp(char *expr) {
     printf("No more watchpoint!\n");
     assert(0);
   }
-  WP *wp = extract_wp(free_, free_);
+  WP *wp = extract_wp(free_, free_->NO);
   wp->expr = malloc(strlen(expr) + 1);
   if(!wp->expr) {
     printf("malloc failed!\n");
@@ -83,13 +100,50 @@ WP* new_wp(char *expr) {
   return wp;
 }
 
-void free_wp(WP *wp)
+void free_wp(int NO)
 {
-  if (wp == NULL) {
-    printf("Wp should not be NULL!\n");
-    assert(0);
+  WP *wp = extract_wp(head, NO);
+  free(wp->expr);
+  wp->expr = NULL;
+  wp->eval = 0;
+  insert_wp(free_, wp);
+}
+
+void print_wp()
+{
+  if (head == NULL) {
+    printf("No watchpoint!\n");
+    return ;
   }
-  WP *p = extract_wp(head, wp);
-  free(p->expr);
-  insert_wp(free_, p);
+  WP *p = head;
+  while (p != NULL) {
+    printf("Watchpoint %d: %s\n", p->NO, p->expr);
+    p = p->next;
+  }
+}
+
+int diff_wp()
+{
+  if (head == NULL) {
+    return 0;
+  }
+  WP *p = head;
+  bool success = true;
+  int diff_flag = 0;
+  while (p != NULL) {
+    uint32_t new_eval = expr(p->expr, &success);
+    if (success == false) {
+      printf("Invalid watch point expression!\n");
+      assert(0);
+    }
+    if (new_eval != p->eval) {
+      printf("Watchpoint %d: %s\n", p->NO, p->expr);
+      printf("Old value = %u\n", p->eval);
+      printf("New value = %u\n", new_eval);
+      p->eval = new_eval;
+      diff_flag++;
+    }
+    p = p->next;
+  }
+  return diff_flag;
 }
