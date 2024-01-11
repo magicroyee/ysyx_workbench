@@ -146,3 +146,10 @@ int diff_wp()
   }
   return diff_flag;
 }
+
+void free_wp_all()
+{
+  while (head != NULL) {
+    free_wp(head->NO);
+  }
+}
