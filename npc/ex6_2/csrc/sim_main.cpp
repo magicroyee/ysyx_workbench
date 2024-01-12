@@ -47,31 +47,28 @@ int main(int argc, char **argv)
 
     reset(10);
 
-    while (!contextp->gotFinish())
+    for (int i = 0; i < 8; i++)
     {
-        // printf("x = %d\n", top->x);
-        // single_cycle();
-        for (int i=0; i<8; i++){
-            for (int j=0; j<sizeof(din); j++){
-                top->din = din[j];
-                top->shamt = i;
-                top->lr = 0;
-                top->al = 0;
-                single_cycle();
-                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
-                top->lr = 0;
-                top->al = 1;
-                single_cycle();
-                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
-                top->lr = 1;
-                top->al = 0;
-                single_cycle();
-                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
-                top->lr = 1;
-                top->al = 1;
-                single_cycle();
-                printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
-            }
+        for (int j = 0; j < sizeof(din); j++)
+        {
+            top->din = din[j];
+            top->shamt = i;
+            top->lr = 0;
+            top->al = 0;
+            single_cycle();
+            printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
+            top->lr = 0;
+            top->al = 1;
+            single_cycle();
+            printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
+            top->lr = 1;
+            top->al = 0;
+            single_cycle();
+            printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
+            top->lr = 1;
+            top->al = 1;
+            single_cycle();
+            printf("shamt = %d, din = %d, dout = %d\n", i, din[j], top->dout);
         }
     }
 
