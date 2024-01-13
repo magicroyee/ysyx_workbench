@@ -64,6 +64,9 @@ static int cmd_si(char *args) {
     sscanf(arg, "%d", &n);
   }
   cpu_exec(n);
+  if (nemu_state.state == NEMU_STOP) {
+    printf("Program stop at pc: 0x%08x: 0x%08x\n", nemu_state.halt_pc, vaddr_read(nemu_state.halt_pc, 4));
+  }
   return 0;
 }
 
