@@ -46,8 +46,7 @@ static char* rl_gets() {
 static int cmd_c(char *args) {
   cpu_exec(-1);
   if (nemu_state.state == NEMU_STOP) {
-    printf("Program stop at pc: 0x%08x:\n", nemu_state.halt_pc);
-    printf("0x%08x: 0x%08x\n", nemu_state.halt_pc, vaddr_read(nemu_state.halt_pc, 4));
+    printf("Program stop at pc: 0x%08x: 0x%08x\n", nemu_state.halt_pc, vaddr_read(nemu_state.halt_pc, 4));
   }
   return 0;
 }
