@@ -32,5 +32,6 @@ WP* new_wp(char *expr);
 void free_wp(int NO);
 int diff_wp();
 void free_wp_all();
+void print_wp();
 
 #endif
