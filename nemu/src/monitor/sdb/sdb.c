@@ -43,8 +43,38 @@ static char* rl_gets() {
   return line_read;
 }
 
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("Please specify the length!\n");
+    return 0;
+  }
+  int n;
+  sscanf(arg, "%d", &n);
+  arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("Please specify the address!\n");
+    return 0;
+  }
+  vaddr_t addr;
+  bool success;
+  addr = expr(arg, &success);
+  if (success == false) {
+    printf("Invalid expression!\n");
+    return 0;
+  }
+  // sscanf(arg, "%x", &addr);
+  for (int i = 0; i < n; i++) {
+    printf("0x%08x: 0x%08x\n", addr + i * 4, vaddr_read(addr + i * 4, 4));
+  }
+  return 0;
+}
+
 static int cmd_c(char *args) {
   cpu_exec(-1);
+  if (nemu_state.state == NEMU_STOP) {
+    cmd_x("4 $pc");
+  }
   return 0;
 }
 
@@ -75,33 +105,6 @@ static int cmd_info(char *args) {
   }
   else {
     printf("Unknown subcommand '%s'\n", arg);
-  }
-  return 0;
-}
-
-static int cmd_x(char *args) {
-  char *arg = strtok(NULL, " ");
-  if (arg == NULL) {
-    printf("Please specify the length!\n");
-    return 0;
-  }
-  int n;
-  sscanf(arg, "%d", &n);
-  arg = strtok(NULL, " ");
-  if (arg == NULL) {
-    printf("Please specify the address!\n");
-    return 0;
-  }
-  vaddr_t addr;
-  bool success;
-  addr = expr(arg, &success);
-  if (success == false) {
-    printf("Invalid expression!\n");
-    return 0;
-  }
-  // sscanf(arg, "%x", &addr);
-  for (int i = 0; i < n; i++) {
-    printf("0x%08x: 0x%08x\n", addr + i * 4, vaddr_read(addr + i * 4, 4));
   }
   return 0;
 }
