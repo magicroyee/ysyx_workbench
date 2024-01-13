@@ -93,7 +93,13 @@ static int cmd_x(char *args) {
     return 0;
   }
   vaddr_t addr;
-  sscanf(arg, "%x", &addr);
+  bool success;
+  addr = expr(arg, &success);
+  if (success == false) {
+    printf("Invalid expression!\n");
+    return 0;
+  }
+  // sscanf(arg, "%x", &addr);
   for (int i = 0; i < n; i++) {
     printf("0x%08x: 0x%08x\n", addr + i * 4, vaddr_read(addr + i * 4, 4));
   }
