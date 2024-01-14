@@ -45,6 +45,9 @@ static char* rl_gets() {
 
 static int cmd_c(char *args) {
   cpu_exec(-1);
+  if (nemu_state.state == NEMU_STOP) {
+    printf("Program stop at pc: 0x%08x: 0x%08x\n", nemu_state.halt_pc, vaddr_read(nemu_state.halt_pc, 4));
+  }
   return 0;
 }
 
@@ -61,6 +64,9 @@ static int cmd_si(char *args) {
     sscanf(arg, "%d", &n);
   }
   cpu_exec(n);
+  if (nemu_state.state == NEMU_STOP) {
+    printf("Program stop at pc: 0x%08x: 0x%08x\n", cpu.pc, vaddr_read(cpu.pc, 4));
+  }
   return 0;
 }
 
@@ -72,6 +78,9 @@ static int cmd_info(char *args) {
   }
   if (strcmp(arg, "r") == 0) {
     isa_reg_display();
+  }
+  else if (strcmp(arg, "w") == 0) {
+    print_wp();
   }
   else {
     printf("Unknown subcommand '%s'\n", arg);
@@ -93,7 +102,13 @@ static int cmd_x(char *args) {
     return 0;
   }
   vaddr_t addr;
-  sscanf(arg, "%x", &addr);
+  bool success;
+  addr = expr(arg, &success);
+  if (success == false) {
+    printf("Invalid expression!\n");
+    return 0;
+  }
+  // sscanf(arg, "%x", &addr);
   for (int i = 0; i < n; i++) {
     printf("0x%08x: 0x%08x\n", addr + i * 4, vaddr_read(addr + i * 4, 4));
   }
