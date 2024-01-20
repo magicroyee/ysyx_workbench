@@ -36,6 +36,12 @@ run-env: $(BINARY) $(DIFF_REF_SO)
 run: run-env
 	$(call git_commit, "run NEMU")
 	$(NEMU_EXEC)
+	if [[ $? -eq 0 ]]; then
+		echo "PASS"
+	else
+		echo "FAIL"
+		exit 1
+	fi
 
 gdb: run-env
 	$(call git_commit, "gdb NEMU")
