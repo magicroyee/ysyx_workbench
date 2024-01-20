@@ -32,8 +32,8 @@ int main(int argc, char *argv[]) {
   /* Start engine. */
   engine_start();
 
-  // return is_exit_status_bad();
-  return 1;
+  return is_exit_status_bad();
+  // return 1;
 
   // printf("hex 0x10 is %ld\n", strtol("0x10u", NULL, 16));
 
