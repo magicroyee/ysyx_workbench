@@ -26,12 +26,11 @@ image: $(IMAGE).elf
 
 run: image
 	# echo $(MAKE) -C $(NEMU_HOME) ISA=$(ISA) AM_BATCH=$(AM_BATCH) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
-	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) AM_BATCH=$(AM_BATCH) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
+	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) CONFIG_BATCH=$(CONFIG_BATCH) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 gdb: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 $(PLATFORM_CLEAN):
-	echo nemu-clean
 	$(MAKE) -C $(NEMU_HOME) clean
 .PHONY: $(PLATFORM_CLEAN)
