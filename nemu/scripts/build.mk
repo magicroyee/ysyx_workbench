@@ -31,8 +31,7 @@ OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 $(OBJ_DIR)/%.o: %.c
 	@echo + CC $<
 	@mkdir -p $(dir $@)
-	echo $(CC) $(CFLAGS) -c -o $@ $<
-	$(CC) $(CFLAGS) -c -o $@ $<
+	@$(CC) $(CFLAGS) -c -o $@ $<
 	@$(CC) $(CFLAGS) -E -o $@.i $<
 	$(call call_fixdep, $(@:.o=.d), $@)
 
