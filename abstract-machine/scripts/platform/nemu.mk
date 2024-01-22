@@ -34,5 +34,6 @@ gdb: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 $(PLATFORM_CLEAN):
+	echo \# Cleaning $(NEMU_HOME)
 	$(MAKE) -C $(NEMU_HOME) clean
 .PHONY: $(PLATFORM_CLEAN)

@@ -152,6 +152,7 @@ image-dep: $(OBJS) am $(LIBS)
 
 ### Clean a single project (remove `build/`)
 clean: $(PLATFORM_CLEAN)
+	echo \# Cleaning AM
 	rm -rf Makefile.html $(WORK_DIR)/build/
 .PHONY: clean
 
