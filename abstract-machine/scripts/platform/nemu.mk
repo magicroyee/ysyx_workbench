@@ -23,8 +23,12 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
-	echo $(MAKE) -C $(NEMU_HOME) ISA=$(ISA) AM_BATCH=$(AM_BATCH) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
+	# echo $(MAKE) -C $(NEMU_HOME) ISA=$(ISA) AM_BATCH=$(AM_BATCH) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) AM_BATCH=$(AM_BATCH) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 gdb: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
+
+nemu-clean:
+	echo nemu-clean
+	$(MAKE) -C $(NEMU_HOME) clean

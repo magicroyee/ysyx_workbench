@@ -30,6 +30,8 @@ ifeq ($(filter $(ARCHS), $(ARCH)), )
   $(error Expected $$ARCH in {$(ARCHS)}, Got "$(ARCH)")
 endif
 
+$(info #  $$ARCH=$(ARCH))
+
 ### Extract instruction set architecture (`ISA`) and platform from `$ARCH`. Example: `ARCH=x86_64-qemu -> ISA=x86_64; PLATFORM=qemu`
 ARCH_SPLIT = $(subst -, ,$(ARCH))
 ISA        = $(word 1,$(ARCH_SPLIT))
@@ -106,8 +108,10 @@ endif
 
 ### Rule (compile): a single `.c` -> `.o` (gcc)
 $(DST_DIR)/%.o: %.c
-	@mkdir -p $(dir $@) && echo + CC $<
-	@$(CC) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)
+	mkdir -p $(dir $@) && echo + CC $<
+	# echo $(CFLAGS)
+	echo $(COMMON_CFLAGS)
+	$(CC) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)
 
 ### Rule (compile): a single `.cc` -> `.o` (g++)
 $(DST_DIR)/%.o: %.cc
@@ -151,7 +155,9 @@ image-dep: $(OBJS) am $(LIBS)
 .PHONY: image image-dep archive run $(LIBS)
 
 ### Clean a single project (remove `build/`)
-clean:
+PLATFORM_CLEAN = $(addpostfix -clean, $(PLATFORM))
+clean: $(PLATFORM_CLEAN)
+	echo $(PLATFORM_CLEAN)
 	rm -rf Makefile.html $(WORK_DIR)/build/
 .PHONY: clean
 
