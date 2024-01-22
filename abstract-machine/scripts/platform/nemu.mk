@@ -17,6 +17,8 @@ CFLAGS += -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
 .PHONY: $(AM_HOME)/am/src/platform/nemu/trm.c
 
+PLATFORM_CLEAN = nemu-clean
+
 image: $(IMAGE).elf
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
 	@echo + OBJCOPY "->" $(IMAGE_REL).bin
@@ -24,6 +26,14 @@ image: $(IMAGE).elf
 
 run: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
+	
+run-batch: image
+	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run-batch ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 gdb: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
+
+$(PLATFORM_CLEAN):
+	echo \# Cleaning $(NEMU_HOME)
+	$(MAKE) -C $(NEMU_HOME) clean
+.PHONY: $(PLATFORM_CLEAN)

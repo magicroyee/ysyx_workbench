@@ -151,7 +151,8 @@ image-dep: $(OBJS) am $(LIBS)
 .PHONY: image image-dep archive run $(LIBS)
 
 ### Clean a single project (remove `build/`)
-clean:
+clean: $(PLATFORM_CLEAN)
+	echo \# Cleaning AM
 	rm -rf Makefile.html $(WORK_DIR)/build/
 .PHONY: clean
 
