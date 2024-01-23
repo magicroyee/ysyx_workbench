@@ -29,6 +29,10 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
+  for (int i = 1; i < argc; i ++) {
+    printf ("argv[%d] = %s\n", i, argv[i]);
+  }
+
   /* Start engine. */
   engine_start();
 
