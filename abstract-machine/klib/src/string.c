@@ -79,7 +79,13 @@ void *memcpy(void *out, const void *in, size_t n) {
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  panic("Not implemented");
+  for (int i = 0; i < n; i++) {
+    if (((char *)s1)[i] != ((char *)s2)[i]) {
+      return ((char *)s1)[i] - ((char *)s2)[i];
+    }
+  }
+
+  return 0;
 }
 
 #endif
