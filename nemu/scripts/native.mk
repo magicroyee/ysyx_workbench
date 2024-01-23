@@ -39,7 +39,6 @@ run: run-env
 
 run-batch: ARGS += -b
 run-batch: run-env
-	echo ARGS=$(ARGS)
 	$(call git_commit, "run batch NEMU")
 	$(NEMU_EXEC)
 
