@@ -15,12 +15,15 @@
 
 #include <isa.h>
 #include <cpu/cpu.h>
+#include <cpu/iringbuffer.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
 #include "memory/vaddr.h"
 
 static int is_batch_mode = false;
+
+IRingBuffer irb;
 
 void init_regex();
 void init_wp_pool();
@@ -197,6 +200,8 @@ void sdb_mainloop() {
     return;
   }
 
+  IFDEF(CONFIG_ITRACE, irb_init(&irb, 16));
+
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
@@ -222,6 +227,8 @@ void sdb_mainloop() {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
         if (cmd_table[i].handler(args) < 0) { 
           free_wp_all();
+          IFDEF(CONFIG_ITRACE, irb_print(&irb));
+          IFDEF(CONFIG_ITRACE, irb_free(&irb));
           return; 
         }
         break;
