@@ -227,7 +227,6 @@ void sdb_mainloop() {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
         if (cmd_table[i].handler(args) < 0) { 
           free_wp_all();
-          IFDEF(CONFIG_ITRACE, irb_print(&irb));
           IFDEF(CONFIG_ITRACE, irb_free(&irb));
           return; 
         }
