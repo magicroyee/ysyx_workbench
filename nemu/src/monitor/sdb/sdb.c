@@ -195,12 +195,12 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
+  IFDEF(CONFIG_ITRACE, irb_init(&irb, 16));
   if (is_batch_mode) {
     cmd_c(NULL);
+    IFDEF(CONFIG_ITRACE, irb_free(&irb));
     return;
   }
-
-  IFDEF(CONFIG_ITRACE, irb_init(&irb, 16));
 
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);

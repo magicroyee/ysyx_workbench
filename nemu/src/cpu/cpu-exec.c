@@ -15,6 +15,7 @@
 
 #include <cpu/cpu.h>
 #include <cpu/decode.h>
+#include <cpu/ifetch.h>
 #include <cpu/difftest.h>
 #include <locale.h>
 #include "sdb.h"
@@ -56,8 +57,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
-  isa_exec_once(s);
-  cpu.pc = s->dnpc;
+  s->isa.inst.val = inst_fetch(&s->snpc, 4);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -73,6 +73,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
+  
+  IFDEF(CONFIG_ITRACE, irb_log(&irb, s->logbuf));
 
 #ifndef CONFIG_ISA_loongarch32r
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
@@ -82,6 +84,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 #endif
+  s->snpc = pc;
+  isa_exec_once(s);
+  cpu.pc = s->dnpc;
 }
 
 static void execute(uint64_t n) {
@@ -89,7 +94,6 @@ static void execute(uint64_t n) {
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
-    IFDEF(CONFIG_ITRACE, irb_log(&irb, s.logbuf));
     trace_and_difftest(&s, cpu.pc);
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
