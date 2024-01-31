@@ -73,8 +73,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
-  
-  IFDEF(CONFIG_ITRACE, irb_log(&irb, s->logbuf));
 
 #ifndef CONFIG_ISA_loongarch32r
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
@@ -84,6 +82,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 #endif
+  
+  IFDEF(CONFIG_ITRACE, irb_log(&irb, s->logbuf));
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
