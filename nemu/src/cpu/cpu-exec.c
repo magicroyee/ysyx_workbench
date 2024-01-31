@@ -15,6 +15,7 @@
 
 #include <cpu/cpu.h>
 #include <cpu/decode.h>
+#include <cpu/ifetch.h>
 #include <cpu/difftest.h>
 #include <locale.h>
 #include "sdb.h"
@@ -30,6 +31,8 @@ CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
+
+extern IRingBuffer irb;
 
 void device_update();
 
@@ -54,8 +57,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
-  isa_exec_once(s);
-  cpu.pc = s->dnpc;
+  s->isa.inst.val = inst_fetch(&s->snpc, 4);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -80,6 +82,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 #endif
+  
+  IFDEF(CONFIG_ITRACE, irb_log(&irb, s->logbuf));
+  s->snpc = pc;
+  isa_exec_once(s);
+  cpu.pc = s->dnpc;
 }
 
 static void execute(uint64_t n) {
