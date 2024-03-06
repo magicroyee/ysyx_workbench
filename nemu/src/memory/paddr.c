@@ -74,9 +74,10 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 #ifdef CONFIG_MTRACE
   int offset = sprintf(mtrace_buf, "Writing to 0x%08x for %d bytes:", addr, len);
   int p = 0;
+  word_t tmp = data;
   for (int i = 0; i < len; i++) {
-    p += sprintf(mtrace_buf + offset + p, " %02x", data & 0xff);
-    data >>= 8;
+    p += sprintf(mtrace_buf + offset + p, " %02x", tmp & 0xff);
+    tmp >>= 8;
   }
   rb_push(&mtrace, mtrace_buf);
 #endif
