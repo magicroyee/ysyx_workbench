@@ -15,13 +15,13 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#include <sdb/sdb.h>
 
 void init_rand();
 void init_log(const char *log_file);
 void init_mem();
 void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
-void init_sdb();
 void init_disasm(const char *triple);
 
 static void welcome() {

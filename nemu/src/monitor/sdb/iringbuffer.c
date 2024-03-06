@@ -1,4 +1,4 @@
-#include <cpu/iringbuffer.h>
+#include <sdb/iringbuffer.h>
 #include <cpu/decode.h>
 
 int irb_init(IRingBuffer *irb, uint32_t size) {

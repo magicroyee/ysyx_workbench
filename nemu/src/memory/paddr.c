@@ -16,7 +16,7 @@
 #include <memory/host.h>
 #include <memory/paddr.h>
 #include <device/mmio.h>
-#include <cpu/iringbuffer.h>
+#include <sdb/iringbuffer.h>
 #include <isa.h>
 
 #if   defined(CONFIG_PMEM_MALLOC)

@@ -34,4 +34,7 @@ int diff_wp();
 void free_wp_all();
 void print_wp();
 
+void init_sdb();
+void release_sdb();
+
 #endif

@@ -17,7 +17,7 @@
 #define __CPU_DECODE_H__
 
 #include <isa.h>
-#include <cpu/iringbuffer.h>
+#include <sdb/iringbuffer.h>
 
 #define   LOGBUF_LEN 128
 
