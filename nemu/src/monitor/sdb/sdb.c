@@ -15,7 +15,7 @@
 
 #include <isa.h>
 #include <cpu/cpu.h>
-#include <sdb/iringbuffer.h>
+#include <sdb/ringbuffer.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb/sdb.h"
@@ -23,7 +23,8 @@
 
 static int is_batch_mode = false;
 
-IRingBuffer irb;
+RingBuffer irb;
+extern RingBuffer mtrace;
 
 void init_regex();
 void init_wp_pool();
@@ -241,10 +242,12 @@ void init_sdb() {
     /* Initialize the watchpoint pool. */
     init_wp_pool();
 
-    IFDEF(CONFIG_ITRACE, irb_init(&irb, 16));
+    IFDEF(CONFIG_ITRACE, rb_init(&irb, 16));
+    IFDEF(CONFIG_MTRACE, rb_init(&mtrace, 16));
 }
 
 void release_sdb() {
     free_wp_all();
-    IFDEF(CONFIG_ITRACE, irb_free(&irb));
+    IFDEF(CONFIG_ITRACE, rb_free(&irb));
+    IFDEF(CONFIG_MTRACE, rb_free(&mtrace));
 }

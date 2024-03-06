@@ -46,4 +46,6 @@ typedef uint16_t ioaddr_t;
 
 #include <debug.h>
 
+#define   LOGBUF_LEN 128
+
 #endif

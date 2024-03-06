@@ -16,7 +16,7 @@
 #include <memory/host.h>
 #include <memory/paddr.h>
 #include <device/mmio.h>
-#include <sdb/iringbuffer.h>
+#include <sdb/ringbuffer.h>
 #include <isa.h>
 
 #if   defined(CONFIG_PMEM_MALLOC)
@@ -25,7 +25,9 @@ static uint8_t *pmem = NULL;
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
-extern IRingBuffer irb;
+extern RingBuffer irb;
+RingBuffer mtrace;
+char mtrace_buf[LOGBUF_LEN];
 
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
@@ -40,8 +42,10 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
 }
 
 static void out_of_bound(paddr_t addr) {
-  IFDEF(CONFIG_ITRACE, irb_print(&irb));
-  IFDEF(CONFIG_ITRACE, irb_free(&irb));
+  IFDEF(CONFIG_ITRACE, rb_print(&irb));
+  IFDEF(CONFIG_ITRACE, rb_free(&irb));
+  IFDEF(CONFIG_MTRACE, rb_print(&mtrace));
+  IFDEF(CONFIG_MTRACE, rb_free(&mtrace));
   panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
       addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
 }
@@ -56,6 +60,10 @@ void init_mem() {
 }
 
 word_t paddr_read(paddr_t addr, int len) {
+#ifdef CONFIG_MTRACE
+  sprintf(mtrace_buf, "Reading from 0x%08x for %d bytes", addr, len);
+  rb_push(&mtrace, mtrace_buf);
+#endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
@@ -63,6 +71,15 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
+#ifdef CONFIG_MTRACE
+  int offset = sprintf(mtrace_buf, "Writing to 0x%08x for %d bytes:", addr, len);
+  int p = 0;
+  for (int i = 0; i < len; i++) {
+    p += sprintf(mtrace_buf + offset + p, " %02x", data & 0xff);
+    data >>= 8;
+  }
+  rb_push(&mtrace, mtrace_buf);
+#endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);

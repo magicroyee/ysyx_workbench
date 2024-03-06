@@ -17,9 +17,7 @@
 #define __CPU_DECODE_H__
 
 #include <isa.h>
-#include <sdb/iringbuffer.h>
-
-#define   LOGBUF_LEN 128
+#include <sdb/ringbuffer.h>
 
 typedef struct Decode {
   vaddr_t pc;
