@@ -88,6 +88,12 @@ static int cmd_info(char *args) {
     else if (strcmp(arg, "w") == 0) {
         print_wp();
     }
+    else if (strcmp(arg, "i") == 0) {
+        IFDEF(CONFIG_ITRACE, rb_print(&irb));
+    }
+    else if (strcmp(arg, "m") == 0) {
+        IFDEF(CONFIG_MTRACE, rb_print(&mtrace));
+    }
     else {
         printf("Unknown subcommand '%s'\n", arg);
     }

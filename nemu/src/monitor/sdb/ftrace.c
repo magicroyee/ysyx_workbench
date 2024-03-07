@@ -91,29 +91,28 @@ const char *ftrace_lookup(uint32_t addr) {
     return "???";
 }
 
-void ftrace(word_t addr, word_t pc) {
+void ftrace(word_t addr, word_t pc, int rd, int rs1) {
     int fcall_flag = 0;
+    int fret_flag = 0;
 
     if (!init_flag) {
         return;
     }
 
-    for (int i = 0; i < ftab.size; i++) {
-        if (addr == ftab.tab[i].st_value) {
-            fcall_flag = 1;
-            break;
-        }
-    }
+    fcall_flag = (rd == 1);
+    fret_flag = (rd == 0) && (rs1 == 1);
 
     if (fcall_flag) {
         indent++;
         sprintf(ftrace_buf, "[FTRACE:%08x] %*scall %s", pc, indent, "", ftrace_lookup(addr));
     }
-    else {
+    else if (fret_flag){
         sprintf(ftrace_buf, "[FTRACE:%08x] %*sret %s", pc, indent, "", ftrace_lookup(pc));
         indent--;
     }
 
-    log_write("%s\n", ftrace_buf);
-    printf("%s\n", ftrace_buf);
+    if (fcall_flag || fret_flag) {
+        log_write("%s\n", ftrace_buf);
+        printf("%s\n", ftrace_buf);
+    }
 }

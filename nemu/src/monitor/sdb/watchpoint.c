@@ -137,8 +137,8 @@ int diff_wp()
     }
     if (new_eval != p->eval) {
       printf("Watchpoint %d: %s\n", p->NO, p->expr);
-      printf("Old value = %u\n", p->eval);
-      printf("New value = %u\n", new_eval);
+      printf("Old value = %u, 0x%08x\n", p->eval, p->eval);
+      printf("New value = %u, 0x%08x\n", new_eval, new_eval);
       p->eval = new_eval;
       diff_flag++;
     }

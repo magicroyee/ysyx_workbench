@@ -17,6 +17,6 @@ typedef struct {
 int ftrace_init(const char *elfname);
 void ftrace_release();
 const char *ftrace_lookup(uint32_t addr);
-void ftrace(word_t addr, word_t pc);
+void ftrace(word_t addr, word_t pc, int rd, int rs1);
 
 #endif
