@@ -19,9 +19,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb/sdb.h"
+#include "sdb/ftrace.h"
 #include "memory/vaddr.h"
 
 static int is_batch_mode = false;
+static const char * elf_file = NULL;
 
 RingBuffer irb;
 extern RingBuffer mtrace;
@@ -195,6 +197,10 @@ void sdb_set_batch_mode() {
     is_batch_mode = true;
 }
 
+void sdb_set_elfname(const char *file) {
+    elf_file = file;
+}
+
 void sdb_mainloop() {
     if (is_batch_mode) {
         cmd_c(NULL);
@@ -244,10 +250,12 @@ void init_sdb() {
 
     IFDEF(CONFIG_ITRACE, rb_init(&irb, 16));
     IFDEF(CONFIG_MTRACE, rb_init(&mtrace, 16));
+    if(elf_file) ftrace_init(elf_file);
 }
 
 void release_sdb() {
     free_wp_all();
     IFDEF(CONFIG_ITRACE, rb_free(&irb));
     IFDEF(CONFIG_MTRACE, rb_free(&mtrace));
+    if(elf_file) ftrace_release();
 }
