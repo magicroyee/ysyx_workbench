@@ -140,7 +140,9 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
+    printf("test begin\n");
     char *arg = strtok(NULL, "");
+    printf("test end\n");
     WP *wp = new_wp(arg);
     printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
     return 0;
