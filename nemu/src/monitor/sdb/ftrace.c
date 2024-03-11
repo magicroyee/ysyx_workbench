@@ -76,6 +76,8 @@ int ftrace_init(const char *elfname) {
     init_flag = true;
 
     fclose(fp);
+    free(strhdr);
+    free(symhdr);
 
     return 0;
 }
