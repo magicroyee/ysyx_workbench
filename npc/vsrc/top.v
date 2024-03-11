@@ -1,14 +1,19 @@
+`timescale 1ns / 1ps
+
 module top(
     input clk,
     input rstn,
-    output reg [15:0] led
+    output mem_rd,
+    output [31:0] mem_raddr,
+    input [31:0] mem_rdata
 );
-    reg [31:0] count;
-    always @(posedge clk) begin
-        if (!rstn) begin led <= 1; count <= 0; end
-        else begin
-            if (count == 0) led <= {led[14:0], led[15]};
-            count <= (count >= 5000000 ? 32'b0 : count + 1);
-        end
-    end
+
+    ysyx_23060180_cpu_core cpu_core(
+        .clk(clk),
+        .rstn_in(rstn),
+        .mem_rd(mem_rd),
+        .mem_raddr(mem_raddr),
+        .mem_rdata(mem_rdata)
+    );
+
 endmodule

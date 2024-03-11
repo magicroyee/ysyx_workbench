@@ -18,7 +18,7 @@
 #include <cpu/ifetch.h>
 #include <cpu/difftest.h>
 #include <locale.h>
-#include "sdb.h"
+#include "sdb/sdb.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -32,7 +32,7 @@ uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
-extern IRingBuffer irb;
+extern RingBuffer irb;
 
 void device_update();
 
@@ -83,7 +83,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #endif
 #endif
   
-  IFDEF(CONFIG_ITRACE, irb_log(&irb, s->logbuf));
+  IFDEF(CONFIG_ITRACE, rb_log(&irb, s->logbuf));
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
