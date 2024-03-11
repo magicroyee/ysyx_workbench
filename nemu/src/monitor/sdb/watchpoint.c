@@ -89,6 +89,10 @@ WP* new_wp(char *expr) {
     printf("No more watchpoint!\n");
     assert(0);
   }
+  if (strlen(expr) == 0) {
+    printf("Empty expression!\n");
+    return NULL;
+  }
   WP *wp = extract_wp(&free_, free_->NO);
   wp->expr = malloc(strlen(expr) + 1);
   if(!wp->expr) {
