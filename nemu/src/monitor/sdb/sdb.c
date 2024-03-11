@@ -221,20 +221,16 @@ void sdb_mainloop() {
         char *str_end = str + strlen(str);
 
         /* extract the first token as the command */
-        printf("str = %s\n", str);
         char *cmd = strtok(str, " ");
         if (cmd == NULL) { continue; }
-        printf("cmd = %s\n", cmd);
 
         /* treat the remaining string as the arguments,
          * which may need further parsing
          */
         char *args = cmd + strlen(cmd) + 1;
-        printf("args = %s\n", args);
         if (args >= str_end) {
             args = NULL;
         }
-        printf("args = %s\n", args);
 
 #ifdef CONFIG_DEVICE
         extern void sdl_clear_event_queue();
