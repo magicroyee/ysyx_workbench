@@ -10,13 +10,16 @@
 #include "Vtop__Dpi.h"
 
 bool break_flag = 0;
+VerilatedContext *contextp = NULL;
+VerilatedVcdC *tfp = NULL;
+static Vtop *top = NULL;
+
+u_int32_t mem[2048];
 
 void ebreak() {
     printf("ebreak\n");
     break_flag = 1;
 }
-
-int add(int a, int b) { return a+b; }
 
 static inline uint32_t inst(const char *str)
 {
@@ -39,12 +42,6 @@ static inline uint32_t inst(const char *str)
     }
     return inst;
 }
-
-VerilatedContext *contextp = NULL;
-VerilatedVcdC *tfp = NULL;
-static Vtop *top = NULL;
-
-u_int32_t mem[2048];
 
 void nvboard_bind_all_pins(Vtop *top);
 
