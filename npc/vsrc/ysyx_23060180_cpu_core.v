@@ -31,7 +31,12 @@ always @(posedge clk or negedge rstn_in) begin
         case (state)
             EXECUTE: begin
                 if (alu_result_valid && (alu_result_rd != 0)) begin
-                    R[alu_result_rd] <= alu_result;
+                    if (jump_valid_d1) begin
+                        R[alu_result_rd] <= pc + 4;
+                    end
+                    else begin
+                        R[alu_result_rd] <= alu_result;
+                    end
                 end
             end
         endcase
@@ -101,8 +106,10 @@ wire [2:0] func3;
 wire [11:0] func12;
 wire [31:0] imm;
 wire [31:0] immu;
+wire [31:0] immj;
 reg alu_valid;
-reg e_valid;
+reg e_valid; // ebreak
+reg jump_valid;
 reg [31:0] oprand1;
 reg [31:0] oprand2;
 reg [4:0] oprand_rd;
@@ -113,8 +120,9 @@ assign rs2 = instr[24:20];
 assign rd = instr[11:7];
 assign func3 = instr[14:12];
 assign func12 = instr[31:20];
-assign imm = {20'b0, instr[31:20]};
+assign imm = {{20{instr[31]}}, instr[31:20]};
 assign immu = {instr[31:12], 12'b0};
+assign immj = {{11{instr[31]}}, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0};
 
 always @(posedge clk or negedge rstn) begin
     if (!rstn) begin
@@ -131,22 +139,31 @@ always @(posedge clk or negedge rstn) begin
         oprand2 <= 32'h0;
         alu_valid <= 1'b0;
         e_valid <= 1'b0;
+        jump_valid <= 1'b0;
     end
     else if (instr_valid) begin
+        oprand1 <= R[rs1];
+        oprand2 <= 32'h0;
         alu_valid <= 1'b0;
         e_valid <= 1'b0;
-        oprand1 <= R[rs1];
+        jump_valid <= 1'b0;
         case (opcode)
             7'b0010111: begin   // auipc
                 oprand1 <= 0;
                 oprand2 <= immu;
                 alu_valid <= 1'b1;
             end
-            7'b0010011: begin
+            7'b1101111: begin   // jal
+                oprand1 <= pc;
+                oprand2 <= immj;
+                alu_valid <= 1'b1;
+                jump_valid <= 1'b1;
+            end
+            7'b0010011: begin   // addi
                 oprand2 <= imm;
                 alu_valid <= 1'b1;
             end
-            7'b1110011: begin
+            7'b1110011: begin   // ebreak
                 if (func3 == 3'b000) begin
                     oprand2 <= imm;
                     e_valid <= 1'b1;
@@ -168,6 +185,7 @@ end
 reg [31:0] alu_result;
 reg alu_result_valid;
 reg [4:0] alu_result_rd;
+reg jump_valid_d1;
 
 always @(posedge clk or negedge rstn) begin
     if (!rstn) begin
@@ -191,13 +209,25 @@ always @(posedge clk or negedge rstn) begin
     end
 end
 
+always @(posedge clk) begin
+    jump_valid_d1 <= jump_valid;
+end
+
 // pc control
 always @* begin
     pc_next = pc;
     case (state)
         EXECUTE: begin
             if (alu_result_valid) begin
-                pc_next = pc + 4;
+                if (jump_valid_d1) begin
+                    pc_next = alu_result;
+                end
+                else begin
+                    pc_next = pc + 4;
+                end
+            end
+            else begin
+                pc_next = pc;
             end
         end
     endcase
