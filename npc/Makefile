@@ -23,6 +23,8 @@ SIM_DIR = ./sim
 SIM_OBJ_DIR = $(SIM_DIR)/obj_dir
 SIM_BIN = $(SIM_DIR)/$(TOPNAME)
 
+IMG ?= 
+
 default: $(BIN) $(SIM_BIN)
 
 $(shell mkdir -p $(BUILD_DIR))
@@ -65,7 +67,7 @@ all: default
 
 sim: $(SIM_BIN) 
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@$^ /home/zhu/workspace/ysyx_workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+	@$^ $(IMG)
 
 run: $(BIN)
 	$(call git_commit, "run RTL") # DO NOT REMOVE THIS LINE!!!
