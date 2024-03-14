@@ -24,3 +24,4 @@ image: $(IMAGE).elf
 
 run: image
 	$(MAKE) -C $(NPC_HOME) sim ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
+	gtkwave $(NPC_HOME)/sim/wave.vcd
