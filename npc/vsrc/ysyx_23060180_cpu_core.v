@@ -146,6 +146,7 @@ always @(posedge clk or negedge rstn) begin
         alu_valid <= 1'b0;
         e_valid <= 1'b0;
         jump_valid <= 1'b0;
+        store_valid <= 1'b0;
     end
     else if (instr_valid) begin
         oprand1 <= R[rs1];
@@ -193,6 +194,8 @@ always @(posedge clk or negedge rstn) begin
     else begin
         alu_valid <= 1'b0;
         e_valid <= 1'b0;
+        jump_valid <= 1'b0;
+        store_valid <= 1'b0;
     end
 end
 
