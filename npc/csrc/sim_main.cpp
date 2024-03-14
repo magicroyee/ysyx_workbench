@@ -131,7 +131,7 @@ int main(int argc, char** argv)
         mem_rd = top->mem_rd;
         if (mem_rd) {
             mem_raddr = top->mem_raddr - 0x80000000;
-            top->mem_rdata = mem[mem_raddr>>2];
+            top->mem_rdata = mem_read(mem_raddr, 4);
         }
         else {
             top->mem_rdata = 0;
