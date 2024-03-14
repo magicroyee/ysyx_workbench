@@ -8,7 +8,7 @@
 # 	verilator $(CFLAGS) $(VSOURCES) $(CSOURCES)
 TOPNAME = top
 NXDC_FILES = constr/top.nxdc
-INC_PATH ?=
+INC_PATH ?= $(NPC_HOME)/include
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build -cc  \
@@ -36,7 +36,7 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
 CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 CSRCS += $(SRC_AUTO_BIND)
-SIM_CSRCS = $(shell find $(abspath ./csrc) -name "sim*.cpp")
+SIM_CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 
 # rules for NVBoard
 include $(NVBOARD_HOME)/scripts/nvboard.mk

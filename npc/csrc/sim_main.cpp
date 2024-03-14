@@ -8,13 +8,15 @@
 #include "verilated_vcd_c.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
+#include "npc_memory.h"
+#include "npc_init.h"
 
 bool break_flag = 0;
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
 static Vtop *top = NULL;
 
-u_int32_t mem[2048];
+extern char mem[MEMORY_SIZE];
 
 void ebreak() {
     printf("ebreak\n");
@@ -81,6 +83,23 @@ int main(int argc, char** argv)
     u_int32_t mem_raddr = 0;
     // nvboard_bind_all_pins(&dut);
     // nvboard_init();
+
+    if (argc > 1) {
+        printf("Loading program from file %s\n", argv[1]);
+        FILE *fp = fopen(argv[1], "r");
+        if (fp == NULL) {
+            printf("Failed to open file %s\n", argv[1]);
+            return 1;
+        }
+        int i = 0;
+        while (fscanf(fp, "%x", &mem[i]) != EOF) {
+            i++;
+        }
+        fclose(fp);
+    }
+    else {
+        printf("No program file specified, using default program.\n");
+    }
 
     mem[0] = inst("0000 0000 0001 00000 000 00001 0010011"); // addi x1, x0, 1
     mem[1] = inst("0000 0000 0010 00000 000 00010 0010011"); // addi x2, x0, 2
