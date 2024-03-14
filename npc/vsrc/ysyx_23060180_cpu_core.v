@@ -100,6 +100,7 @@ wire [4:0] rd;
 wire [2:0] func3;
 wire [11:0] func12;
 wire [31:0] imm;
+wire [31:0] immu;
 reg alu_valid;
 reg e_valid;
 reg [31:0] oprand1;
@@ -113,20 +114,20 @@ assign rd = instr[11:7];
 assign func3 = instr[14:12];
 assign func12 = instr[31:20];
 assign imm = {20'b0, instr[31:20]};
+assign immu = {instr[31:12], 12'b0};
 
 always @(posedge clk or negedge rstn) begin
     if (!rstn) begin
-        oprand1 <= 32'h0;
         oprand_rd <= 5'b0;
     end
     else if (instr_valid) begin
-        oprand1 <= R[rs1];
         oprand_rd <= rd;
     end
 end
 
 always @(posedge clk or negedge rstn) begin
     if (!rstn) begin
+        oprand1 <= 32'h0;
         oprand2 <= 32'h0;
         alu_valid <= 1'b0;
         e_valid <= 1'b0;
@@ -134,7 +135,13 @@ always @(posedge clk or negedge rstn) begin
     else if (instr_valid) begin
         alu_valid <= 1'b0;
         e_valid <= 1'b0;
+        oprand1 <= R[rs1];
         case (opcode)
+            7'b0010111: begin   // auipc
+                oprand1 <= 0;
+                oprand2 <= immu;
+                alu_valid <= 1'b1;
+            end
             7'b0010011: begin
                 oprand2 <= imm;
                 alu_valid <= 1'b1;
