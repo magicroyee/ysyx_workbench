@@ -110,6 +110,7 @@ wire [31:0] immj;
 reg alu_valid;
 reg e_valid; // ebreak
 reg jump_valid;
+reg store_valid;
 reg [31:0] oprand1;
 reg [31:0] oprand2;
 reg [4:0] oprand_rd;
@@ -129,7 +130,12 @@ always @(posedge clk or negedge rstn) begin
         oprand_rd <= 5'b0;
     end
     else if (instr_valid) begin
-        oprand_rd <= rd;
+        if ((instr[6:0] | 7'b0100011) == 7'b0100011) begin
+            oprand_rd <= 5'b0;
+        end
+        else begin
+            oprand_rd <= rd;
+        end
     end
 end
 
@@ -158,6 +164,15 @@ always @(posedge clk or negedge rstn) begin
                 oprand2 <= immj;
                 alu_valid <= 1'b1;
                 jump_valid <= 1'b1;
+            end
+            7'b1100111: begin   // jalr
+                oprand2 <= imm;
+                alu_valid <= 1'b1;
+                jump_valid <= 1'b1;
+            end
+            7'b0100011: begin   // sw
+                oprand2 <= imm;
+                alu_valid <= 1'b1;
             end
             7'b0010011: begin   // addi
                 oprand2 <= imm;
