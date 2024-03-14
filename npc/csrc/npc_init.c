@@ -6,7 +6,7 @@
 char *img_file = NULL;
 extern char mem[MEMORY_SIZE];
 
-static int parse_args(int argc, char *argv[]) {
+int parse_args(int argc, char *argv[]) {
     const struct option table[] = {
         // {"batch"    , no_argument      , NULL, 'b'},
         // {"log"      , required_argument, NULL, 'l'},
@@ -42,7 +42,7 @@ static int parse_args(int argc, char *argv[]) {
 int load_img() {
     if (img_file == NULL) {
         printf("No image is given. Use the default build-in image.");
-        return 16;
+        return 68;
     }
 
     FILE *fp = fopen(img_file, "rb");

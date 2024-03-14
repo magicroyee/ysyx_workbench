@@ -65,7 +65,7 @@ all: default
 
 sim: $(SIM_BIN) 
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@$^
+	@$^ /home/zhu/workspace/ysyx_workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 
 run: $(BIN)
 	$(call git_commit, "run RTL") # DO NOT REMOVE THIS LINE!!!
