@@ -141,8 +141,12 @@ static int cmd_p(char *args) {
 
 static int cmd_w(char *args) {
     char *arg = strtok(NULL, "");
+    if (arg == NULL) {
+        printf("Please specify the expression!\n");
+        return 0;
+    }
     WP *wp = new_wp(arg);
-    printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
+    if(wp) printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
     return 0;
 }
 

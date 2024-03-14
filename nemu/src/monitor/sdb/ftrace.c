@@ -19,8 +19,8 @@ int ftrace_init(const char *elfname) {
     FILE *fp;
     Elf32_Ehdr ehdr;
     Elf32_Shdr shdr;
-    Elf32_Shdr symhdr;
-    Elf32_Shdr strhdr;
+    Elf32_Shdr *symhdr = NULL;
+    Elf32_Shdr *strhdr = NULL;
     Elf32_Sym sym;
 
     fp = fopen(elfname, "rb");
@@ -49,20 +49,24 @@ int ftrace_init(const char *elfname) {
         Assert(fread(&shdr, 1, sizeof(shdr), fp) == sizeof(shdr), "fread failed");
 
         if (strcmp(&shstrtab[shdr.sh_name], ".symtab") == 0) {
-            symhdr = shdr;
+            symhdr = malloc(sizeof(Elf32_Shdr));
+            *symhdr = shdr;
         }
         if (strcmp(&shstrtab[shdr.sh_name], ".strtab") == 0) {
-            strhdr = shdr;
+            strhdr = malloc(sizeof(Elf32_Shdr));
+            *strhdr = shdr;
         }
     }
 
-    strtab = malloc(strhdr.sh_size);
-    Assert(strtab, "malloc failed");
-    fseek(fp, strhdr.sh_offset, SEEK_SET);
-    Assert(fread(strtab, 1, strhdr.sh_size, fp) == strhdr.sh_size, "fread failed");
+    Assert(symhdr && strhdr, "no .symtab or .strtab found");
 
-    fseek(fp, symhdr.sh_offset, SEEK_SET);
-    for (int i = 0; i < symhdr.sh_size / sizeof(sym); i++) {
+    strtab = malloc(strhdr->sh_size);
+    Assert(strtab, "malloc failed");
+    fseek(fp, strhdr->sh_offset, SEEK_SET);
+    Assert(fread(strtab, 1, strhdr->sh_size, fp) == strhdr->sh_size, "fread failed");
+
+    fseek(fp, symhdr->sh_offset, SEEK_SET);
+    for (int i = 0; i < symhdr->sh_size / sizeof(sym); i++) {
         Assert(fread(&sym, 1, sizeof(sym), fp) == sizeof(sym), "fread failed");
         if (ELF32_ST_TYPE(sym.st_info) == STT_FUNC) {
             ftab.tab[ftab.size++] = sym;
@@ -72,6 +76,8 @@ int ftrace_init(const char *elfname) {
     init_flag = true;
 
     fclose(fp);
+    free(strhdr);
+    free(symhdr);
 
     return 0;
 }

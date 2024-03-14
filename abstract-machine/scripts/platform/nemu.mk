@@ -15,6 +15,9 @@ NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
 ifeq ($(FTRACE),y)
   NEMUFLAGS += -e $(shell dirname $(IMAGE).elf)/$(NAME)-riscv32-nemu.elf
 endif
+ifeq ($(BATCH),y)
+  NEMUFLAGS += -b
+endif
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
