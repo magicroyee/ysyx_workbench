@@ -152,10 +152,10 @@ int main(int argc, char** argv)
     }
 
     if (npc_ret == 0) {
-        printf("NPC HIT GOOD TRAP.\n");
+        printf("NPC \33[1;32mHIT GOOD TRAP\33[0m.\n");
     }
     else {
-        printf("NPC HIT BAD TRAP with ret %d.\n", npc_ret);
+        printf("NPC \33[1;31mHIT BAD TRAP\33[0m with ret %d.\n", npc_ret);
     }
 
     tfp->close();
