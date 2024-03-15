@@ -11,7 +11,7 @@
 #include "npc_memory.h"
 #include "npc_init.h"
 
-extern void ret_value(svLogicVecVal* value);
+extern void reg_value(const svLogicVecVal* reg_num, svLogicVecVal* value);
 
 bool break_flag = 0;
 VerilatedContext *contextp = NULL;
@@ -24,7 +24,8 @@ extern char mem[MEMORY_SIZE];
 void ebreak() {
     printf("ebreak\n");
     break_flag = 1;
-    ret_value((svLogicVecVal*)&npc_ret);
+    int tmp = 10;
+    reg_value((const svLogicVecVal*)&tmp, (svLogicVecVal*)&npc_ret);
 }
 
 static inline uint32_t inst(const char *str)

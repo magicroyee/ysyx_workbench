@@ -9,11 +9,12 @@ module ysyx_23060180_cpu_core(
 reg test;
 
 import "DPI-C" context function void ebreak();
-export "DPI-C" task ret_value;
+export "DPI-C" task reg_value;
 
-task ret_value;
+task reg_value;
+    input [4:0] reg_num;
     output [31:0] value;
-    value = R[10];
+    value = R[reg_num];
 endtask
 
 // sys states
