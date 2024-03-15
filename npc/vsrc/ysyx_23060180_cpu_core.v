@@ -16,13 +16,6 @@ task ret_value;
     value = R[10];
 endtask
 
-export "DPI-C" task publicSetBool;
-
-task publicSetBool;
-   input in_bool;
-   test = in_bool;
-endtask
-
 // sys states
 parameter IDLE = 0;
 parameter FETCH = 1;
