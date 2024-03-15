@@ -6,12 +6,21 @@ module ysyx_23060180_cpu_core(
     input [31:0] mem_rdata
 );
 
+reg test;
+
 import "DPI-C" function void ebreak();
 export "DPI-C" task ret_value;
 
 task ret_value;
     output [31:0] value;
     value = R[10];
+endtask
+
+export "DPI-C" task publicSetBool;
+
+task publicSetBool;
+   input in_bool;
+   test = in_bool;
 endtask
 
 // sys states
