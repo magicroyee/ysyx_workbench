@@ -8,15 +8,25 @@
 #include "verilated_vcd_c.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
+#include "npc_memory.h"
+#include "npc_init.h"
+
+extern void reg_value(const svLogicVecVal* reg_num, svLogicVecVal* value);
 
 bool break_flag = 0;
+VerilatedContext *contextp = NULL;
+VerilatedVcdC *tfp = NULL;
+static Vtop *top = NULL;
+word_t npc_ret = -1;
+
+extern char mem[MEMORY_SIZE];
 
 void ebreak() {
     printf("ebreak\n");
     break_flag = 1;
+    int tmp = 10;
+    reg_value((const svLogicVecVal*)&tmp, (svLogicVecVal*)&npc_ret);
 }
-
-int add(int a, int b) { return a+b; }
 
 static inline uint32_t inst(const char *str)
 {
@@ -39,12 +49,6 @@ static inline uint32_t inst(const char *str)
     }
     return inst;
 }
-
-VerilatedContext *contextp = NULL;
-VerilatedVcdC *tfp = NULL;
-static Vtop *top = NULL;
-
-u_int32_t mem[2048];
 
 void nvboard_bind_all_pins(Vtop *top);
 
@@ -85,25 +89,43 @@ int main(int argc, char** argv)
     // nvboard_bind_all_pins(&dut);
     // nvboard_init();
 
-    mem[0] = inst("0000 0000 0001 00000 000 00001 0010011"); // addi x1, x0, 1
-    mem[1] = inst("0000 0000 0010 00000 000 00010 0010011"); // addi x2, x0, 2
-    mem[2] = inst("0000 0000 0011 00000 000 00011 0010011"); // addi x3, x0, 3
-    mem[3] = inst("0000 0000 0100 00000 000 00100 0010011"); // addi x4, x0, 4
-    mem[4] = inst("0000 0000 0101 00000 000 00101 0010011"); // addi x5, x0, 5
-    mem[5] = inst("0000 0000 0110 00000 000 00110 0010011"); // addi x6, x0, 6
-    mem[6] = inst("0000 0000 0111 00000 000 00111 0010011"); // addi x7, x0, 7
-    mem[7] = inst("0000 0000 1000 00000 000 01000 0010011"); // addi x8, x0, 8
-    mem[8] = inst("0000 0000 1001 00000 000 01001 0010011"); // addi x9, x0, 9
-    mem[9] = inst("0000 0000 1010 00000 000 01010 0010011"); // addi x10, x0, 10
-    mem[10] = inst("0000 0000 1011 00000 000 01011 0010011"); // addi x11, x0, 11
-    mem[11] = inst("0000 0000 1100 00000 000 01100 0010011"); // addi x12, x0, 12
-    mem[12] = inst("0000 0000 1101 00000 000 01101 0010011"); // addi x13, x0, 13
-    mem[13] = inst("0000 0000 1110 00000 000 01110 0010011"); // addi x14, x0, 14
-    mem[14] = inst("0000 0000 1111 00000 000 01111 0010011"); // addi x15, x0, 15
-    mem[15] = inst("0000 0001 0000 00000 000 10000 0010011"); // addi x16, x0, 16
+    // if (argc > 1) {
+    //     printf("Loading program from file %s\n", argv[1]);
+    //     FILE *fp = fopen(argv[1], "r");
+    //     if (fp == NULL) {
+    //         printf("Failed to open file %s\n", argv[1]);
+    //         return 1;
+    //     }
+    //     int i = 0;
+    //     while (fscanf(fp, "%x", &mem[i]) != EOF) {
+    //         i++;
+    //     }
+    //     fclose(fp);
+    // }
+    // else {
+    //     printf("No program file specified, using default program.\n");
+    // }
 
-    // ebreak
-    mem[16] = inst("0000 0000 0001 00000 000 00000 1110011");
+    mem_write(0, inst("0000 0000 0001 00000 000 00001 0010011"), 4);
+    mem_write(4, inst("0000 0000 0010 00000 000 00010 0010011"), 4);
+    mem_write(8, inst("0000 0000 0011 00000 000 00011 0010011"), 4);
+    mem_write(12, inst("0000 0000 0100 00000 000 00100 0010011"), 4);
+    mem_write(16, inst("0000 0000 0101 00000 000 00101 0010011"), 4);
+    mem_write(20, inst("0000 0000 0110 00000 000 00110 0010011"), 4);
+    mem_write(24, inst("0000 0000 0111 00000 000 00111 0010011"), 4);
+    mem_write(28, inst("0000 0000 1000 00000 000 01000 0010011"), 4);
+    mem_write(32, inst("0000 0000 1001 00000 000 01001 0010011"), 4);
+    mem_write(36, inst("0000 0000 1010 00000 000 01010 0010011"), 4);
+    mem_write(40, inst("0000 0000 1011 00000 000 01011 0010011"), 4);
+    mem_write(44, inst("0000 0000 1100 00000 000 01100 0010011"), 4);
+    mem_write(48, inst("0000 0000 1101 00000 000 01101 0010011"), 4);
+    mem_write(52, inst("0000 0000 1110 00000 000 01110 0010011"), 4);
+    mem_write(56, inst("0000 0000 1111 00000 000 01111 0010011"), 4);
+    mem_write(60, inst("0000 0001 0000 00000 000 10000 0010011"), 4);
+    mem_write(64, inst("0000 0000 0001 00000 000 00000 1110011"), 4);
+
+    parse_args(argc, argv);
+    load_img();
 
     reset(10);
 
@@ -115,7 +137,7 @@ int main(int argc, char** argv)
         mem_rd = top->mem_rd;
         if (mem_rd) {
             mem_raddr = top->mem_raddr - 0x80000000;
-            top->mem_rdata = mem[mem_raddr>>2];
+            top->mem_rdata = mem_read(mem_raddr, 4);
         }
         else {
             top->mem_rdata = 0;
@@ -128,6 +150,13 @@ int main(int argc, char** argv)
         if (break_flag) {
             break;
         }
+    }
+
+    if (npc_ret == 0) {
+        printf("NPC \33[1;32mHIT GOOD TRAP\33[0m.\n");
+    }
+    else {
+        printf("NPC \33[1;31mHIT BAD TRAP\33[0m with ret %d.\n", npc_ret);
     }
 
     tfp->close();
