@@ -7,6 +7,12 @@ module ysyx_23060180_cpu_core(
 );
 
 import "DPI-C" function void ebreak();
+export "DPI-C" task ret_value;
+
+task ret_value;
+    output [31:0] value;
+    value = R[10];
+endtask
 
 // sys states
 parameter IDLE = 0;

@@ -11,16 +11,20 @@
 #include "npc_memory.h"
 #include "npc_init.h"
 
+// extern word_t ret_value();
+
 bool break_flag = 0;
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
 static Vtop *top = NULL;
+word_t npc_ret = -1;
 
 extern char mem[MEMORY_SIZE];
 
 void ebreak() {
     printf("ebreak\n");
     break_flag = 1;
+    // npc_ret = ret_value();
 }
 
 static inline uint32_t inst(const char *str)
@@ -145,6 +149,13 @@ int main(int argc, char** argv)
         if (break_flag) {
             break;
         }
+    }
+
+    if (npc_ret == 0) {
+        printf("NPC HIT GOOD TRAP.\n");
+    }
+    else {
+        printf("NPC HIT BAD TRAP with ret %d.\n", npc_ret);
     }
 
     tfp->close();
