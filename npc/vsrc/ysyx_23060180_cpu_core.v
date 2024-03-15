@@ -8,7 +8,7 @@ module ysyx_23060180_cpu_core(
 
 reg test;
 
-import "DPI-C" function void ebreak();
+import "DPI-C" context function void ebreak();
 export "DPI-C" task ret_value;
 
 task ret_value;
