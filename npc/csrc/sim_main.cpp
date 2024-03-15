@@ -24,7 +24,6 @@ extern char mem[MEMORY_SIZE];
 void ebreak() {
     printf("ebreak\n");
     break_flag = 1;
-    ret_value((svLogicVecVal*)&npc_ret);
 }
 
 static inline uint32_t inst(const char *str)
@@ -150,6 +149,7 @@ int main(int argc, char** argv)
             break;
         }
     }
+    ret_value((svLogicVecVal*)&npc_ret);
 
     if (npc_ret == 0) {
         printf("NPC HIT GOOD TRAP.\n");
