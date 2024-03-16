@@ -105,9 +105,15 @@ endif
 ## 5. Compilation Rules
 
 ### Rule (compile): a single `.c` -> `.o` (gcc)
+ifeq ($(NAME), klib)
+$(DST_DIR)/%.o: %.c lastest
+	@mkdir -p $(dir $@) && echo + CC $<
+	@$(CC) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)
+else
 $(DST_DIR)/%.o: %.c
 	@mkdir -p $(dir $@) && echo + CC $<
 	@$(CC) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)
+endif
 
 ### Rule (compile): a single `.cc` -> `.o` (g++)
 $(DST_DIR)/%.o: %.cc
@@ -152,13 +158,15 @@ image-dep: $(OBJS) am $(LIBS)
 
 ### Clean a single project (remove `build/`)
 clean: $(PLATFORM_CLEAN)
-	echo \# Cleaning AM
 	rm -rf Makefile.html $(WORK_DIR)/build/
 .PHONY: clean
 
 ### Clean all sub-projects within depth 2 (and ignore errors)
-CLEAN_ALL = $(dir $(shell find . -mindepth 2 -name Makefile))
+CLEAN_ALL = $(dir $(shell find $(AM_HOME) -mindepth 2 -name Makefile))
 clean-all: $(CLEAN_ALL) clean
 $(CLEAN_ALL):
 	-@$(MAKE) -s -C $@ clean
 .PHONY: clean-all $(CLEAN_ALL)
+
+lastest:
+.PHONY: lastest
