@@ -5,7 +5,11 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
-  panic("Not implemented");
+  size_t len = 0;
+  while (s[len] != '\0') {
+    len++;
+  }
+  return len;
 }
 
 char *strcpy(char *dst, const char *src) {
@@ -43,10 +47,10 @@ int strcmp(const char *s1, const char *s2) {
   int i = 0;
   while (s1[i] != '\0' || s2[i] != '\0') {
     if (s1[i] != s2[i]) {
-      return s1[i] - s2[i];
+      return (uint8_t)s1[i] - (uint8_t)s2[i];
     }
     if (s1[i] == '\0' || s2[i] == '\0') {
-      return s1[i] - s2[i];
+      return (uint8_t)s1[i] - (uint8_t)s2[i];
     }
     i++;
   }
@@ -80,8 +84,8 @@ void *memcpy(void *out, const void *in, size_t n) {
 
 int memcmp(const void *s1, const void *s2, size_t n) {
   for (int i = 0; i < n; i++) {
-    if (((char *)s1)[i] != ((char *)s2)[i]) {
-      return ((char *)s1)[i] - ((char *)s2)[i];
+    if (((uint8_t *)s1)[i] != ((uint8_t *)s2)[i]) {
+      return ((uint8_t *)s1)[i] - ((uint8_t *)s2)[i];
     }
   }
 
