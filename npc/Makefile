@@ -23,6 +23,7 @@ BIN = $(BUILD_DIR)/$(TOPNAME)
 SIM_DIR = ./sim
 SIM_OBJ_DIR = $(SIM_DIR)/obj_dir
 SIM_BIN = $(SIM_DIR)/$(TOPNAME)
+LDFLAGS += -lreadline
 
 IMG ?= 
 
