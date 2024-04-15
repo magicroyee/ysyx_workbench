@@ -87,7 +87,7 @@ static void init_mem()
 
 int load_img() {
     if (img_file == NULL) {
-        printf("No image is given. Use the default build-in image.");
+        printf("No image is given. Use the default build-in image.\n");
         return 68;
     }
 
