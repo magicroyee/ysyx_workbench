@@ -1,6 +1,7 @@
 #include <npc_cpu.h>
 
 static void exec_once() {
+    printf("hello, world\n");
 }
 
 static void execute(uint32_t n) {
