@@ -5,6 +5,7 @@
 #include <nvboard.h>
 #include "npc_memory.h"
 #include "npc_init.h"
+#include "npc_sdb.h"
 #include "hardware.h"
 
 extern void reg_value(const svLogicVecVal* reg_num, svLogicVecVal* value);
@@ -29,29 +30,26 @@ int main(int argc, char** argv)
     init_monitor(argc, argv);
 
     reset(10);
-
-    printf("Reset finished.\n");
-
-    // dut.eval();
-    while(1) {
-        top->eval();
-        mem_rd = top->mem_rd;
-        if (mem_rd) {
-            mem_raddr = top->mem_raddr - 0x80000000;
-            top->mem_rdata = mem_read(mem_raddr, 4);
-        }
-        else {
-            top->mem_rdata = 0;
-        }
-        single_cycle();
-        // nvboard_update();
-        if (mem_raddr > 20*4) {
-            break;
-        }
-        if (break_flag) {
-            break;
-        }
-    }
+    // while(1) {
+    //     top->eval();
+    //     mem_rd = top->mem_rd;
+    //     if (mem_rd) {
+    //         mem_raddr = top->mem_raddr - 0x80000000;
+    //         top->mem_rdata = mem_read(mem_raddr, 4);
+    //     }
+    //     else {
+    //         top->mem_rdata = 0;
+    //     }
+    //     single_cycle();
+    //     // nvboard_update();
+    //     if (mem_raddr > 20*4) {
+    //         break;
+    //     }
+    //     if (break_flag) {
+    //         break;
+    //     }
+    // }
+    sdb_mainloop();
 
     if (npc_ret == 0) {
         printf("NPC \33[1;32mHIT GOOD TRAP\33[0m.\n");
