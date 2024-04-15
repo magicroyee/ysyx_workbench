@@ -21,6 +21,19 @@ static int cmd_q(char *args) {
     return -1;
 }
 
+static int cmd_si(char *args) {
+    char *arg = strtok(NULL, " ");
+    int n = 1;
+    if (arg != NULL) {
+        sscanf(arg, "%d", &n);
+    }
+    cpu_exec(n);
+    if (npc_state.state == NPC_STOP) {
+        printf("Program stop!");
+    }
+    return 0;
+}
+
 static struct {
     const char *name;
     const char *description;
@@ -31,7 +44,7 @@ static struct {
     { "q", "Exit NEMU", cmd_q },
 
     /* TODO: Add more commands */
-    // { "si", "Single step execution", cmd_si },
+    { "si", "Single step execution", cmd_si },
     // { "info", "Print the status of registers or watchpoints", cmd_info },
     // { "x", "Scan the memory", cmd_x },
     // { "p", "Print the result of expression", cmd_p },
