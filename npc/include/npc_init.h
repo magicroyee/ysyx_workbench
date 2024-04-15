@@ -7,6 +7,7 @@
 #include "verilated_vcd_c.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
+#include "npc_utils.h"
 
 extern VerilatedContext *contextp;
 extern VerilatedVcdC *tfp;

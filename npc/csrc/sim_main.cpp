@@ -8,7 +8,7 @@
 #include "npc_sdb.h"
 #include "hardware.h"
 
-extern void reg_value(const svLogicVecVal* reg_num, svLogicVecVal* value);
+extern NPCState npc_state;
 
 bool break_flag = 0;
 word_t npc_ret = -1;
@@ -17,7 +17,7 @@ extern char mem[MEMORY_SIZE];
 
 void ebreak() {
     printf("ebreak\n");
-    break_flag = 1;
+    npc_state.state = NPC_END;
     int tmp = 10;
     reg_value((const svLogicVecVal*)&tmp, (svLogicVecVal*)&npc_ret);
 }
