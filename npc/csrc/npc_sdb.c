@@ -29,7 +29,7 @@ static int cmd_si(char *args) {
     }
     cpu_exec(n);
     if (npc_state.state == NPC_STOP) {
-        printf("Program stop!");
+        printf("Program stop.\n");
     }
     return 0;
 }
