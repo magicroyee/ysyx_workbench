@@ -1,5 +1,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "npc_init.h"
 #include "npc_sdb.h"
 #include "npc_cpu.h"
 
@@ -29,7 +30,7 @@ static int cmd_si(char *args) {
     }
     cpu_exec(n);
     if (npc_state.state == NPC_STOP) {
-        printf("Program stop.\n");
+        printf("Program stop at pc: 0x%08x.\n", top->rootp->top__DOT__cpu_core__DOT__pc_next);
     }
     return 0;
 }
