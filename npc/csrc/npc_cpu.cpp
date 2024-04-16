@@ -7,17 +7,32 @@ u_int32_t mem_rd = 0;
 u_int32_t mem_raddr = 0;
 
 static void exec_once() {
-    top->eval();
-    mem_rd = top->mem_rd;
-    if (mem_rd) {
+    // top->eval();
+    // mem_rd = top->mem_rd;
+    // if (mem_rd) {
+    //     mem_raddr = top->mem_raddr - 0x80000000;
+    //     top->mem_rdata = mem_read(mem_raddr, 4);
+    // }
+    // else {
+    //     top->mem_rdata = 0;
+    // }
+    // single_cycle();
+    // nvboard_update();
+    while (!top->mem_rd) {
+        top->eval();
+        single_cycle();
+    }
+    while (top->mem_rd)
+    {
+        top->eval();
         mem_raddr = top->mem_raddr - 0x80000000;
         top->mem_rdata = mem_read(mem_raddr, 4);
+        single_cycle();
     }
-    else {
-        top->mem_rdata = 0;
+    while (!top->mem_rd) {
+        top->eval();
+        single_cycle();
     }
-    single_cycle();
-    // nvboard_update();
 }
 
 static void execute(uint32_t n) {
