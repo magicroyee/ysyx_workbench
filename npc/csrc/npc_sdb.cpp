@@ -3,8 +3,11 @@
 #include "npc_init.h"
 #include "npc_sdb.h"
 #include "npc_cpu.h"
+#include "npc_memory.h"
 
 NPCState npc_state;
+
+word_t expr(char *e, bool *success);
 
 static int cmd_help(char *args);
 
@@ -30,7 +33,34 @@ static int cmd_si(char *args) {
     }
     cpu_exec(n);
     if (npc_state.state == NPC_STOP) {
-        printf("Program stop at pc: 0x%08x.\n", top->rootp->top__DOT__cpu_core__DOT__pc_next);
+        printf("Program stop at pc: 0x%08x.\n", top->rootp->top__DOT__cpu_core__DOT__pc);
+    }
+    return 0;
+}
+
+static int cmd_x(char *args) {
+    char *arg = strtok(NULL, " ");
+    if (arg == NULL) {
+        printf("Please specify the length!\n");
+        return 0;
+    }
+    int n;
+    sscanf(arg, "%d", &n);
+    arg = strtok(NULL, " ");
+    if (arg == NULL) {
+        printf("Please specify the address!\n");
+        return 0;
+    }
+    vaddr_t addr;
+    bool success;
+    addr = expr(arg, &success);
+    if (success == false) {
+        printf("Invalid expression!\n");
+        return 0;
+    }
+    // sscanf(arg, "%x", &addr);
+    for (int i = 0; i < n; i++) {
+        printf("0x%08x: 0x%08x\n", addr + i * 4, vaddr_read(addr + i * 4, 4));
     }
     return 0;
 }
@@ -47,7 +77,7 @@ static struct {
     /* TODO: Add more commands */
     { "si", "Single step execution", cmd_si },
     // { "info", "Print the status of registers or watchpoints", cmd_info },
-    // { "x", "Scan the memory", cmd_x },
+    { "x", "Scan the memory", cmd_x },
     // { "p", "Print the result of expression", cmd_p },
     // { "w", "Set a watchpoint", cmd_w },
     // { "d", "Delete a watchpoint", cmd_d },
