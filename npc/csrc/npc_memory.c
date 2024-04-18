@@ -23,8 +23,9 @@ void mem_write(addr_t addr, word_t data, int len) {
 }
 
 word_t vaddr_read(addr_t addr, int len) {
-    if (addr >= MEM_BASE && addr < MEM_BASE+MEMORY_SIZE) {
-        return mem_read(addr-MEM_BASE, len);
+    addr_t maddr = addr - MEM_BASE;
+    if (addr >= 0 && addr < MEMORY_SIZE) {
+        return mem_read(maddr, len);
     }
     else {
         return 0;
