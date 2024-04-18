@@ -102,7 +102,7 @@ static struct {
 
     /* TODO: Add more commands */
     { "si", "Single step execution", cmd_si },
-    // { "info", "Print the status of registers or watchpoints", cmd_info },
+    { "info", "Print the status of registers or watchpoints", cmd_info },
     { "x", "Scan the memory", cmd_x },
     // { "p", "Print the result of expression", cmd_p },
     // { "w", "Set a watchpoint", cmd_w },
