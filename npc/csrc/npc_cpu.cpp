@@ -6,6 +6,12 @@
 u_int32_t mem_rd = 0;
 u_int32_t mem_raddr = 0;
 
+#define EXEC_CHECK_END { \
+    if (npc_state.state != NPC_RUNNING) { \
+        return; \
+    } \
+}
+
 static void exec_once() {
     // top->eval();
     // mem_rd = top->mem_rd;
@@ -18,12 +24,10 @@ static void exec_once() {
     // }
     // single_cycle();
     // nvboard_update();
-    if (npc_state.state != NPC_RUNNING) {
-        return;
-    }
     while (!top->mem_rd) {
         top->eval();
         single_cycle();
+        EXEC_CHECK_END;
     }
     while (top->mem_rd)
     {
@@ -31,10 +35,12 @@ static void exec_once() {
         mem_raddr = top->mem_raddr - 0x80000000;
         top->mem_rdata = mem_read(mem_raddr, 4);
         single_cycle();
+        EXEC_CHECK_END;
     }
     while (!top->mem_rd) {
         top->eval();
         single_cycle();
+        EXEC_CHECK_END;
     }
 }
 
