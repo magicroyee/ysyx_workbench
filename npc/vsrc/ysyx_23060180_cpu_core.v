@@ -94,8 +94,8 @@ always @(posedge clk) begin
     mem_rd_d1 <= mem_rd;
     mem_rd_d2 <= mem_rd_d1;
 end
-assign mem_rdata_valid = mem_rd;
-assign instr_valid = mem_rd_d1;
+assign mem_rdata_valid = mem_rd_d1;
+assign instr_valid = mem_rd_d2;
 
 always @(posedge clk or negedge rstn) begin
     if (!rstn) begin

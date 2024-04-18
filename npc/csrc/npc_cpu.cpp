@@ -33,8 +33,8 @@ static void exec_once() {
     {
         top->eval();
         mem_raddr = top->mem_raddr - 0x80000000;
-        top->mem_rdata = mem_read(mem_raddr, 4);
         single_cycle();
+        top->mem_rdata = mem_read(mem_raddr, 4);
         EXEC_CHECK_END;
     }
     while (!top->mem_rd) {
