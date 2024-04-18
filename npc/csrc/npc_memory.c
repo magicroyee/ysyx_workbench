@@ -21,3 +21,13 @@ void mem_write(addr_t addr, word_t data, int len) {
         default: printf("not valid len.\n"); break;
     }
 }
+
+word_t vaddr_read(addr_t addr, int len) {
+    addr_t maddr = addr - MEM_BASE;
+    if (maddr >= 0 && maddr < MEMORY_SIZE) {
+        return mem_read(maddr, len);
+    }
+    else {
+        return 0;
+    }
+}

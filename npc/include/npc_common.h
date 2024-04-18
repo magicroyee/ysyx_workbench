@@ -9,5 +9,6 @@
 
 typedef uint32_t word_t;
 typedef word_t addr_t;
+typedef word_t vaddr_t;
 
 #endif
