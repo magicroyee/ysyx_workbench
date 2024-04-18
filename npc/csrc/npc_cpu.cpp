@@ -18,6 +18,9 @@ static void exec_once() {
     // }
     // single_cycle();
     // nvboard_update();
+    if (npc_state.state != NPC_RUNNING) {
+        return;
+    }
     while (!top->mem_rd) {
         top->eval();
         single_cycle();
