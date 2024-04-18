@@ -12,6 +12,7 @@ extern void reg_value(const svLogicVecVal* reg_num, svLogicVecVal* value);
 void single_cycle();
 void reset(int n);
 void step_and_dump_wave();
+void isa_reg_display();
 word_t isa_reg_str2val(const char *s, bool *success);
 
 #endif

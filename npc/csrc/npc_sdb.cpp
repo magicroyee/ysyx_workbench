@@ -4,6 +4,7 @@
 #include "npc_sdb.h"
 #include "npc_cpu.h"
 #include "npc_memory.h"
+#include "hardware.h"
 
 NPCState npc_state;
 
@@ -62,6 +63,30 @@ static int cmd_x(char *args) {
     // sscanf(arg, "%x", &addr);
     for (int i = 0; i < n; i++) {
         printf("0x%08x: 0x%08x\n", addr + i * 4, vaddr_read(addr + i * 4, 4));
+    }
+    return 0;
+}
+
+static int cmd_info(char *args) {
+    char *arg = strtok(NULL, " ");
+    if (arg == NULL) {
+        printf("Please specify the subcommand!\n");
+        return 0;
+    }
+    if (strcmp(arg, "r") == 0) {
+        isa_reg_display();
+    }
+    // else if (strcmp(arg, "w") == 0) {
+    //     print_wp();
+    // }
+    // else if (strcmp(arg, "i") == 0) {
+    //     IFDEF(CONFIG_ITRACE, rb_print(&irb));
+    // }
+    // else if (strcmp(arg, "m") == 0) {
+    //     IFDEF(CONFIG_MTRACE, rb_print(&mtrace));
+    // }
+    else {
+        printf("Unknown subcommand '%s'\n", arg);
     }
     return 0;
 }
