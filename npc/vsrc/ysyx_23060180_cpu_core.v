@@ -201,7 +201,6 @@ always @(posedge clk or negedge rstn) begin
     end
     else begin
         alu_valid <= 1'b0;
-        e_valid <= 1'b0;
         jump_valid <= 1'b0;
         store_valid <= 1'b0;
     end
@@ -230,7 +229,7 @@ always @(posedge clk or negedge rstn) begin
 end
 
 always @(posedge clk or negedge rstn) begin
-    if (rstn &&  e_valid && func12 == 12'h001) begin
+    if (rstn && (state==EXECUTE) && e_valid && func12 == 12'h001) begin
         ebreak();
     end
 end
