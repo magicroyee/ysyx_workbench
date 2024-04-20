@@ -23,6 +23,7 @@ parameter FETCH = 1;
 parameter DECODE = 2;
 parameter EXECUTE = 3;
 parameter MEMORY = 4;
+parameter WRITEBACK = 5;
 parameter STATE_BITS = 3;
 reg [STATE_BITS-1:0] state;
 
@@ -87,7 +88,7 @@ reg mem_rd_d2;
 wire mem_rdata_valid;
 wire instr_valid;
 
-assign mem_rd = (state == IDLE);
+assign mem_rd = (state == IDLE) || (state == WRITEBACK);
 assign mem_raddr = pc;
 
 always @(posedge clk) begin
@@ -161,7 +162,6 @@ always @(posedge clk or negedge rstn) begin
         oprand1 <= R[rs1];
         oprand2 <= 32'h0;
         alu_valid <= 1'b0;
-        e_valid <= 1'b0;
         jump_valid <= 1'b0;
         case (opcode)
             7'b0010111: begin   // auipc
@@ -196,7 +196,6 @@ always @(posedge clk or negedge rstn) begin
             end
             default: begin
                 alu_valid <= 1'b0;
-                e_valid <= 1'b0;
             end
         endcase
     end
@@ -231,7 +230,7 @@ always @(posedge clk or negedge rstn) begin
 end
 
 always @(posedge clk or negedge rstn) begin
-    if (rstn && e_valid && func12 == 12'h001) begin
+    if (rstn && (state==EXECUTE) && e_valid && func12 == 12'h001) begin
         ebreak();
     end
 end
@@ -284,8 +283,11 @@ always @(posedge clk or negedge rstn) begin
             end
             EXECUTE: begin
                 if (alu_result_valid) begin
-                    state <= IDLE;
+                    state <= WRITEBACK;
                 end
+            end
+            WRITEBACK: begin
+                state <= FETCH;
             end
         endcase
     end
