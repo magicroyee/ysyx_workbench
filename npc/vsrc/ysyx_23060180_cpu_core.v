@@ -230,7 +230,7 @@ always @(posedge clk or negedge rstn) begin
 end
 
 always @(posedge clk or negedge rstn) begin
-    if (rstn && (state==EXECUTE) && e_valid && func12 == 12'h001) begin
+    if (rstn &&  e_valid && func12 == 12'h001) begin
         ebreak();
     end
 end
