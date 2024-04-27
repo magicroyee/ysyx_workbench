@@ -14,7 +14,7 @@ static void exec_once() {
     uint32_t pc = CPU_PC;
     uint32_t instval = INST;
     char *p = log_buf;
-    p += snprintf(p, sizeof(log_buf), "pc: 0x%08x:\n", CPU_PC);
+    p += snprintf(p, sizeof(log_buf), "pc: 0x%08x:", CPU_PC);
 
     int ilen = 4;
     uint8_t *inst = (uint8_t *)&instval;
