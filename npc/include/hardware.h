@@ -7,6 +7,7 @@
 #define CPU_PC top->rootp->top__DOT__cpu_core__DOT__pc
 #define gpr(x) top->rootp->top__DOT__cpu_core__DOT__R[x]
 #define INST top->rootp->top__DOT__cpu_core__DOT__instr
+#define NPC_STATE top->rootp->__Vdly__top__DOT__cpu_core__DOT__state
 
 #define EXEC_CHECK_END { \
     if (npc_state.state != NPC_RUNNING) { \

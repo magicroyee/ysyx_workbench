@@ -58,22 +58,44 @@ u_int32_t mem_rd = 0;
 u_int32_t mem_raddr = 0;
 void isa_exec_once()
 {
-    while (!top->mem_rd) {
+    // while (!top->mem_rd) {
+    //     top->eval();
+    //     single_cycle();
+    //     EXEC_CHECK_END;
+    // }
+    // while (top->mem_rd)
+    // {
+    //     top->eval();
+    //     mem_raddr = top->mem_raddr - 0x80000000;
+    //     single_cycle();
+    //     top->mem_rdata = mem_read(mem_raddr, 4);
+    //     EXEC_CHECK_END;
+    // }
+    // while (!top->mem_rd) {
+    //     top->eval();
+    //     single_cycle();
+    //     EXEC_CHECK_END;
+    // }
+    while (!(NPC_STATE == 5)) {
         top->eval();
+        mem_rd = top->mem_rd;
         single_cycle();
+        if (mem_rd)
+        {
+            mem_raddr = top->mem_raddr - 0x80000000;
+            top->mem_rdata = mem_read(mem_raddr, 4);
+        }
         EXEC_CHECK_END;
     }
-    while (top->mem_rd)
-    {
+    while (NPC_STATE == 5) {
         top->eval();
-        mem_raddr = top->mem_raddr - 0x80000000;
+        mem_rd = top->mem_rd;
         single_cycle();
-        top->mem_rdata = mem_read(mem_raddr, 4);
-        EXEC_CHECK_END;
-    }
-    while (!top->mem_rd) {
-        top->eval();
-        single_cycle();
+        if (mem_rd)
+        {
+            mem_raddr = top->mem_raddr - 0x80000000;
+            top->mem_rdata = mem_read(mem_raddr, 4);
+        }
         EXEC_CHECK_END;
     }
 }
