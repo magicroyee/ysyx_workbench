@@ -32,8 +32,8 @@ static void exec_once() {
     memset(p, ' ', space_len);
     p += space_len;
 
-    // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-    // disassemble(p, log_buf + sizeof(log_buf) - p, pc, (uint8_t *)&instval, ilen);
+    void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+    disassemble(p, log_buf + sizeof(log_buf) - p, pc, (uint8_t *)&instval, ilen);
 
     isa_exec_once();
 }
