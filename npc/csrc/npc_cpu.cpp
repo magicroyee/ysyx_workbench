@@ -12,7 +12,7 @@ static void trace()
 
 static void exec_once() {
     uint32_t pc = CPU_PC;
-    uint32_t instval = mem_read(pc, 4);
+    uint32_t instval = vaddr_read(pc, 4);
     char *p = log_buf;
     p += snprintf(p, sizeof(log_buf), "pc: 0x%08x:", CPU_PC);
 
