@@ -11,6 +11,8 @@ static void trace()
 }
 
 static void exec_once() {
+    isa_exec_once();
+    
     uint32_t pc = CPU_PC;
     uint32_t instval = INST;
     char *p = log_buf;
@@ -34,8 +36,6 @@ static void exec_once() {
 
     void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
     disassemble(p, log_buf + sizeof(log_buf) - p, pc, (uint8_t *)&instval, ilen);
-
-    isa_exec_once();
 }
 
 static void execute(uint32_t n) {
