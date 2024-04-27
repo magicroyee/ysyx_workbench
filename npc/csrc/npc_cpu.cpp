@@ -1,4 +1,5 @@
-#include <npc_cpu.h>
+#include "npc_cpu.h"
+#include "npc_config.h"
 #include "npc_init.h"
 #include "npc_memory.h"
 #include "hardware.h"
@@ -7,7 +8,9 @@ char log_buf[LOG_BUF_LEN];
 
 static void trace()
 {
+    #ifdef ITRACE
     printf("%s\n", log_buf);
+    #endif
 }
 
 static void exec_once() {
