@@ -14,5 +14,8 @@
 #**************************************************************************************/
 
 CXXSRC = csrc/utils/disasm.cc
-CXXFLAGS += $(shell llvm-config-11 --cxxflags) -fPIE
+
+TMP_FLAGS = $(shell llvm-config-11 --cxxflags)
+# remove the cases with "-D_"
+CXXFLAGS += $(filter-out -D_%,$(TMP_FLAGS)) -fPIE
 LIBS += $(shell llvm-config-11 --libs)
