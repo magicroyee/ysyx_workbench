@@ -1,4 +1,5 @@
 #include "npc_init.h"
+#include "npc_config.h"
 #include "npc_memory.h"
 #include <getopt.h>
 #include <assert.h>
@@ -8,6 +9,8 @@ VerilatedVcdC *tfp = NULL;
 Vtop *top = NULL;
 char *img_file = NULL;
 extern char mem[MEMORY_SIZE];
+
+void init_disasm(const char *triple);
 
 static inline uint32_t inst(const char *str)
 {
@@ -122,6 +125,10 @@ void init_monitor(int argc, char *argv[])
 
     parse_args(argc, argv);
     load_img();
+
+    #ifdef ITRACE
+    init_disasm("riscv32");
+    #endif
 }
 
 void release_monitor()
