@@ -16,24 +16,32 @@
 #include <common.h>
 #include "sdb/sdb.h"
 
+#define A
+
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
 int is_exit_status_bad();
 
 int main(int argc, char *argv[]) {
-  /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
-  init_monitor(argc, argv);
-#endif
+    /* Initialize the monitor. */
+// #ifdef CONFIG_TARGET_AM
+//   am_init_monitor();
+// #else
+//   init_monitor(argc, argv);
+// #endif
 
-  /* Start engine. */
-  engine_start();
+//   /* Start engine. */
+//   engine_start();
 
-  release_sdb();
+//   release_sdb();
 
-  return is_exit_status_bad();
+//   return is_exit_status_bad();
+
+    printf("Hello, NEMU!\n");
+    IFDEF(A, printf("A is defined\n"));
+    IFNDEF(A, printf("A is not defined\n"));
+
+    return 0;
 
 }

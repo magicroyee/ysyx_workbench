@@ -30,25 +30,6 @@ int main(int argc, char** argv)
     init_monitor(argc, argv);
 
     reset(10);
-    // while(1) {
-    //     top->eval();
-    //     mem_rd = top->mem_rd;
-    //     if (mem_rd) {
-    //         mem_raddr = top->mem_raddr - 0x80000000;
-    //         top->mem_rdata = mem_read(mem_raddr, 4);
-    //     }
-    //     else {
-    //         top->mem_rdata = 0;
-    //     }
-    //     single_cycle();
-    //     // nvboard_update();
-    //     if (mem_raddr > 20*4) {
-    //         break;
-    //     }
-    //     if (break_flag) {
-    //         break;
-    //     }
-    // }
     sdb_mainloop();
 
     if (npc_ret == 0) {
