@@ -2,6 +2,7 @@
 #define __NPC_INIT_H__
 
 #include "npc_common.h"
+#include "macro.h"
 #include "Vtop.h"
 #include "Vtop___024root.h"
 #include "verilated.h"
