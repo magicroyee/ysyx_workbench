@@ -8,9 +8,7 @@ char log_buf[LOG_BUF_LEN];
 
 static void trace()
 {
-    #ifdef ITRACE
-    printf("%s\n", log_buf);
-    #endif
+    IFDEF(TRACE, printf("%s\n", log_buf));
 }
 
 static void exec_once() {

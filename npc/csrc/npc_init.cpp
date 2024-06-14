@@ -126,9 +126,7 @@ void init_monitor(int argc, char *argv[])
     parse_args(argc, argv);
     load_img();
 
-    #ifdef ITRACE
-    init_disasm("riscv32");
-    #endif
+    IFDEF(ITRACE, init_disasm("riscv32"));
 }
 
 void release_monitor()
