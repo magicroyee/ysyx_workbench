@@ -8,7 +8,7 @@ char log_buf[LOG_BUF_LEN];
 
 static void trace()
 {
-    IFDEF(TRACE, printf("%s\n", log_buf));
+    IFDEF(ITRACE, printf("%s\n", log_buf));
 }
 
 static void exec_once() {
