@@ -17,7 +17,7 @@ static void trace()
     IFDEF(ITRACE, printf("%s\n", log_buf));
 #if FTRACE==1
     if (jump_valid) {
-        printf("jump_valid\n");
+        // printf("jump_valid\n");
         npc_ftrace(npc_addr, npc_pc, npc_rd, npc_rs1);
         jump_valid = 0;
     }
