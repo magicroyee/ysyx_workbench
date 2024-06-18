@@ -16,6 +16,9 @@ CFLAGS += -DMAINARGS=\"$(mainargs)\"
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 
 NPCFLAGS += 
+ifeq ($(FTRACE),y)
+  NPCFLAGS += -e $(shell dirname $(IMAGE).elf)/$(IMAGE).elf
+endif
 
 image: $(IMAGE).elf
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt

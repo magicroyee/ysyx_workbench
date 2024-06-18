@@ -7,8 +7,24 @@
 #include "hardware.h"
 
 NPCState npc_state;
+static const char * elf_file = NULL;
 
 word_t expr(char *e, bool *success);
+
+void sdb_set_elfname(const char *elfname)
+{
+    elf_file = elfname;
+}
+
+void sdb_init()
+{
+    IFDEF(FTRACE, if(elf_file) npc_ftrace_init(elf_file));
+}
+
+void sdb_release()
+{
+    IFDEF(FTRACE, npc_ftrace_release());
+}
 
 static int cmd_help(char *args);
 
@@ -151,11 +167,6 @@ static char* rl_gets() {
     }
 
     return line_read;
-}
-
-void sdb_init()
-{
-
 }
 
 void sdb_mainloop()

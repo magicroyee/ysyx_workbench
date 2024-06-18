@@ -9,6 +9,7 @@ module ysyx_23060180_cpu_core(
 reg test;
 
 import "DPI-C" context function void ebreak();
+import "DPI-C" context function void jump_en(input int addr, input int pc, input int rd, input int rs1);
 export "DPI-C" task reg_value;
 
 task reg_value;
@@ -283,6 +284,9 @@ always @(posedge clk or negedge rstn) begin
             EXECUTE: begin
                 if (alu_result_valid) begin
                     state <= WRITEBACK;
+                    if (jump_valid_d1) begin
+                        jump_en(pc_next, pc, alu_result_rd, ((opcode==7'b1101111)? 'd0 : rs1));
+                    end
                 end
             end
             WRITEBACK: begin

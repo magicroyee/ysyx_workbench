@@ -17,6 +17,7 @@
 #define __DEBUG_H__
 
 #include <stdio.h>
+#include <assert.h>
 #include "npc_utils.h"
 #include "npc_common.h"
 

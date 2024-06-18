@@ -6,5 +6,7 @@
 
 void sdb_init();
 void sdb_mainloop();
+void sdb_set_elfname(const char *elfname);
+void sdb_release();
 
 #endif

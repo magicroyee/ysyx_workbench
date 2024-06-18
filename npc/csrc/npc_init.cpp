@@ -1,6 +1,7 @@
 #include "npc_init.h"
 #include "npc_config.h"
 #include "npc_memory.h"
+#include "npc_sdb.h"
 #include <getopt.h>
 #include <assert.h>
 
@@ -41,7 +42,7 @@ int parse_args(int argc, char *argv[]) {
         // {"diff"     , required_argument, NULL, 'd'},
         // {"port"     , required_argument, NULL, 'p'},
         // {"help"     , no_argument      , NULL, 'h'},
-        // {"elf"      , required_argument, NULL, 'e'},
+        {"elf"      , required_argument, NULL, 'e'},
         {0          , 0                , NULL,  0 },
     };
     int o;
@@ -51,7 +52,7 @@ int parse_args(int argc, char *argv[]) {
         // case 'p': sscanf(optarg, "%d", &difftest_port); break;
         // case 'l': log_file = optarg; break;
         // case 'd': diff_so_file = optarg; break;
-        // case 'e': sdb_set_elfname(optarg); break;
+        case 'e': sdb_set_elfname(optarg); break;
         case 1: img_file = optarg; return 0;
         default:
             printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
@@ -59,7 +60,7 @@ int parse_args(int argc, char *argv[]) {
             // printf("\t-l,--log=FILE           output log to FILE\n");
             // printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
             // printf("\t-p,--port=PORT          run DiffTest with port PORT\n");
-            // printf("\t-e,--elf=FILE           specify the ELF file\n");
+            printf("\t-e,--elf=FILE           specify the ELF file\n");
             printf("\n");
             exit(0);
         }
@@ -125,12 +126,14 @@ void init_monitor(int argc, char *argv[])
 
     parse_args(argc, argv);
     load_img();
+    sdb_init();
 
     IFDEF(ITRACE, init_disasm("riscv32"));
 }
 
 void release_monitor()
 {
+    sdb_release();
     tfp->close();
     delete top;
     delete tfp;
