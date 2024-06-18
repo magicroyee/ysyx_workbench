@@ -28,6 +28,7 @@ void ebreak() {
 }
 
 void jump_en(int addr, int pc, int rd, int rs1) {
+    printf("jump_en\n");
     jump_valid = 1;
     npc_addr = addr;
     npc_pc = pc;
