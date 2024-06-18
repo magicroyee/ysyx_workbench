@@ -2,13 +2,26 @@
 #include "npc_config.h"
 #include "npc_init.h"
 #include "npc_memory.h"
+#include "npc_ftrace.h"
 #include "hardware.h"
 
 char log_buf[LOG_BUF_LEN];
+int jump_valid;
+word_t npc_addr;
+word_t npc_pc;
+int npc_rd;
+int npc_rs1;
 
 static void trace()
 {
     IFDEF(ITRACE, printf("%s\n", log_buf));
+#if FTRACE==1
+    if (jump_valid) {
+        // printf("jump_valid\n");
+        npc_ftrace(npc_addr, npc_pc, npc_rd, npc_rs1);
+        jump_valid = 0;
+    }
+#endif
 }
 
 static void exec_once() {

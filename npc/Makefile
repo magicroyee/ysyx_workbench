@@ -15,6 +15,7 @@ VERILATOR_CFLAGS += -MMD --build -cc  \
 				-O3 --x-assign fast --x-initial fast --noassert
 SIM_CFLAGS += --cc --exe --build --j 0  \
 				-O3 --trace -Wno-TIMESCALEMOD \
+				-Wno-WIDTHEXPAND \
 				--timescale-override 1ns/1ps
 
 BUILD_DIR = ./build
@@ -73,7 +74,7 @@ all: default
 
 sim: $(SIM_BIN) 
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@$^ $(IMG)
+	@$^ $(ARGS) $(IMG)
 
 run: $(BIN)
 	$(call git_commit, "run RTL") # DO NOT REMOVE THIS LINE!!!

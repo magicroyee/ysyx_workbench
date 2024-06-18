@@ -9,6 +9,11 @@
 #include "hardware.h"
 
 extern NPCState npc_state;
+extern int jump_valid;
+extern word_t npc_addr;
+extern word_t npc_pc;
+extern int npc_rd;
+extern int npc_rs1;
 
 bool break_flag = 0;
 word_t npc_ret = -1;
@@ -20,6 +25,15 @@ void ebreak() {
     npc_state.state = NPC_END;
     int tmp = 10;
     reg_value((const svLogicVecVal*)&tmp, (svLogicVecVal*)&npc_ret);
+}
+
+void jump_en(int addr, int pc, int rd, int rs1) {
+    // printf("jump_en\n");
+    jump_valid = 1;
+    npc_addr = addr;
+    npc_pc = pc;
+    npc_rd = rd;
+    npc_rs1 = rs1;
 }
 
 int main(int argc, char** argv)
