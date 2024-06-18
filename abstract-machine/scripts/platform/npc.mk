@@ -17,7 +17,7 @@ CFLAGS += -DMAINARGS=\"$(mainargs)\"
 
 NPCFLAGS += 
 ifeq ($(FTRACE),y)
-  NPCFLAGS += -e $(shell dirname $(IMAGE).elf)/$(IMAGE).elf
+	NPCFLAGS += -e $(shell dirname $(IMAGE).elf)/$(IMAGE).elf
 endif
 
 image: $(IMAGE).elf
@@ -26,5 +26,6 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
+	@echo $(NPCFLAGS)
 	$(MAKE) -C $(NPC_HOME) sim ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
 	
