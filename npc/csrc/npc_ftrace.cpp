@@ -14,6 +14,7 @@ static inline void func_tab_add(Elf32_Sym sym) {
 }
 
 int npc_ftrace_init(const char *elfname) {
+    printf("npc_ftrace_init\n");
     ftab.size = 0;
     indent = 0;
 
