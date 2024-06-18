@@ -74,6 +74,7 @@ all: default
 
 sim: $(SIM_BIN) 
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	@echo "run $(SIM_BIN) $(ARGS) $(IMG)"
 	@$^ $(ARGS) $(IMG)
 
 run: $(BIN)
