@@ -17,7 +17,7 @@ CFLAGS += -DMAINARGS=\"$(mainargs)\"
 
 NPCFLAGS += 
 ifeq ($(FTRACE),y)
-	NPCFLAGS += -e $(shell dirname $(IMAGE).elf)/$(IMAGE).elf
+	NPCFLAGS += -e $(IMAGE).elf
 endif
 
 image: $(IMAGE).elf
