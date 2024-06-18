@@ -4,6 +4,8 @@
 #include "npc_sdb.h"
 #include "npc_cpu.h"
 #include "npc_memory.h"
+#include "npc_config.h"
+#include "npc_ftrace.h"
 #include "hardware.h"
 
 NPCState npc_state;
