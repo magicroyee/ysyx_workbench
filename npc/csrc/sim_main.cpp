@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
     reset(10);
 
-    printf("cpu pc is %08h\n", CPU_PC);
+    printf("cpu pc is %08x\n", CPU_PC);
     sdb_mainloop();
 
     if (npc_ret == 0) {
