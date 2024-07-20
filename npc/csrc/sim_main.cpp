@@ -44,6 +44,8 @@ int main(int argc, char** argv)
     init_monitor(argc, argv);
 
     reset(10);
+
+    printf("cpu pc is %08h\n", CPU_PC);
     sdb_mainloop();
 
     if (npc_ret == 0) {
