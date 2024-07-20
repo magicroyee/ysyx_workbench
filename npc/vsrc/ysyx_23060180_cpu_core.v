@@ -8,9 +8,9 @@ module ysyx_23060180_cpu_core(
 
 reg test;
 
-import "DPI-C" context function void ebreak(); endfunction
-import "DPI-C" context function void jump_en(input int addr, input int pc, input int rd, input int rs1); endfunction
-export "DPI-C" task reg_value; endtask
+import "DPI-C" context function void ebreak(); 
+import "DPI-C" context function void jump_en(input int addr, input int pc, input int rd, input int rs1); 
+export "DPI-C" task reg_value; 
 
 task reg_value;
     input [4:0] reg_num;
