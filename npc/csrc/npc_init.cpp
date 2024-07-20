@@ -126,6 +126,9 @@ void init_monitor(int argc, char *argv[])
     top->trace(tfp, 0);
     tfp->open("./sim/wave.vcd");
 
+    reset(10);
+    isa_reg_read();
+
     init_mem();
 
     parse_args(argc, argv);
