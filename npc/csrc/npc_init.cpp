@@ -128,7 +128,6 @@ void init_monitor(int argc, char *argv[])
 
     reset(10);
     isa_reg_read();
-    isa_reg_display();
 
     init_mem();
 
