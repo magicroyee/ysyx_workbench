@@ -166,7 +166,7 @@ always @(posedge clk or negedge rstn) begin
         jump_valid <= 1'b0;
         case (opcode)
             7'b0010111: begin   // auipc
-                oprand1 <= 0;
+                oprand1 <= pc;
                 oprand2 <= immu;
                 alu_valid <= 1'b1;
             end
