@@ -45,7 +45,8 @@ int main(int argc, char** argv)
 
     reset(10);
 
-    printf("cpu pc is %08x\n", CPU_PC);
+    isa_reg_read();
+    isa_reg_display();
     sdb_mainloop();
 
     if (npc_ret == 0) {
