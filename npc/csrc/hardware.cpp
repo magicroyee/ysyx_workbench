@@ -136,11 +136,5 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
         printf("pc is different! ref: 0x%08x, dut: 0x%08x\n", ref_r->pc, CPU_PC);
     }
 err:
-    if (!is_same)
-    {
-        printf("pc: 0x%08x\n", pc);
-        cpu_reg_display(ref_r);
-        isa_reg_display();
-    }
     return is_same;
 }
