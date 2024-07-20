@@ -39,6 +39,15 @@ void isa_reg_display() {
     }
 }
 
+void cpu_reg_display(CPU_state *cpu) {
+    printf("%-3s: 0x%08x\n", "pc", cpu->pc);
+    for (int i = 0; i < 32; i++) {
+        printf("%-3s: 0x%08x", regs[i], cpu->gpr[i]);
+        if (i % 4 == 3) printf("\n");
+        else printf("\t");
+    }
+}
+
 word_t isa_reg_str2val(const char *s, bool *success) {
     if (strcmp(s, "pc") == 0) {
         *success = true;
@@ -127,5 +136,11 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
         printf("pc is different! ref: 0x%08x, dut: 0x%08x\n", ref_r->pc, CPU_PC);
     }
 err:
+    if (!is_same)
+    {
+        printf("pc: 0x%08x\n", pc);
+        cpu_reg_display(ref_r);
+        isa_reg_display();
+    }
     return is_same;
 }

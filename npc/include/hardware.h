@@ -29,6 +29,7 @@ void single_cycle();
 void reset(int n);
 void step_and_dump_wave();
 void isa_reg_display();
+void cpu_reg_display(CPU_state *cpu);
 word_t isa_reg_str2val(const char *s, bool *success);
 void isa_exec_once();
 void isa_reg_read();
