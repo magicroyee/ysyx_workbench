@@ -2,6 +2,11 @@
 
 char mem[MEMORY_SIZE];
 
+uint8_t *guest_to_host(vaddr_t addr)
+{
+    return (uint8_t *)(mem + addr - MEM_BASE);
+}
+
 word_t mem_read(addr_t addr, int len) {
     switch (len)
     {

@@ -33,7 +33,7 @@ const char *regs[] = {
 void isa_reg_display() {
     printf("%-3s: 0x%08x\n", "pc", CPU_PC);
     for (int i = 0; i < 32; i++) {
-        printf("%-3s: 0x%08x", regs[i], gpr(i));
+        printf("%-3s: 0x%08x", regs[i], GPR(i));
         if (i % 4 == 3) printf("\n");
         else printf("\t");
     }
@@ -47,7 +47,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
     for (int i = 0; i < 32; i++) {
         if (strcmp(regs[i], s) == 0) {
         *success = true;
-        return gpr(i);
+        return GPR(i);
         }
     }
     *success = false;
@@ -98,4 +98,34 @@ void isa_exec_once()
         }
         EXEC_CHECK_END;
     }
+}
+
+void isa_reg_read()
+{
+    for (int i = 0; i < 32; i++)
+    {
+        cpu.gpr[i] = GPR(i);
+    }
+    cpu.pc = CPU_PC;
+}
+
+bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
+{
+    bool is_same = true;
+    for (int i = 0; i < 32; i++)
+    {
+        if (ref_r->gpr[i] != cpu.gpr[i])
+        {
+            is_same = false;
+            printf("reg[%d] is different! ref: 0x%08x, dut: 0x%08x\n", i, ref_r->gpr[i], GPR(i));
+            goto err;
+        }
+    }
+    if (ref_r->pc != cpu.pc)
+    {
+        is_same = false;
+        printf("pc is different! ref: 0x%08x, dut: 0x%08x\n", ref_r->pc, CPU_PC);
+    }
+err:
+    return is_same;
 }
