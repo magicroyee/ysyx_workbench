@@ -229,13 +229,8 @@ always @(posedge clk or negedge rstn) begin
     end
 end
 
-reg e_valid_d1;
-always @(posedge clk) begin
-    e_valid_d1 <= e_valid;
-end
-
 always @(posedge clk or negedge rstn) begin
-    if (rstn && (state==WRITEBACK) && e_valid_d1 && func12 == 12'h001) begin
+    if (rstn && (state==WRITEBACK) && e_valid && func12 == 12'h001) begin
         ebreak();
     end
 end
@@ -287,7 +282,7 @@ always @(posedge clk or negedge rstn) begin
                 end
             end
             EXECUTE: begin
-                if (alu_result_valid) begin
+                if (alu_result_valid || e_valid) begin
                     state <= WRITEBACK;
                     if (jump_valid_d1) begin
                         jump_en(pc_next, pc, alu_result_rd, ((opcode==7'b1101111)? 'd0 : rs1));
