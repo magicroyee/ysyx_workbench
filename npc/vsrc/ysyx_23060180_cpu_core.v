@@ -244,7 +244,7 @@ always @* begin
     pc_next = pc;
     case (state)
         EXECUTE: begin
-            if (alu_result_valid) begin
+            if (alu_result_valid || e_valid) begin
                 if (jump_valid_d1) begin
                     pc_next = alu_result;
                 end
