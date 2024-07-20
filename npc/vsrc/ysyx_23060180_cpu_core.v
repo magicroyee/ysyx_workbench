@@ -8,9 +8,9 @@ module ysyx_23060180_cpu_core(
 
 reg test;
 
-import "DPI-C" context function void ebreak();
-import "DPI-C" context function void jump_en(input int addr, input int pc, input int rd, input int rs1);
-export "DPI-C" task reg_value;
+import "DPI-C" context function void ebreak(); 
+import "DPI-C" context function void jump_en(input int addr, input int pc, input int rd, input int rs1); 
+export "DPI-C" task reg_value; 
 
 task reg_value;
     input [4:0] reg_num;
@@ -166,7 +166,7 @@ always @(posedge clk or negedge rstn) begin
         jump_valid <= 1'b0;
         case (opcode)
             7'b0010111: begin   // auipc
-                oprand1 <= 0;
+                oprand1 <= pc;
                 oprand2 <= immu;
                 alu_valid <= 1'b1;
             end
@@ -230,7 +230,7 @@ always @(posedge clk or negedge rstn) begin
 end
 
 always @(posedge clk or negedge rstn) begin
-    if (rstn && (state==EXECUTE) && e_valid && func12 == 12'h001) begin
+    if (rstn && (state==WRITEBACK) && e_valid && func12 == 12'h001) begin
         ebreak();
     end
 end
@@ -244,7 +244,7 @@ always @* begin
     pc_next = pc;
     case (state)
         EXECUTE: begin
-            if (alu_result_valid) begin
+            if (alu_result_valid || e_valid) begin
                 if (jump_valid_d1) begin
                     pc_next = alu_result;
                 end
@@ -282,7 +282,7 @@ always @(posedge clk or negedge rstn) begin
                 end
             end
             EXECUTE: begin
-                if (alu_result_valid) begin
+                if (alu_result_valid || e_valid) begin
                     state <= WRITEBACK;
                     if (jump_valid_d1) begin
                         jump_en(pc_next, pc, alu_result_rd, ((opcode==7'b1101111)? 'd0 : rs1));

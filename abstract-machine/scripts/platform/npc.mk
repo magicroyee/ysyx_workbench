@@ -19,6 +19,9 @@ NPCFLAGS +=
 ifeq ($(FTRACE),y)
 	NPCFLAGS += -e $(IMAGE).elf
 endif
+ifeq ($(DIFF_TEST),y)
+    NPCFLAGS += -d $(NEMU_HOME)/build/riscv32-nemu-interpreter-so
+endif
 
 image: $(IMAGE).elf
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt

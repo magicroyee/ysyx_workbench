@@ -5,4 +5,6 @@
 #define MTRACE  1
 #define FTRACE  1
 
+#define DIFF_TEST 1
+
 #endif

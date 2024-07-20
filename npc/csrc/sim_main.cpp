@@ -43,7 +43,6 @@ int main(int argc, char** argv)
 
     init_monitor(argc, argv);
 
-    reset(10);
     sdb_mainloop();
 
     if (npc_ret == 0) {

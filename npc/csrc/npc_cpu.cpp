@@ -4,6 +4,7 @@
 #include "npc_memory.h"
 #include "npc_ftrace.h"
 #include "hardware.h"
+#include "sdb/npc_difftest.h"
 
 char log_buf[LOG_BUF_LEN];
 int jump_valid;
@@ -56,6 +57,7 @@ static void execute(uint32_t n) {
     for (uint32_t i = 0; i < n; i++) {
         exec_once();
         trace();
+        IFDEF(DIFF_TEST, difftest_step(CPU_PC, CPU_PC));
         if (npc_state.state != NPC_RUNNING) {
             break;
         }
@@ -66,7 +68,7 @@ void cpu_exec(uint32_t n) {
     switch (npc_state.state) {
         case NPC_END:
         case NPC_ABORT:
-            printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
+            printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
             return;
         default:
             npc_state.state = NPC_RUNNING;
