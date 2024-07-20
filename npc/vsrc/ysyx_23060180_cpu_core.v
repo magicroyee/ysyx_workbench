@@ -229,8 +229,13 @@ always @(posedge clk or negedge rstn) begin
     end
 end
 
+reg e_valid_d1;
+always @(posedge clk) begin
+    e_valid_d1 <= e_valid;
+end
+
 always @(posedge clk or negedge rstn) begin
-    if (rstn && (state==EXECUTE) && e_valid && func12 == 12'h001) begin
+    if (rstn && (state==WRITEBACK) && e_valid_d1 && func12 == 12'h001) begin
         ebreak();
     end
 end
