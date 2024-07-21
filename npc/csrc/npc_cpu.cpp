@@ -26,29 +26,29 @@ static void trace()
 }
 
 static void exec_once() {
-    uint32_t pc = CPU_PC;
-    uint32_t instval = vaddr_read(pc, 4);
-    char *p = log_buf;
-    p += snprintf(p, sizeof(log_buf), "pc: 0x%08x:", CPU_PC);
+    // uint32_t pc = CPU_PC;
+    // uint32_t instval = vaddr_read(pc, 4);
+    // char *p = log_buf;
+    // p += snprintf(p, sizeof(log_buf), "pc: 0x%08x:", CPU_PC);
 
-    int ilen = 4;
-    uint8_t *inst = (uint8_t *)&instval;
-    for (int i = ilen - 1; i >= 0; i--) {
-        p += snprintf(p, 4, " %02x", inst[i]);
-    }
+    // int ilen = 4;
+    // uint8_t *inst = (uint8_t *)&instval;
+    // for (int i = ilen - 1; i >= 0; i--) {
+    //     p += snprintf(p, 4, " %02x", inst[i]);
+    // }
 
-    int ilen_max = 4;
-    int space_len = ilen_max - ilen;
-    if (space_len < 0) {
-        space_len = 0;
-    }
+    // int ilen_max = 4;
+    // int space_len = ilen_max - ilen;
+    // if (space_len < 0) {
+    //     space_len = 0;
+    // }
 
-    space_len = space_len * 3 + 1;
-    memset(p, ' ', space_len);
-    p += space_len;
+    // space_len = space_len * 3 + 1;
+    // memset(p, ' ', space_len);
+    // p += space_len;
 
-    void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-    disassemble(p, log_buf + sizeof(log_buf) - p, pc, (uint8_t *)&instval, ilen);
+    // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+    // disassemble(p, log_buf + sizeof(log_buf) - p, pc, (uint8_t *)&instval, ilen);
 
     isa_exec_once();
 }
