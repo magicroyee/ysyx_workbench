@@ -65,6 +65,10 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 
 u_int32_t mem_rd = 0;
 u_int32_t mem_raddr = 0;
+u_int32_t mem_wr = 0;
+u_int32_t mem_wdata = 0;
+u_int32_t mem_wbit_en = 0;
+
 void isa_exec_once()
 {
     // while (!top->mem_rd) {
@@ -88,32 +92,38 @@ void isa_exec_once()
     while (!(NPC_STATE == 5)) {
         top->eval();
         mem_rd = top->mem_rd;
+        mem_raddr = top->mem_raddr - 0x80000000;
+        mem_wr = top->mem_wr;
+        mem_wdata = top->mem_wdata;
+        mem_wbit_en = top->mem_wbit_en;
         single_cycle();
         if (mem_rd)
         {
-            mem_raddr = top->mem_raddr - 0x80000000;
             top->mem_rdata = mem_read(mem_raddr, 4);
-            printf("read mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_rdata);
         }
-        if (top->mem_wr)
+        if (mem_wr)
         {
-            mem_write(top->mem_raddr - 0x80000000, top->mem_wdata, top->mem_wbit_en);
-            printf("write mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_wdata);
+            mem_write(mem_raddr, mem_wdata, mem_wbit_en);
+            // printf("write mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_wdata);
         }
         EXEC_CHECK_END;
     }
     while (NPC_STATE == 5) {
         top->eval();
         mem_rd = top->mem_rd;
+        mem_raddr = top->mem_raddr - 0x80000000;
+        mem_wr = top->mem_wr;
+        mem_wdata = top->mem_wdata;
+        mem_wbit_en = top->mem_wbit_en;
         single_cycle();
         if (mem_rd)
         {
-            mem_raddr = top->mem_raddr - 0x80000000;
             top->mem_rdata = mem_read(mem_raddr, 4);
         }
-        if (top->mem_wr)
+        if (mem_wr)
         {
-            mem_write(top->mem_raddr - 0x80000000, top->mem_wdata, top->mem_wbit_en);
+            mem_write(mem_raddr, mem_wdata, mem_wbit_en);
+            // printf("write mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_wdata);
         }
         EXEC_CHECK_END;
     }
