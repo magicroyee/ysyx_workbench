@@ -245,36 +245,30 @@ always @(posedge clk or negedge rstn) begin
                 jump_valid <= 1'b1;
             end
             7'b1100011: begin   // beq, bne, blt, bge, bltu, bgeu
+                alu_valid <= 1'b1;
                 oprand1 <= pc;
                 oprand2 <= immb;
                 oprand_rd <= 5'b0;
                 case(func3)
                 3'b000: begin // beq
-                    alu_valid <= R[rs1] == R[rs2];
                     jump_valid <= R[rs1] == R[rs2];
                 end
                 3'b001: begin // bne
-                    alu_valid <= R[rs1] != R[rs2];
                     jump_valid <= R[rs1] != R[rs2];
                 end
                 3'b100: begin // blt
-                    alu_valid <= b_cmp;
                     jump_valid <= b_cmp;
                 end
                 3'b101: begin // bge
-                    alu_valid <= !b_cmp;
                     jump_valid <= !b_cmp;
                 end
                 3'b110: begin // bltu
-                    alu_valid <= R[rs1] < R[rs2];
                     jump_valid <= R[rs1] < R[rs2];
                 end
                 3'b111: begin // bgeu
-                    alu_valid <= R[rs1] >= R[rs2];
                     jump_valid <= R[rs1] >= R[rs2];
                 end
                 default: begin
-                    alu_valid <= 1'b0;
                     jump_valid <= 1'b0;
                 end
                 endcase
