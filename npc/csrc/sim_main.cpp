@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
     sdb_mainloop();
 
-    if (npc_ret == 0) {
+    if (npc_state.state == NPC_END && npc_ret == 0) {
         printf("NPC \33[1;32mHIT GOOD TRAP\33[0m.\n");
     }
     else {
