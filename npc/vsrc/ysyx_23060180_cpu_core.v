@@ -322,6 +322,8 @@ wire [31:0] oprand2_com;
 assign oprand2_com = ~oprand2 + 1'b1;
 // assign op1_sub_op2 = oprand1 + oprand2_com;
 
+wire test;
+assign test = func12[10];
 always @(posedge clk or negedge rstn) begin
     if (!rstn) begin
         alu_result_valid <= 1'b0;
@@ -364,7 +366,7 @@ always @(posedge clk or negedge rstn) begin
                 alu_result <= oprand1 << oprand2[4:0];
             end
             3'b101: begin // srli, srai
-                case(func12[10])
+                case(test)
                 1'b0: alu_result <= oprand1 >> oprand2[4:0];
                 1'b1: alu_result <= oprand1 >>> oprand2[4:0];
                 endcase
