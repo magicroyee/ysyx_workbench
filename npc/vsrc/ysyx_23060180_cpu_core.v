@@ -291,8 +291,12 @@ always @(posedge clk or negedge rstn) begin
                 oprand_rd <= rd;
                 load_valid <= 1'b1;
             end
-            7'b0010011: begin   // addi, slti, sltiu, xori, ori, andi
+            7'b0010011: begin   // addi, slti, sltiu, xori, ori, andi, slli, srli, srai
                 oprand2 <= imm;
+                alu_valid <= 1'b1;
+            end
+            7'b0110011: begin   // add, sub, sll, slt, sltu, xor, srl, sra, or, and
+                oprand2 <= R[rs2];
                 alu_valid <= 1'b1;
             end
             7'b1110011: begin   // ebreak
