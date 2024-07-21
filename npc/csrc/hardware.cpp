@@ -93,7 +93,7 @@ void isa_exec_once()
         {
             mem_raddr = top->mem_raddr - 0x80000000;
             top->mem_rdata = mem_read(mem_raddr, 4);
-            printf("read mem: 0x%08x: 0x%08x\n", mem_raddr, top->mem_rdata);
+            printf("read mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_rdata);
         }
         if (top->mem_wr)
         {
