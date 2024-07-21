@@ -98,6 +98,7 @@ void isa_exec_once()
         if (top->mem_wr)
         {
             mem_write(top->mem_raddr - 0x80000000, top->mem_wdata, top->mem_wbit_en);
+            printf("write mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_wdata);
         }
         EXEC_CHECK_END;
     }
