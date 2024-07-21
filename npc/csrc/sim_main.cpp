@@ -50,6 +50,7 @@ int main(int argc, char** argv)
     }
     else {
         printf("NPC \33[1;31mHIT BAD TRAP\33[0m with ret %d.\n", npc_ret);
+        return -1;
     }
 
     release_monitor();
