@@ -3,7 +3,7 @@
 
 #define ITRACE  1
 #define MTRACE  1
-#define FTRACE  1
+#define FTRACE  0
 
 #define DIFF_TEST 1
 
