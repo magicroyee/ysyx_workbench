@@ -335,7 +335,7 @@ always @(posedge clk or negedge rstn) begin
         if (opcode == 7'b0010011 || opcode == 7'b0110011) begin
             case(func3)
             3'b000: begin // addi
-                case(func12[11] && opcode[5])
+                case(func12[10] && opcode[5])
                 1'b0 : alu_result <= oprand1 + oprand2;
                 1'b1 : alu_result <= oprand1 + oprand2_com;
                 endcase
@@ -364,7 +364,7 @@ always @(posedge clk or negedge rstn) begin
                 alu_result <= oprand1 << oprand2[4:0];
             end
             3'b101: begin // srli, srai
-                case(func12[11])
+                case(func12[10])
                 1'b0: alu_result <= oprand1 >> oprand2[4:0];
                 1'b1: alu_result <= oprand1 >>> oprand2[4:0];
                 endcase
