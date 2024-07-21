@@ -168,13 +168,13 @@ always @(posedge clk) begin
     mem_rd_d2 <= mem_rd_d1;
 end
 assign mem_rdata_valid = mem_rd_d1;
-assign instr_valid = mem_rd_d2;
+assign instr_valid = (state == FETCH) && mem_rd_d2;
 
 always @(posedge clk or negedge rstn) begin
     if (!rstn) begin
         instr <= 32'h0;
     end
-    else if (state == FETCH && mem_rdata_valid) begin
+    else if ((state == FETCH) && mem_rdata_valid) begin
         instr <= mem_rdata;
     end
 end
