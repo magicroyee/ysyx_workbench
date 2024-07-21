@@ -94,6 +94,10 @@ void isa_exec_once()
             mem_raddr = top->mem_raddr - 0x80000000;
             top->mem_rdata = mem_read(mem_raddr, 4);
         }
+        if (top->mem_wr)
+        {
+            mem_write(top->mem_raddr - 0x80000000, top->mem_wdata, top->mem_wbit_en);
+        }
         EXEC_CHECK_END;
     }
     while (NPC_STATE == 5) {
@@ -104,6 +108,10 @@ void isa_exec_once()
         {
             mem_raddr = top->mem_raddr - 0x80000000;
             top->mem_rdata = mem_read(mem_raddr, 4);
+        }
+        if (top->mem_wr)
+        {
+            mem_write(top->mem_raddr - 0x80000000, top->mem_wdata, top->mem_wbit_en);
         }
         EXEC_CHECK_END;
     }
