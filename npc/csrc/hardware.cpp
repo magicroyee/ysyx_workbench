@@ -79,12 +79,12 @@ static void cpu_single_cycle() {
     single_cycle();
     if (mem_rd)
     {
-        printf("read mem: 0x%08x\n", mem_raddr);
+        // printf("read mem: 0x%08x\n", mem_raddr);
         top->mem_rdata = mem_read(mem_raddr, 4);
     }
     if (mem_wr)
     {
-        printf("write mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_wdata);
+        // printf("write mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_wdata);
         mem_write(mem_raddr, mem_wdata, mem_wbit_en);
     }
     EXEC_CHECK_END;
