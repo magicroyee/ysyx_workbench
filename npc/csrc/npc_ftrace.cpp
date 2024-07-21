@@ -112,10 +112,10 @@ void npc_ftrace(word_t addr, word_t pc, int rd, int rs1) {
 
     if (fcall_flag) {
         indent++;
-        sprintf(ftrace_buf, "[FTRACE:%08x] call %s", pc, npc_ftrace_lookup(addr));
+        sprintf(ftrace_buf, "[FTRACE:%08x] %*scall %s", pc, indent, "", npc_ftrace_lookup(addr));
     }
     else if (fret_flag){
-        sprintf(ftrace_buf, "[FTRACE:%08x] ret %s", pc, npc_ftrace_lookup(pc));
+        sprintf(ftrace_buf, "[FTRACE:%08x] %*sret %s", pc, indent, "", npc_ftrace_lookup(pc));
         indent--;
     }
 
