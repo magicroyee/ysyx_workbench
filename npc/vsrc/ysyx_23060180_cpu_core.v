@@ -335,7 +335,7 @@ always @(posedge clk or negedge rstn) begin
         if (opcode == 7'b0010011 || opcode == 7'b0110011) begin
             case(func3)
             3'b000: begin // addi
-                case(func12[11])
+                case(func12[11] && opcode[5])
                 1'b0 : alu_result <= oprand1 + oprand2;
                 1'b1 : alu_result <= oprand1 + oprand2_com;
                 endcase
