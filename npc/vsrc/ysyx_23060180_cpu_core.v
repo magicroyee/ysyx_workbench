@@ -174,7 +174,7 @@ always @(posedge clk or negedge rstn) begin
     if (!rstn) begin
         instr <= 32'h0;
     end
-    else if (mem_rdata_valid) begin
+    else if (state == FETCH && mem_rdata_valid) begin
         instr <= mem_rdata;
     end
 end
