@@ -368,7 +368,7 @@ always @(posedge clk or negedge rstn) begin
             3'b101: begin // srli, srai
                 case(test)
                 1'b0: alu_result <= oprand1 >> oprand2[4:0];
-                1'b1: alu_result <= oprand1 >>> oprand2[4:0];
+                1'b1: alu_result <= $signed(oprand1) >>> oprand2[4:0];
                 endcase
             end
             endcase
