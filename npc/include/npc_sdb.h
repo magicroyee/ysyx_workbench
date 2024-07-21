@@ -6,6 +6,7 @@
 
 void sdb_init();
 void sdb_mainloop();
+void sdb_set_batch_mode();
 void sdb_set_elfname(const char *elfname);
 void sdb_release();
 

@@ -45,14 +45,15 @@ int main(int argc, char** argv)
 
     sdb_mainloop();
 
-    if (npc_ret == 0) {
+    release_monitor();
+
+    if (npc_state.state == NPC_END && npc_ret == 0) {
         printf("NPC \33[1;32mHIT GOOD TRAP\33[0m.\n");
     }
     else {
         printf("NPC \33[1;31mHIT BAD TRAP\33[0m with ret %d.\n", npc_ret);
+        return -1;
     }
-
-    release_monitor();
 
     return 0;
 }
