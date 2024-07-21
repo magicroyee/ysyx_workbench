@@ -191,7 +191,7 @@ assign imm = {{20{instr[31]}}, instr[31:20]};
 assign immu = {instr[31:12], 12'b0};
 assign imms = {{20{instr[31]}}, instr[31:25], instr[11:7]};
 assign immj = {{11{instr[31]}}, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0};
-assign immb = {{12{instr[31]}}, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0};
+assign immb = {{19{instr[31]}}, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0};
 
 reg b_cmp;
 always @* begin
