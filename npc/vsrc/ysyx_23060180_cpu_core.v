@@ -317,9 +317,9 @@ reg [31:0] alu_result;
 reg alu_result_valid;
 reg [4:0] alu_result_rd;
 reg jump_valid_d1;
-// wire [31:0] oprand2_com
+wire [31:0] oprand2_com;
 // wire [32:0] op1_sub_op2;
-// assign oprand2_com = ~oprand2_com + 1'b1;
+assign oprand2_com = ~oprand2 + 1'b1;
 // assign op1_sub_op2 = oprand1 + oprand2_com;
 
 always @(posedge clk or negedge rstn) begin
@@ -335,7 +335,10 @@ always @(posedge clk or negedge rstn) begin
         if (opcode == 7'b0010011 || opcode == 7'b0110011) begin
             case(func3)
             3'b000: begin // addi
-                alu_result <= oprand1 + oprand2;
+                case(func12[11])
+                1'b0 : alu_result <= oprand1 + oprand2;
+                1'b1 : alu_result <= oprand1 + oprand2_com;
+                endcase
             end
             3'b010: begin // slti
                 case({oprand1[31], oprand2[31]})
