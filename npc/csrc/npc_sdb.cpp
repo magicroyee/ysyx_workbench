@@ -10,12 +10,17 @@
 
 NPCState npc_state;
 static const char * elf_file = NULL;
+bool is_batch_mode = false;
 
 word_t expr(char *e, bool *success);
 
 void sdb_set_elfname(const char *elfname)
 {
     elf_file = elfname;
+}
+
+void sdb_set_batch_mode() {
+    is_batch_mode = true;
 }
 
 void sdb_init()
@@ -173,6 +178,10 @@ static char* rl_gets() {
 
 void sdb_mainloop()
 {
+    if (is_batch_mode) {
+        cpu_exec(-1);
+        return;
+    }
     for (char *str; (str = rl_gets()) != NULL; ) {
         char *str_end = str + strlen(str);
 
