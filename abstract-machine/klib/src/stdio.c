@@ -14,6 +14,8 @@ int printf(const char *fmt, ...) {
   va_end(ap);
   
   putstr(buf);
+  putch('?');
+  putch('\n');
   return n;
 }
 
