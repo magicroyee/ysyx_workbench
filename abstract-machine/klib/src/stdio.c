@@ -5,12 +5,22 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-// int printf(const char *fmt, ...) {
-//   panic("Not implemented");
-// }
+int printf(const char *fmt, ...) {
+  // panic("Not implemented");
+  va_list ap;
+  va_start(ap, fmt);
+  char buf[1024];
+  int n = vsprintf(buf, fmt, ap);
+  va_end(ap);
+  
+  putstr(buf);
+  return n;
+}
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  panic("Not implemented");
+  // panic("Not implemented");
+  int n = sprintf(out, fmt, ap);
+  return n;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
