@@ -7,16 +7,16 @@
 
 int printf(const char *fmt, ...) {
   // panic("Not implemented");
-  va_list ap;
-  va_start(ap, fmt);
-  char buf[1024];
-  int n = vsprintf(buf, fmt, ap);
-  va_end(ap);
+  // va_list ap;
+  // va_start(ap, fmt);
+  // char buf[1024];
+  // int n = vsprintf(buf, fmt, ap);
+  // va_end(ap);
   
-  putstr(buf);
+  // putstr(buf);
   putch('?');
   putch('\n');
-  return n;
+  return 0;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
