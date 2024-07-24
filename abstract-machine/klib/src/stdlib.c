@@ -35,12 +35,18 @@ void *malloc(size_t size) {
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
 #if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
   // panic("Not implemented");
-  // if (size > 0 && addr + size < (void *)heap.end) {
-  //   void * ret = addr;
-  //   addr += size;
-  //   return ret;
-  // }
-  printf("hello, malloc.\n");
+  static void *addr;
+  static int flag = 0;
+  if (flag == 0) {
+    flag = 1;
+    addr = heap.start;
+  }
+  if (size > 0 && addr + size < (void *)heap.end) {
+    void * ret = addr;
+    addr += size;
+    return ret;
+  }
+  // printf("hello, malloc.\n");
 #endif
   return NULL;
 }
