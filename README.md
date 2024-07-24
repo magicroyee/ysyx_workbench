@@ -1,9 +1,11 @@
 # "一生一芯"工程项目
 
-这是"一生一芯"的工程项目. 通过运行
-```bash
-bash init.sh subproject-name
-```
-进行初始化, 具体请参考[实验讲义][lecture note].
+这是我参与的"一生一芯"的工程项目.
 
-[lecture note]: https://ysyx.oscc.cc/docs/
+# 软件
+
+完成RV32IM⾏为模拟器NEMU。
+
+# 硬件
+
+完成了多周期RV32E处理器设计和开发。
