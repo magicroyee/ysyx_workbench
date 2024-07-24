@@ -10,7 +10,7 @@
 !README.md
 !.gitignore
 !init.sh
-/fceux-am
 /am-kernels
 /nvboard
 /riscv-isa-sim
+/fceux-am
