@@ -13,27 +13,7 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <common.h>
-#include "sdb/sdb.h"
+#include <device/map.h>
 
-void init_monitor(int, char *[]);
-void am_init_monitor();
-void engine_start();
-int is_exit_status_bad();
-
-int main(int argc, char *argv[]) {
-  /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
-  init_monitor(argc, argv);
-#endif
-
-  /* Start engine. */
-  engine_start();
-
-  IFNDEF(CONFIG_TARGET_AM, release_sdb());
-
-  return is_exit_status_bad();
-
+void init_disk() {
 }

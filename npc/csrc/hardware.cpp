@@ -1,6 +1,7 @@
 #include "hardware.h"
 #include "npc_init.h"
 #include "npc_memory.h"
+#include "memory/vaddr.h"
 
 void step_and_dump_wave()
 {
@@ -72,7 +73,7 @@ u_int32_t mem_wbit_en = 0;
 static void cpu_single_cycle() {
     top->eval();
     mem_rd = top->mem_rd;
-    mem_raddr = top->mem_raddr - 0x80000000;
+    mem_raddr = top->mem_raddr;
     mem_wr = top->mem_wr;
     mem_wdata = top->mem_wdata;
     mem_wbit_en = top->mem_wbit_en;
@@ -80,12 +81,13 @@ static void cpu_single_cycle() {
     if (mem_rd)
     {
         // printf("read mem: 0x%08x\n", mem_raddr);
-        top->mem_rdata = mem_read(mem_raddr, 4);
+        top->mem_rdata = vaddr_read(mem_raddr, 4);
     }
     if (mem_wr)
     {
         // printf("write mem: 0x%08x: 0x%08x\n", top->mem_raddr, top->mem_wdata);
-        mem_write(mem_raddr, mem_wdata, mem_wbit_en);
+        // mem_write(mem_raddr, mem_wdata, mem_wbit_en);
+        vaddr_write(mem_raddr, mem_wbit_en, mem_wdata);
     }
     EXEC_CHECK_END;
 }

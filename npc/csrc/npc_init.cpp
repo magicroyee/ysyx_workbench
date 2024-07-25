@@ -1,21 +1,21 @@
+#include <getopt.h>
+#include <assert.h>
 #include "npc_init.h"
 #include "npc_config.h"
 #include "npc_memory.h"
 #include "npc_sdb.h"
 #include "sdb/npc_difftest.h"
-#include <getopt.h>
-#include <assert.h>
 
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
 Vtop *top = NULL;
 char *img_file = NULL;
-extern char mem[MEMORY_SIZE];
 
 static char *diff_so_file = NULL;
 static int difftest_port = 1234;
 
 void init_disasm(const char *triple);
+void init_device();
 
 static inline uint32_t inst(const char *str)
 {
@@ -108,7 +108,7 @@ int load_img() {
     printf("The image is %s, size = %ld\n", img_file, size);
 
     fseek(fp, 0, SEEK_SET);
-    int ret = fread(mem, size, 1, fp);
+    int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
     assert(ret == 1);
 
     fclose(fp);
@@ -133,6 +133,9 @@ void init_monitor(int argc, char *argv[])
 
     parse_args(argc, argv);
     long img_size = load_img();
+
+    IFDEF(CONFIG_DEVICE, init_device());
+
     sdb_init();
 
     IFDEF(DIFF_TEST, init_difftest(diff_so_file, img_size, difftest_port));

@@ -1,9 +1,10 @@
 #include <dlfcn.h>
 #include "debug.h"
+#include "memory/paddr.h"
 #include "sdb/npc_difftest.h"
 
-void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
-// typedef void (*type_ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction);
+// void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
+typedef void (*type_ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction);
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
 // void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
@@ -17,7 +18,7 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
     handle = dlopen(ref_so_file, RTLD_LAZY);
     assert(handle);
 
-    ref_difftest_memcpy = dlsym(handle, "difftest_memcpy");
+    type_ref_difftest_memcpy ref_difftest_memcpy = (type_ref_difftest_memcpy)dlsym(handle, "difftest_memcpy");
     assert(ref_difftest_memcpy);
 
     ref_difftest_regcpy = dlsym(handle, "difftest_regcpy");

@@ -13,27 +13,12 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <common.h>
-#include "sdb/sdb.h"
+#ifndef __DEVICE_MMIO_H__
+#define __DEVICE_MMIO_H__
 
-void init_monitor(int, char *[]);
-void am_init_monitor();
-void engine_start();
-int is_exit_status_bad();
+#include <npc_common.h>
 
-int main(int argc, char *argv[]) {
-  /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
-  init_monitor(argc, argv);
+word_t mmio_read(paddr_t addr, int len);
+void mmio_write(paddr_t addr, int len, word_t data);
+
 #endif
-
-  /* Start engine. */
-  engine_start();
-
-  IFNDEF(CONFIG_TARGET_AM, release_sdb());
-
-  return is_exit_status_bad();
-
-}

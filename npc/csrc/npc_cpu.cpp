@@ -26,6 +26,7 @@ static void trace()
 }
 
 static void exec_once() {
+#if ITRACE==1
     uint32_t pc = CPU_PC;
     uint32_t instval = vaddr_read(pc, 4);
     char *p = log_buf;
@@ -49,7 +50,7 @@ static void exec_once() {
 
     void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
     disassemble(p, log_buf + sizeof(log_buf) - p, pc, (uint8_t *)&instval, ilen);
-
+#endif
     isa_exec_once();
 }
 

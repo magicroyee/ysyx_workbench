@@ -42,6 +42,7 @@ VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
 CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 CSRCS += $(SRC_AUTO_BIND)
 SIM_CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+INCSRCS = $(shell find $(abspath ./include) -name "*.h")
 
 # rules for NVBoard
 include $(NVBOARD_HOME)/scripts/nvboard.mk
@@ -54,18 +55,18 @@ include csrc/utils/filelist.mk
 CSRCS += $(CXXSRC)
 LDFLAGS += $(LIBS)
 
-$(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
+$(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE) $(INCSRCS)
 	@rm -rf $(OBJ_DIR)
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
+		--top-module $(TOPNAME) $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE) \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
-$(SIM_BIN): $(VSRCS) $(SIM_CSRCS)
+$(SIM_BIN): $(VSRCS) $(SIM_CSRCS) $(INCSRCS)
 	$(shell mkdir -p $(SIM_DIR))
 	@rm -rf $(SIM_OBJ_DIR)
 	$(VERILATOR) $(SIM_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
+		--top-module $(TOPNAME)  $(VSRCS) $(SIM_CSRCS) \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(SIM_OBJ_DIR) --exe -o $(abspath $(SIM_BIN))
 

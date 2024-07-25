@@ -13,27 +13,17 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <common.h>
-#include "sdb/sdb.h"
+// #include <isa.h>
+#include <memory/paddr.h>
 
-void init_monitor(int, char *[]);
-void am_init_monitor();
-void engine_start();
-int is_exit_status_bad();
+word_t vaddr_ifetch(vaddr_t addr, int len) {
+  return paddr_read(addr, len);
+}
 
-int main(int argc, char *argv[]) {
-  /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
-  init_monitor(argc, argv);
-#endif
+word_t vaddr_read(vaddr_t addr, int len) {
+  return paddr_read(addr, len);
+}
 
-  /* Start engine. */
-  engine_start();
-
-  IFNDEF(CONFIG_TARGET_AM, release_sdb());
-
-  return is_exit_status_bad();
-
+void vaddr_write(vaddr_t addr, int len, word_t data) {
+  paddr_write(addr, len, data);
 }

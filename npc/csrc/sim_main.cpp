@@ -18,7 +18,7 @@ extern int npc_rs1;
 bool break_flag = 0;
 word_t npc_ret = -1;
 
-extern char mem[MEMORY_SIZE];
+extern char mem[CONFIG_MSIZE];
 
 void ebreak() {
     printf("ebreak\n");
@@ -40,6 +40,7 @@ int main(int argc, char** argv)
 {
     u_int32_t mem_rd = 0;
     u_int32_t mem_raddr = 0;
+
 
     init_monitor(argc, argv);
 

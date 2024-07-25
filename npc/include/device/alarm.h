@@ -13,27 +13,12 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <common.h>
-#include "sdb/sdb.h"
+#ifndef __DEVICE_ALARM_H__
+#define __DEVICE_ALARM_H__
 
-void init_monitor(int, char *[]);
-void am_init_monitor();
-void engine_start();
-int is_exit_status_bad();
+#define TIMER_HZ 60
 
-int main(int argc, char *argv[]) {
-  /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
-  init_monitor(argc, argv);
+typedef void (*alarm_handler_t) ();
+void add_alarm_handle(alarm_handler_t h);
+
 #endif
-
-  /* Start engine. */
-  engine_start();
-
-  IFNDEF(CONFIG_TARGET_AM, release_sdb());
-
-  return is_exit_status_bad();
-
-}
