@@ -12,7 +12,7 @@
 #include "npc_utils.h"
 
 extern VerilatedContext *contextp;
-extern VerilatedVcdC *tfp;
+IFDEF(CONFIG_WAVE, extern VerilatedVcdC *tfp);
 extern Vtop *top;
 
 int parse_args(int argc, char *argv[]);

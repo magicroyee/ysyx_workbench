@@ -18,7 +18,7 @@
 #include <memory/vaddr.h>
 #include <device/map.h>
 #include "hardware.h"
-// #include <sdb/dtrace.h>
+#include <sdb/dtrace.h>
 
 #define IO_SPACE_MAX (2 * 1024 * 1024)
 

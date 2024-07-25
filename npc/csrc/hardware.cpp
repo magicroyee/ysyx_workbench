@@ -7,7 +7,7 @@ void step_and_dump_wave()
 {
     top->eval();
     contextp->timeInc(1);
-    tfp->dump(contextp->time());
+    IFDEF(CONFIG_WAVE, tfp->dump(contextp->time()));
 }
 
 void single_cycle() {

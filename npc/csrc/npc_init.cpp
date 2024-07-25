@@ -7,7 +7,7 @@
 #include "sdb/npc_difftest.h"
 
 VerilatedContext *contextp = NULL;
-VerilatedVcdC *tfp = NULL;
+IFDEF(CONFIG_WAVE, VerilatedVcdC *tfp = NULL);
 Vtop *top = NULL;
 char *img_file = NULL;
 
@@ -118,13 +118,13 @@ int load_img() {
 void init_monitor(int argc, char *argv[])
 {
     contextp = new VerilatedContext;
-    tfp = new VerilatedVcdC;
+    IFDEF(CONFIG_WAVE, tfp = new VerilatedVcdC);
     top = new Vtop{contextp};
     contextp->commandArgs(argc, argv);
 
     contextp->traceEverOn(true);
-    top->trace(tfp, 0);
-    tfp->open("./sim/wave.vcd");
+    IFDEF(CONFIG_WAVE, top->trace(tfp, 0));
+    IFDEF(CONFIG_WAVE, tfp->open("./sim/wave.vcd"));
 
     reset(10);
     isa_reg_read();
@@ -146,8 +146,8 @@ void init_monitor(int argc, char *argv[])
 void release_monitor()
 {
     sdb_release();
-    tfp->close();
+    IFDEF(CONFIG_WAVE, tfp->close());
     delete top;
-    delete tfp;
+    IFDEF(CONFIG_WAVE, delete tfp);
     delete contextp;
 }

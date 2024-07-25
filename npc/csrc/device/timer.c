@@ -15,7 +15,7 @@
 
 #include <device/map.h>
 #include <device/alarm.h>
-#include <utils.h>
+#include <npc_utils.h>
 
 static uint32_t *rtc_port_base = NULL;
 
@@ -30,7 +30,7 @@ static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
 
 #ifndef CONFIG_TARGET_AM
 static void timer_intr() {
-  if (nemu_state.state == NEMU_RUNNING) {
+  if (npc_state.state == NPC_RUNNING) {
     extern void dev_raise_intr();
     dev_raise_intr();
   }

@@ -13,6 +13,8 @@ word_t npc_pc;
 int npc_rd;
 int npc_rs1;
 
+void device_update();
+
 static void trace()
 {
     IFDEF(ITRACE, printf("%s\n", log_buf));
@@ -62,6 +64,7 @@ static void execute(uint32_t n) {
         if (npc_state.state != NPC_RUNNING) {
             break;
         }
+        IFDEF(CONFIG_DEVICE, device_update());
     }
 }
 
