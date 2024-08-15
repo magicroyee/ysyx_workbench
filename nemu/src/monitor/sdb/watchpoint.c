@@ -84,22 +84,34 @@ WP *extract_wp(WP **_head, int NO)
   assert(0);
 }
 
-WP* new_wp(char *expr) {
+WP* new_wp(char *args) {
+  char *exp = strtok(args, " ");
   if (free_ == NULL) {
     printf("No more watchpoint!\n");
     assert(0);
   }
-  if (strlen(expr) == 0) {
-    printf("Empty expression!\n");
+  if (strlen(exp) == 0) {
+    printf("Empty expession!\n");
     return NULL;
   }
   WP *wp = extract_wp(&free_, free_->NO);
-  wp->expr = malloc(strlen(expr) + 1);
+  wp->expr = malloc(strlen(exp) + 1);
   if(!wp->expr) {
     printf("malloc failed!\n");
     assert(0);
   }
-  strcpy(wp->expr, expr);
+  strcpy(wp->expr, exp);
+
+  exp = strtok(NULL, "");
+  if (exp != NULL) {
+    bool success = true;
+    wp->evalue = expr(exp, &success);
+    if (success == false) {
+      printf("Invalid watchpoint expression!\n");
+      free_wp(wp->NO);
+      return NULL;
+    }
+  }
   insert_wp(&head, wp);
   return wp;
 }
@@ -139,7 +151,14 @@ int diff_wp()
     if (success == false) {
       printf("Invalid watch point expression!\n");
     }
-    if (new_eval != p->eval) {
+    if (strcmp(p->expr, "$pc") == 0)
+    {
+      if (new_eval == p->evalue) {
+        printf("Stop at 0x%08x\n", p->evalue);
+        diff_flag++;
+      }
+    }
+    else if (new_eval != p->eval) {
       printf("Watchpoint %d: %s\n", p->NO, p->expr);
       printf("Old value = %u, 0x%08x\n", p->eval, p->eval);
       printf("New value = %u, 0x%08x\n", new_eval, new_eval);

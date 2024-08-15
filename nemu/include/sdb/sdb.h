@@ -25,6 +25,7 @@ typedef struct watchpoint {
   /* TODO: Add more members if necessary */
   char *expr;
   uint32_t eval;
+  word_t evalue;
 } WP;
 
 word_t expr(char *e, bool *success);

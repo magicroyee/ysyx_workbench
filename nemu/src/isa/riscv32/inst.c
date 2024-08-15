@@ -51,6 +51,14 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   }
 }
 
+static word_t csr_read(int csr) {
+  return cpu.sr[csr];
+}
+
+static void csr_write(int csr, word_t val) {
+  cpu.sr[csr] = val;
+}
+
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -116,10 +124,14 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("??????? ????? ????? 000 ????? 00011 11", fence  , N, );
   INSTPAT("??????? ????? ????? 001 ????? 00011 11", fence.i, N, );
-  // INSTPAT("0000000 00000 00000 000 00000 00000 11", ecall  , N, NEMU_SYSCALL());
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(R(17), s->pc));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
 
-  // INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = csr_read(src1); csr_write(src1, src2));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = csr_read(CSR_MEPC));
+
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = csr_read(imm); csr_write(imm, src1));
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(rd) = csr_read(imm); csr_write(imm, src1|csr_read(imm)));
+  INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , I, R(rd) = csr_read(imm); csr_write(imm, (~src1)&csr_read(imm)));
 
   // mul, mulh, mulhsu, mulhu, div, divu, rem, remu
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(rd) = (int32_t)src1 * (int32_t)src2);

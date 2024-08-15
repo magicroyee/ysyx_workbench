@@ -5,6 +5,39 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+static int int2buf(char *buf, uint32_t data, char type, int width, char fill_c) {
+  int i = 0;
+  do {
+    switch (type)
+    {
+    case 'd':
+      if ((int32_t)data < 0) {
+        buf[i++] = '-';
+        data = -(int32_t)data;
+      }
+      buf[i++] = data % 10 + '0';
+      data /= 10;
+      break;
+    case 'u':
+      buf[i++] = data % 10 + '0';
+      data /= 10;
+      break;
+    case 'x':
+      buf[i++] = "0123456789abcdef"[data % 16];
+      data /= 16;
+      break;
+    default:
+      break;
+    }
+  } while (data);
+
+  while (i < width) {
+    buf[i++] = fill_c;
+  }
+  
+  return i;
+}
+
 int printf(const char *fmt, ...) {
   // panic("Not implemented");
   va_list ap;
@@ -22,15 +55,36 @@ int printf(const char *fmt, ...) {
 int vsprintf(char *out, const char *fmt, va_list ap) {
   // panic("Not implemented");
   int d;
+  uint32_t u;
+  char fill_c = ' ';
+  int width = 0;
+  int i = 0;
   char c, *s;
   char *p = out;
+  char buf[32];
 
   while (*fmt) {
     if (*fmt != '%') {
+      fill_c = ' ';
       *p++ = *fmt++;
       continue;
     }
+    
     fmt++;
+    width = 0;
+    fill_c = ' ';
+
+    if (*fmt == '0') {
+      fill_c = '0';
+      fmt++;
+    }
+    if (*fmt >= '1' && *fmt <= '9') {
+      while (*fmt >= '0' && *fmt <= '9') {
+        width = width * 10 + *fmt - '0';
+        fmt++;
+      }
+    }
+
     switch (*fmt) {
       case 's':
         s = va_arg(ap, char *);
@@ -39,17 +93,26 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         break;
       case 'd':
-        d = va_arg(ap, int);
+        d = va_arg(ap, uint32_t);
         if (d < 0) {
           *p++ = '-';
           d = -d;
         }
-        char buf[32];
-        int i = 0;
-        do {
-          buf[i++] = d % 10 + '0';
-          d /= 10;
-        } while (d);
+        i = int2buf(buf, d, 'd', width, fill_c);
+        while (i--) {
+          *p++ = buf[i];
+        }
+        break;
+      case 'u':
+        u = va_arg(ap, uint32_t);
+        i = int2buf(buf, u, 'u', width, fill_c);
+        while (i--) {
+          *p++ = buf[i];
+        }
+        break;
+      case 'x':
+        u = va_arg(ap, uint32_t);
+        i = int2buf(buf, u, 'x', width, fill_c);
         while (i--) {
           *p++ = buf[i];
         }
