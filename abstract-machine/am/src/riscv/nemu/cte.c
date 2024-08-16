@@ -4,6 +4,21 @@
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
+void show_context(Context *c) {
+  printf("--------------------\n");
+  printf("Context: 0x%08x\n", c);
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 4; j++) {
+      printf("x%02d = 0x%08x ", i*4+j, c->gpr[i*4+j]);
+    }
+    printf("\n");
+  }
+  printf("mcause = 0x%08x\n", c->mcause);
+  printf("mstatus = 0x%08x\n", c->mstatus);
+  printf("mepc = 0x%08x\n", c->mepc);
+  printf("--------------------\n");
+}
+
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
@@ -14,7 +29,6 @@ Context* __am_irq_handle(Context *c) {
         break;
       default: ev.event = EVENT_ERROR; break;
     }
-
     c = user_handler(ev, c);
     assert(c != NULL);
   }

@@ -56,10 +56,19 @@ int strcmp(const char *s1, const char *s2) {
   }
 
   return 0;
+  // return strncmp(s1, s2, -1);
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  panic("Not implemented");
+  for (int i = 0; i < n; i++) {
+    if (s1[i] != s2[i]) {
+      return (uint8_t)s1[i] - (uint8_t)s2[i];
+    }
+    if (s1[i] == '\0' || s2[i] == '\0') {
+      return (uint8_t)s1[i] - (uint8_t)s2[i];
+    }
+  }
+  return 0;
 }
 
 void *memset(void *s, int c, size_t n) {
