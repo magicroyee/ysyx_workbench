@@ -18,7 +18,8 @@
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
-   */
+   */ 
+  IFDEF(CONFIG_ETRACE, etrace_ecall(NO, epc))
   cpu.sr[CSR_MEPC] = epc;
   cpu.sr[CSR_MCAUSE] = NO;
 
