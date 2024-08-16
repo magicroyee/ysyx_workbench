@@ -21,6 +21,8 @@
 // #include <sdb/ringbuffer.h>
 // #include <isa.h>
 
+int rw_device_addr = 0;
+
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
@@ -67,6 +69,7 @@ word_t paddr_read(paddr_t addr, int len) {
   rb_push(&mtrace, mtrace_buf);
 #endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
+  rw_device_addr = 1;
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
@@ -84,6 +87,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   rb_push(&mtrace, mtrace_buf);
 #endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+  rw_device_addr = 1;
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }

@@ -6,6 +6,7 @@
 
 #define CPU_PC top->rootp->top__DOT__cpu_core__DOT__pc
 #define GPR(x) top->rootp->top__DOT__cpu_core__DOT__R[x]
+#define CSR(x) top->rootp->top__DOT__cpu_core__DOT__csr[x]
 #define INST top->rootp->top__DOT__cpu_core__DOT__instr
 #define NPC_STATE top->rootp->__Vdly__top__DOT__cpu_core__DOT__state
 
@@ -19,6 +20,7 @@
 typedef struct {
   word_t gpr[32];
   vaddr_t pc;
+  word_t sr[0xfff];
 } CPU_state;
 
 extern CPU_state cpu;

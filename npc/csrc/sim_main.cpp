@@ -41,7 +41,6 @@ int main(int argc, char** argv)
     u_int32_t mem_rd = 0;
     u_int32_t mem_raddr = 0;
 
-
     init_monitor(argc, argv);
 
     sdb_mainloop();

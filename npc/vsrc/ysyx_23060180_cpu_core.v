@@ -25,14 +25,21 @@ wire [31:0] immu;
 wire [31:0] imms;
 wire [31:0] immj;
 wire [31:0] immb;
+wire [31:0] zimm;
 reg alu_valid;
 reg e_valid; // ebreak
 reg jump_valid;
 reg store_valid;
 reg load_valid;
+reg ecall_valid;
+reg csr_valid;
+reg mret_valid;
 reg [31:0] oprand1;
 reg [31:0] oprand2;
 reg [4:0] oprand_rd;
+
+reg csr_valid_d1;
+reg mret_valid_d1;
 
 import "DPI-C" context function void ebreak(); 
 import "DPI-C" context function void jump_en(input int addr, input int pc, input int rd, input int rs1); 
@@ -56,6 +63,8 @@ reg [STATE_BITS-1:0] state;
 
 // registers
 reg [31:0] R [0:31];
+reg [31:0] csr [0:4];
+reg [2:0] csr_addr;
 
 always @(posedge clk or negedge rstn_in) begin
     if (!rstn_in) begin
@@ -102,6 +111,7 @@ always @(posedge clk or negedge rstn_in) begin
     end
 end
 
+
 // aysnc reset, synchronous load
 reg rstn_d1;
 reg rstn_d2;
@@ -117,6 +127,59 @@ always @(posedge clk or negedge rstn_in) begin
     end
 end
 assign rstn = rstn_d2;
+
+always @(*) begin
+    case(func12)
+    12'h300: csr_addr = 'd1; // mstatus
+    12'h305: csr_addr = 'd2; // mtvec
+    12'h341: csr_addr = 'd3; // mepc
+    12'h342: csr_addr = 'd4; // mcause
+    default: csr_addr = 'd0;
+    endcase
+end
+
+reg [31:0] csr_data;
+always @(*) begin
+    case(func3)
+    3'b001: begin // csrrw
+        csr_data = R[rs1];
+    end
+    3'b010: begin // csrrs
+        csr_data = csr[csr_addr] | R[rs1];
+    end
+    3'b011: begin // csrrc
+        csr_data = csr[csr_addr] & ~R[rs1];
+    end
+    3'b101: begin // csrrwi
+        csr_data = zimm;
+    end
+    3'b110: begin // csrrsi
+        csr_data = csr[csr_addr] | zimm;
+    end
+    3'b111: begin // csrrci
+        csr_data = csr[csr_addr] & ~zimm;
+    end
+    default: csr_data = 32'h0;
+    endcase
+end
+
+always @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        for (int i = 0; i < 5; i = i + 1) begin
+            if (i == 1) csr[i] <= 32'h1800; // mstatus
+            else        csr[i] <= 32'h0;
+        end
+    end
+    else begin
+        if (ecall_valid) begin
+            csr[3] <= pc;
+            csr[4] <= R[15];
+        end
+        else if (state == EXECUTE && execute_finish && csr_valid_d1) begin
+            csr[csr_addr] <= csr_data;
+        end
+    end
+end
 
 // pc
 reg [31:0] pc;
@@ -192,6 +255,7 @@ assign immu = {instr[31:12], 12'b0};
 assign imms = {{20{instr[31]}}, instr[31:25], instr[11:7]};
 assign immj = {{11{instr[31]}}, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0};
 assign immb = {{19{instr[31]}}, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0};
+assign zimm = {{27{1'b0}}, instr[19:15]};
 
 reg b_cmp;
 always @* begin
@@ -217,11 +281,14 @@ always @(posedge clk or negedge rstn) begin
     else if (instr_valid) begin
         oprand1 <= R[rs1];
         oprand2 <= 32'h0;
+        oprand_rd <= rd;
         alu_valid <= 1'b0;
         jump_valid <= 1'b0;
-        oprand_rd <= rd;
         store_valid <= 1'b0;
         load_valid <= 1'b0;
+        ecall_valid <= 1'b0;
+        csr_valid <= 1'b0;
+        mret_valid <= 1'b0;
         case (opcode)
             7'b0110111: begin   // lui
                 oprand1 <= 32'd0;
@@ -293,10 +360,22 @@ always @(posedge clk or negedge rstn) begin
                 oprand2 <= R[rs2];
                 alu_valid <= 1'b1;
             end
-            7'b1110011: begin   // ebreak
+            7'b1110011: begin   // ebreak, ecall, csrrw, csrrs, csrrc, csrrwi, csrrsi, csrrci
+                alu_valid <= 1'b1;
                 if (func3 == 3'b000) begin
-                    oprand2 <= imm;
-                    e_valid <= 1'b1;
+                    if (func12 == 12'h001) begin
+                        e_valid <= 1'b1;
+                    end
+                    else if (func12 == 12'h000) begin
+                        ecall_valid <= 1'b1;
+                    end
+                    else if (func12 == 12'h302) begin
+                        mret_valid <= 1'b1;
+                    end
+                end
+                else begin
+                    csr_valid <= 1'b1;
+                    oprand1 <= csr[csr_addr];
                 end
             end
             default: begin
@@ -309,6 +388,9 @@ always @(posedge clk or negedge rstn) begin
         jump_valid <= 1'b0;
         store_valid <= 1'b0;
         load_valid <= 1'b0;
+        ecall_valid <= 1'b0;
+        csr_valid <= 1'b0;
+        mret_valid <= 1'b0;
     end
 end
 
@@ -413,8 +495,12 @@ always @(posedge clk or negedge rstn) begin
     end
 end
 
+reg ecall_valid_d1;
 always @(posedge clk) begin
     jump_valid_d1 <= jump_valid;
+    ecall_valid_d1 <= ecall_valid;
+    csr_valid_d1 <= csr_valid;
+    mret_valid_d1 <= mret_valid;
 end
 
 // pc control
@@ -425,6 +511,12 @@ always @* begin
             if (execute_finish) begin
                 if (jump_valid_d1) begin
                     pc_next = alu_result;
+                end
+                else if (ecall_valid_d1) begin
+                    pc_next = csr[2]; // mtvec
+                end
+                else if (mret_valid_d1) begin
+                    pc_next = csr[3]; // mtvec
                 end
                 else begin
                     pc_next = pc + 4;

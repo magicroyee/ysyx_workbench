@@ -3,6 +3,14 @@
 #include "npc_memory.h"
 #include "memory/vaddr.h"
 
+static uint32_t csr_list[] = {
+    0x300, 0x305, 0x341, 0x342
+};
+
+static char * csr_name[] = {
+    "mstatus", "mtvec", "mepc", "mcause"
+};
+
 void step_and_dump_wave()
 {
     top->eval();
@@ -108,6 +116,10 @@ void isa_reg_read()
         cpu.gpr[i] = GPR(i);
     }
     cpu.pc = CPU_PC;
+    cpu.sr[0x300] = CSR(1);
+    cpu.sr[0x305] = CSR(2);
+    cpu.sr[0x341] = CSR(3);
+    cpu.sr[0x342] = CSR(4);
 }
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
@@ -126,6 +138,15 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
     {
         is_same = false;
         printf("pc is different! ref: 0x%08x, dut: 0x%08x\n", ref_r->pc, CPU_PC);
+    }
+    for (int i = 0; i < sizeof(csr_list) / sizeof(csr_list[0]); i++)
+    {
+        if (ref_r->sr[csr_list[i]] != cpu.sr[csr_list[i]])
+        {
+            is_same = false;
+            printf("csr[0x%03x]: %s is different! ref: 0x%08x, dut: 0x%08x\n", csr_list[i], csr_name[i], ref_r->sr[csr_list[i]], cpu.sr[csr_list[i]]);
+            goto err;
+        }
     }
 err:
     return is_same;

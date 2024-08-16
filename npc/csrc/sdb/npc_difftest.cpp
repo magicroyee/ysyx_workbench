@@ -3,6 +3,8 @@
 #include "memory/paddr.h"
 #include "sdb/npc_difftest.h"
 
+extern int rw_device_addr;
+
 // void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
 typedef void (*type_ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction);
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
@@ -46,6 +48,12 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
     CPU_state ref_r;
     
     isa_reg_read();
+
+    if (rw_device_addr) {
+        rw_device_addr = 0;
+        ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
+        return;
+    }
     
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
